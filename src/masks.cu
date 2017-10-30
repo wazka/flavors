@@ -25,7 +25,7 @@ namespace Flavors
 		unsigned length = lengths[mask];
 		unsigned maskBit = 0;
 
-		for(int level = 0; level < depth; ++level)
+		for (int level = 0; level < depth; ++level)
 		{
 			for (int bit = levels[level] - 1; bit >= 0; --bit, ++maskBit)
 			{
@@ -33,6 +33,24 @@ namespace Flavors
 					masks[level][mask] = masks[level][mask] & ~(1 << bit);
 			}
 		}
+	}
+
+	Masks::Masks(const Configuration& config, int count, unsigned* data, unsigned* lengths) :
+		Keys(config, count, data),
+		Lengths(Count)
+	{
+		cuda::memory::copy(Lengths.Get(), lengths, count * sizeof(unsigned));
+
+		auto kernelConfig = make_launch_config(Count);
+
+		cuda::launch(
+			clip,
+			kernelConfig,
+			Count,
+			Depth(),
+			Config.Levels.Get(),
+			Lengths.Get(),
+			Store.GetLevels());
 	}
 
 	void Masks::FillRandom(int seed)

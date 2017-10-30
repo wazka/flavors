@@ -19,6 +19,12 @@ namespace Flavors
 	{
 	}
 
+	Keys::Keys(const Configuration& config, int count, unsigned* data) :
+		Keys(config, count)
+	{
+		cuda::memory::copy(Store.Get(), data, Count * Depth() * sizeof(unsigned));
+	}
+
 	void Keys::FillRandom(int seed)
 	{
 		std::mt19937 mt(seed);

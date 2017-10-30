@@ -6,7 +6,7 @@ NVCC_FLAGS=-rdc=true -gencode arch=compute_61,code=sm_61 -std=c++11 -I lib/cuda-
 
 LIB=$(BIN)/tmp/device_properties.o
 FLAVORS=$(BIN)/tmp/configuration.o $(BIN)/tmp/keys.o $(BIN)/tmp/masks.o $(BIN)/tmp/tree.o $(BIN)/tmp/utils.o
-SAMPLE=$(BIN)/basicSample
+SAMPLE=$(BIN)/basicKeysSample $(BIN)/basicMasksSample
 
 all: lib flavors
 
@@ -38,11 +38,17 @@ $(BIN)/tmp/device_properties.o: lib/cuda-api-wrappers/api/device_properties.cpp
 	$(NVCC) $(NVCC_FLAGS) -c lib/cuda-api-wrappers/api/device_properties.cpp -o $(BIN)/tmp/device_properties.o
 
 # samples objects
-$(BIN)/basicSample: $(BIN)/tmp/basicSample.o
-	$(NVCC) $(NVCC_FLAGS) -o $(BIN)/basicSample $(BIN)/tmp/basicSample.o $(BIN)/flavors.a
+$(BIN)/basicKeysSample: $(BIN)/tmp/basicKeysSample.o
+	$(NVCC) $(NVCC_FLAGS) -o $(BIN)/basicKeysSample $(BIN)/tmp/basicKeysSample.o $(BIN)/flavors.a
 
-$(BIN)/tmp/basicSample.o: sample/basicSample.cpp
-	$(NVCC) $(NVCC_FLAGS) -c sample/basicSample.cpp -o $(BIN)/tmp/basicSample.o
+$(BIN)/tmp/basicKeysSample.o: sample/basicKeysSample.cpp
+	$(NVCC) $(NVCC_FLAGS) -c sample/basicKeysSample.cpp -o $(BIN)/tmp/basicKeysSample.o
+
+$(BIN)/basicMasksSample: $(BIN)/tmp/basicMasksSample.o
+	$(NVCC) $(NVCC_FLAGS) -o $(BIN)/basicMasksSample $(BIN)/tmp/basicMasksSample.o $(BIN)/flavors.a
+
+$(BIN)/tmp/basicMasksSample.o: sample/basicMasksSample.cpp
+	$(NVCC) $(NVCC_FLAGS) -c sample/basicMasksSample.cpp -o $(BIN)/tmp/basicMasksSample.o
 
 bin:
 	mkdir -p $(BIN)

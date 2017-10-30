@@ -9,6 +9,7 @@ namespace Flavors
 	{
 	public:
 		Keys(const Configuration& config, int count);
+		Keys(const Configuration& config, int count, unsigned* data);
 
 		virtual void FillRandom(int seed);
 		std::vector<std::vector<unsigned>> ToHost() const;

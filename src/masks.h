@@ -8,6 +8,7 @@ namespace Flavors
 	{
 	public:
 		Masks(const Configuration& config, int count);
+		Masks(const Configuration& config, int count, unsigned* data, unsigned* lengths);
 
 		CudaArray<unsigned> Lengths;
 
