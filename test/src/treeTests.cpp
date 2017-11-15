@@ -3,7 +3,7 @@
 #include "testData.h"
 
 #define private public		//This hack should be removed - maybe replaced by HostTree?
-#include "../../flavors/src/tree.h"
+#include "tree.h"
 
 using namespace Flavors;
 
@@ -247,12 +247,12 @@ namespace FlavorsTests
 			::testing::ValuesIn(TestData::Configs))
 	);
 
-//	INSTANTIATE_TEST_CASE_P(
-//		BigData,
-//		TreeTest,
-//		::testing::Combine(
-//			::testing::ValuesIn(TestData::BigCounts),
-//			::testing::ValuesIn(TestData::Seeds),
-//			::testing::ValuesIn(TestData::Configs))
-//	);
+	INSTANTIATE_TEST_CASE_P(
+		BigData,
+		TreeTest,
+		::testing::Combine(
+			::testing::ValuesIn(TestData::BigCounts),
+			::testing::ValuesIn(TestData::Seeds),
+			::testing::ValuesIn(TestData::Configs))
+	);
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "../../flavors/src/configuration.h"
+#include "configuration.h"
 
 namespace FlavorsTests
 {

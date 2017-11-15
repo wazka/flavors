@@ -3,6 +3,8 @@
 	<name>flavors_test</name>
 	<comment></comment>
 	<projects>
+		<project>cuda-api-wrappers</project>
+		<project>flavors</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
