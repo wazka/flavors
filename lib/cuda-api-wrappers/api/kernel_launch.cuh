@@ -42,9 +42,9 @@
 #ifndef CUDA_API_WRAPPERS_KERNEL_LAUNCH_CUH_
 #define CUDA_API_WRAPPERS_KERNEL_LAUNCH_CUH_
 
-#include <types.h>
-#include <constants.h>
-#include <device_function.hpp>
+#include "types.h"
+#include "constants.h"
+#include "device_function.hpp"
 
 #include <type_traits>
 #include <utility>

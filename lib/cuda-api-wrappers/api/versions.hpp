@@ -10,7 +10,7 @@
 #ifndef CUDA_API_WRAPPERS_VERSIONS_HPP_
 #define CUDA_API_WRAPPERS_VERSIONS_HPP_
 
-#include <error.hpp>
+#include "error.hpp"
 #include <ostream>
 #include <utility>
 

@@ -8,9 +8,9 @@
 #ifndef CUDA_API_WRAPPERS_MEMORY_HPP_
 #define CUDA_API_WRAPPERS_MEMORY_HPP_
 
-#include <error.hpp>
-#include <constants.h>
-#include <current_device.hpp>
+#include "error.hpp"
+#include "constants.h"
+#include "current_device.hpp"
 
 #include <cuda_runtime.h> // needed, rather than cuda_runtime_api.h, e.g. for cudaMalloc
 
@@ -257,7 +257,7 @@ inline void set(void* buffer_start, int byte_value, size_t num_bytes, stream::id
 
 inline void zero(void* buffer_start, size_t num_bytes, stream::id_t stream_id)
 {
-	return set(buffer_start, 0, num_bytes, stream_id);
+	set(buffer_start, 0, num_bytes, stream_id);
 }
 
 } // namespace async
@@ -357,7 +357,7 @@ inline void register_(void *ptr, size_t size,
 	bool map_into_device_space,
 	bool make_device_side_accesible_to_all)
 {
-	return detail::register_(
+	detail::register_(
 		ptr, size,
 		  register_mapped_io_space ? cudaHostRegisterIoMemory : 0
 		| map_into_device_space ? cudaHostRegisterMapped : 0

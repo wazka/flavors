@@ -8,8 +8,8 @@
 #ifndef CUDA_API_WRAPPERS_UNIQUE_PTR_HPP_
 #define CUDA_API_WRAPPERS_UNIQUE_PTR_HPP_
 
-#include <memory.hpp>
-#include <current_device.hpp>
+#include "memory.hpp"
+#include "current_device.hpp"
 
 namespace cuda {
 namespace memory {

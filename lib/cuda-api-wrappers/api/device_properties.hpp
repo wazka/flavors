@@ -9,9 +9,9 @@
 #ifndef CUDA_API_WRAPPERS_DEVICE_PROPERTIES_HPP_
 #define CUDA_API_WRAPPERS_DEVICE_PROPERTIES_HPP_
 
-#include <types.h>
-#include <constants.h>
-#include <pci_id.h>
+#include "types.h"
+#include "constants.h"
+#include "pci_id.h"
 
 #include <cuda_runtime_api.h>
 

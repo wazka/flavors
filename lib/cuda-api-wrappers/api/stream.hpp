@@ -8,12 +8,12 @@
 #ifndef CUDA_API_WRAPPERS_STREAM_HPP_
 #define CUDA_API_WRAPPERS_STREAM_HPP_
 
-#include <types.h>
-#include <error.hpp>
-#include <memory.hpp>
-#include <kernel_launch.cuh>
-#include <current_device.hpp>
-#include <device_count.hpp>
+#include "types.h"
+#include "error.hpp"
+#include "memory.hpp"
+#include "kernel_launch.cuh"
+#include "current_device.hpp"
+#include "device_count.hpp"
 
 #include <cuda_runtime_api.h>
 

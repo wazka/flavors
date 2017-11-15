@@ -13,8 +13,8 @@
 #ifndef CUDA_API_WRAPPERS_DEVICE_COUNT_HPP_
 #define CUDA_API_WRAPPERS_DEVICE_COUNT_HPP_
 
-#include <types.h>
-#include <cuda_runtime_api.h>
+#include "types.h"
+#include "cuda_runtime_api.h"
 
 namespace cuda {
 namespace device {

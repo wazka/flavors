@@ -9,10 +9,10 @@
 #ifndef CUDA_API_WRAPPERS_EVENT_HPP_
 #define CUDA_API_WRAPPERS_EVENT_HPP_
 
-#include <types.h>
-#include <constants.h>
-#include <error.hpp>
-#include <current_device.hpp>
+#include "types.h"
+#include "constants.h"
+#include "error.hpp"
+#include "current_device.hpp"
 
 #include <cuda_runtime_api.h>
 

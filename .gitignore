@@ -1,1 +1,8 @@
 /bin
+/flavors/Debug
+/flavors/Release
+/test/Debug
+/test/Release
+/lib/cuda-api-wrappers/Debug
+/lib/cuda-api-wrappers/Release
+/test/.settings

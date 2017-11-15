@@ -9,7 +9,7 @@
 #ifndef CUDA_API_WRAPPERS_ERROR_HPP_
 #define CUDA_API_WRAPPERS_ERROR_HPP_
 
-#include <types.h>
+#include "types.h"
 
 #include <cuda_runtime_api.h>
 #include <type_traits>

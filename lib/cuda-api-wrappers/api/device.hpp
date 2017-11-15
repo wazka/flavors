@@ -9,12 +9,12 @@
 #ifndef CUDA_API_WRAPPERS_DEVICE_HPP_
 #define CUDA_API_WRAPPERS_DEVICE_HPP_
 
-#include <types.h>
-#include <device_properties.hpp>
-#include <memory.hpp>
-#include <current_device.hpp>
-#include <pci_id.h>
-#include <unique_ptr.hpp>
+#include "types.h"
+#include "device_properties.hpp"
+#include "memory.hpp"
+#include "current_device.hpp"
+#include "pci_id.h"
+#include "unique_ptr.hpp"
 
 #include <cuda_runtime_api.h>
 #include <string>

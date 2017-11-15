@@ -9,9 +9,9 @@
 #ifndef MULTI_WRAPPER_IMPLS_HPP_
 #define MULTI_WRAPPER_IMPLS_HPP_
 
-#include <stream.hpp>
-#include <device.hpp>
-#include <event.hpp>
+#include "stream.hpp"
+#include "device.hpp"
+#include "event.hpp"
 
 namespace cuda {
 
