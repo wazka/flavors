@@ -7,7 +7,7 @@
 #include "tree.h"
 
 
-	TEST(DataTest, KeysBasicSample)
+	TEST(SampleTest, KeysBasicSample)
 	{
 		int count = 1000;
 		std::vector<unsigned> levels{ 8, 8, 8, 8 };
@@ -35,7 +35,7 @@
 		auto h_results = result.ToHost();
 	}
 
-	TEST(DataTest, MasksBasicSample)
+	TEST(SampleTest, MasksBasicSample)
 	{
 		int count = 1000;
 		std::vector<unsigned> levels{ 8, 8, 8, 8 };

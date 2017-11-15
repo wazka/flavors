@@ -30,6 +30,7 @@
 								<option id="nvcc.compiler.cpp11option.1461288449" name="Enable C++11 support (-std=c++11)" superClass="nvcc.compiler.cpp11option" value="true" valueType="boolean"/>
 								<option id="nvcc.compiler.include.paths.1963214749" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/src}&quot;"/>
 								</option>
 								<inputType id="nvcc.compiler.input.cu.1009297221" superClass="nvcc.compiler.input.cu"/>
@@ -50,6 +51,7 @@
 									<listOptionValue builtIn="false" value="/usr/lib/libgtest.a"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers/Debug/libcuda-api-wrappers.a}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/Debug/libflavors.a}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks/Debug/libflavors-benchmarks.a}&quot;"/>
 								</option>
 								<inputType id="nvcc.linker.input.1027512438" superClass="nvcc.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -120,7 +122,10 @@
 								<option id="nvcc.compiler.pic.1769683094" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
 								<option id="nvcc.compiler.cpp11option.1904374648" name="Enable C++11 support (-std=c++11)" superClass="nvcc.compiler.cpp11option" value="true" valueType="boolean"/>
 								<option id="nvcc.compiler.include.paths.1139634225" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/src}&quot;"/>
 								</option>
 								<inputType id="nvcc.compiler.input.cu.1721506068" superClass="nvcc.compiler.input.cu"/>
@@ -129,13 +134,21 @@
 							</tool>
 							<tool command="nvcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser;nvcc.errorParser" id="nvcc.linker.base.2037839418" name="NVCC Linker" superClass="nvcc.linker.base">
 								<option id="nvcc.linker.option.libs.2078446264" name="Libraries (-l)" superClass="nvcc.linker.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="flavors-benchmarks"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="flavors"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="cuda-api-wrappers"/>
 									<listOptionValue builtIn="false" value="pthread"/>
 								</option>
-								<option id="nvcc.linker.option.paths.92134620" name="Library search path (-L)" superClass="nvcc.linker.option.paths"/>
+								<option id="nvcc.linker.option.paths.92134620" name="Library search path (-L)" superClass="nvcc.linker.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers/Release}&quot;"/>
+								</option>
 								<option id="nvcc.linker.option.userobjs.1536665747" name="Other objects" superClass="nvcc.linker.option.userobjs" valueType="userObjs">
 									<listOptionValue builtIn="false" value="/usr/lib/libgtest.a"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers/Release/libcuda-api-wrappers.a}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/Release/libflavors.a}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks/Release/libflavors-benchmarks.a}&quot;"/>
 								</option>
 								<inputType id="nvcc.linker.input.1179725070" superClass="nvcc.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -144,6 +157,11 @@
 							</tool>
 							<tool id="nvcc.archiver.base.1429927762" name="NVCC Archiver" superClass="nvcc.archiver.base"/>
 							<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="com.nvidia.host.assembler.482336053" name="Host Assembler" superClass="com.nvidia.host.assembler">
+								<option id="gnu.both.asm.option.include.paths.21120927" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers}&quot;"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1486489859" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
@@ -157,23 +175,33 @@
 				</executable>
 				<editor-arch major="6" minor="0"/>
 			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="cuda-api-wrappers;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/cuda-api-wrappers"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/cuda-api-wrappers/Release"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="cuda-api-wrappers" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="flavors;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/flavors"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/flavors/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="flavors" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="flavors-benchmarks;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/flavors-benchmarks"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/flavors-benchmarks/Release"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="flavors-benchmarks" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+			</storageModule>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="flavors_test.com.nvidia.cuda.ide.eight_zero.exe.269843678" name="Executable" projectType="com.nvidia.cuda.ide.eight_zero.exe"/>
-	</storageModule>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.eight_zero.configuration.debug.622708540;com.nvidia.cuda.ide.eight_zero.configuration.debug.622708540.;nvcc.compiler.base.3588068;nvcc.compiler.input.cu.1009297221">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.eight_zero.configuration.debug.622708540;com.nvidia.cuda.ide.eight_zero.configuration.debug.622708540.;nvcc.compiler.base.3588068;nvcc.compiler.input.cpp.961832496">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.eight_zero.configuration.debug.622708540;com.nvidia.cuda.ide.eight_zero.configuration.debug.622708540.;nvcc.compiler.base.3588068;nvcc.compiler.input.c.971158596">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
-		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
@@ -185,4 +213,25 @@
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.eight_zero.configuration.release.441443713;com.nvidia.cuda.ide.eight_zero.configuration.release.441443713.;nvcc.compiler.base.152829453;nvcc.compiler.input.cu.1721506068">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.eight_zero.configuration.release.441443713;com.nvidia.cuda.ide.eight_zero.configuration.release.441443713.;nvcc.compiler.base.152829453;nvcc.compiler.input.c.198831394">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.eight_zero.configuration.debug.622708540;com.nvidia.cuda.ide.eight_zero.configuration.debug.622708540.;nvcc.compiler.base.3588068;nvcc.compiler.input.cu.1009297221">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.eight_zero.configuration.release.441443713;com.nvidia.cuda.ide.eight_zero.configuration.release.441443713.;nvcc.compiler.base.152829453;nvcc.compiler.input.cpp.803376791">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.eight_zero.configuration.debug.622708540;com.nvidia.cuda.ide.eight_zero.configuration.debug.622708540.;nvcc.compiler.base.3588068;nvcc.compiler.input.cpp.961832496">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.nvidia.cuda.ide.eight_zero.configuration.debug.622708540;com.nvidia.cuda.ide.eight_zero.configuration.debug.622708540.;nvcc.compiler.base.3588068;nvcc.compiler.input.c.971158596">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.nvidia.cuda.ide.build.NVCCPerProjectProfile"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
 </cproject>

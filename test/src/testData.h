@@ -18,5 +18,7 @@ namespace FlavorsTests
 			Flavors::Configuration{ std::vector<unsigned>{16, 4, 4, 4, 4} },
 			Flavors::Configuration{ std::vector<unsigned>{7, 5, 3, 2, 3, 6, 6} }
 		};
+
+		const std::string BenchmarkResultFile = "benchmarkResults.csv";
 	}
 }
