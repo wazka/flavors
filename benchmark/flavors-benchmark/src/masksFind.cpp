@@ -8,6 +8,8 @@ using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
+	std::string MasksFindBenchmark::Label = "Count;Seed;Config;MinLen;MaxLen;Generation;Sort;Reshape;Build;Find;FindRandom;FindRandomSorted";
+
 	void MasksFindBenchmark::Run()
 	{
 		recordParams();

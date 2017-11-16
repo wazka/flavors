@@ -1,0 +1,43 @@
+{
+  "benchmark": "masksFind",
+  "resultFilePath": "masksFindResult.csv",
+  "minLen": 24,
+  "maxLen": 32,
+  "configs": [
+    [
+      8,
+      8,
+      8,
+      8
+    ],
+    [
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      8
+    ],
+    [
+      3,
+      5,
+      5,
+      7,
+      6,
+      3,
+      3
+    ]
+  ],
+  "counts": [
+    50000,
+    100000,
+    150000,
+    200000
+  ],
+  "seeds": [
+    1234,
+    4325,
+    5234
+  ]
+}

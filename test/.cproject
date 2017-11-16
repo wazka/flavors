@@ -29,7 +29,6 @@
 								<option id="nvcc.compiler.pic.856604738" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
 								<option id="nvcc.compiler.cpp11option.1461288449" name="Enable C++11 support (-std=c++11)" superClass="nvcc.compiler.cpp11option" value="true" valueType="boolean"/>
 								<option id="nvcc.compiler.include.paths.1963214749" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/src}&quot;"/>
@@ -40,19 +39,18 @@
 							</tool>
 							<tool command="nvcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX} ${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser;nvcc.errorParser" id="nvcc.linker.base.1991137651" name="NVCC Linker" superClass="nvcc.linker.base">
 								<option id="nvcc.linker.option.libs.2054218348" name="Libraries (-l)" superClass="nvcc.linker.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="flavors-benchmarks"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="flavors"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="cuda-api-wrappers"/>
 									<listOptionValue builtIn="false" value="pthread"/>
 								</option>
 								<option id="nvcc.linker.option.paths.557160022" name="Library search path (-L)" superClass="nvcc.linker.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/Release}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks/Debug}&quot;"/>
 								</option>
 								<option id="nvcc.linker.option.userobjs.1977060784" name="Other objects" superClass="nvcc.linker.option.userobjs" valueType="userObjs">
 									<listOptionValue builtIn="false" value="/usr/lib/libgtest.a"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers/Debug/libcuda-api-wrappers.a}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/Debug/libflavors.a}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks/Debug/libflavors-benchmarks.a}&quot;"/>
 								</option>
 								<inputType id="nvcc.linker.input.1027512438" superClass="nvcc.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -62,6 +60,7 @@
 							<tool id="nvcc.archiver.base.724201977" name="NVCC Archiver" superClass="nvcc.archiver.base"/>
 							<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser" id="com.nvidia.host.assembler.587857617" name="Host Assembler" superClass="com.nvidia.host.assembler">
 								<option id="gnu.both.asm.option.include.paths.570033654" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers}&quot;"/>
 								</option>
@@ -79,18 +78,25 @@
 				<editor-arch major="6" minor="0"/>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="cuda-api-wrappers;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="cuda-api-wrappers;com.nvidia.cuda.ide.eight_zero.configuration.debug.577456600" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/cuda-api-wrappers"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/cuda-api-wrappers/Release"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/cuda-api-wrappers/Debug"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="cuda-api-wrappers" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
-				<externalSettings containerId="flavors;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="flavors;com.nvidia.cuda.ide.eight_zero.configuration.lib.debug.1270669485" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/flavors"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/flavors/Release"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/flavors/Debug"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="flavors" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="flavors-benchmarks;com.nvidia.cuda.ide.eight_zero.configuration.lib.debug.1866219546" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/flavors-benchmarks"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/flavors-benchmarks/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="flavors-benchmarks" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>
@@ -123,8 +129,6 @@
 								<option id="nvcc.compiler.pic.1769683094" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
 								<option id="nvcc.compiler.cpp11option.1904374648" name="Enable C++11 support (-std=c++11)" superClass="nvcc.compiler.cpp11option" value="true" valueType="boolean"/>
 								<option id="nvcc.compiler.include.paths.1139634225" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/src}&quot;"/>
@@ -147,9 +151,6 @@
 								</option>
 								<option id="nvcc.linker.option.userobjs.1536665747" name="Other objects" superClass="nvcc.linker.option.userobjs" valueType="userObjs">
 									<listOptionValue builtIn="false" value="/usr/lib/libgtest.a"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers/Release/libcuda-api-wrappers.a}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/Release/libflavors.a}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks/Release/libflavors-benchmarks.a}&quot;"/>
 								</option>
 								<inputType id="nvcc.linker.input.1179725070" superClass="nvcc.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -177,21 +178,21 @@
 				<editor-arch major="6" minor="0"/>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="cuda-api-wrappers;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="cuda-api-wrappers;com.nvidia.cuda.ide.eight_zero.configuration.release.270531869" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/cuda-api-wrappers"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/cuda-api-wrappers/Release"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="cuda-api-wrappers" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
-				<externalSettings containerId="flavors;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="flavors;com.nvidia.cuda.ide.eight_zero.configuration.lib.release.1741414649" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/flavors"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/flavors/Release"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="flavors" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
-				<externalSettings containerId="flavors-benchmarks;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+				<externalSettings containerId="flavors-benchmarks;com.nvidia.cuda.ide.eight_zero.configuration.lib.release.945748744" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/flavors-benchmarks"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/flavors-benchmarks/Release"/>

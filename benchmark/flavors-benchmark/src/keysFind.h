@@ -20,7 +20,7 @@ namespace FlavorsBenchmarks
 
 		virtual void Run();
 
-		const std::string Label = "Count;Seed;Config;Generation;Sort;Reshape;Build;Find;FindRandom;FindRandomSorted";
+		static std::string Label;
 
 		virtual ~KeysFindBenchmark() = default;
 	protected:

@@ -15,6 +15,8 @@ namespace FlavorsBenchmarks
 
 		void Run() override;
 
+		static std::string Label;
+
 	private:
 		int minLen;
 		int maxLen;

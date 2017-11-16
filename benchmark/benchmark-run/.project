@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>flavors-test</name>
+	<name>flavors-benchmarks-run</name>
 	<comment></comment>
 	<projects>
 		<project>cuda-api-wrappers</project>

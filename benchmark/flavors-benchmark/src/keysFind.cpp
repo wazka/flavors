@@ -11,6 +11,8 @@ using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
+	std::string KeysFindBenchmark::Label = "Count;Seed;Config;Generation;Sort;Reshape;Build;Find;FindRandom;FindRandomSorted";
+
 	void KeysFindBenchmark::Run()
 	{
 		recordParams();

@@ -6,3 +6,4 @@
 /lib/cuda-api-wrappers/Debug
 /lib/cuda-api-wrappers/Release
 /test/.settings
+/benchmark/benchmark-run/.settings
