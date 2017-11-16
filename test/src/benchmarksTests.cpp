@@ -4,6 +4,7 @@
 
 #include "testData.h"
 #include "keysFind.h"
+#include "masksFind.h"
 
 using namespace Flavors;
 using namespace FlavorsBenchmarks;
@@ -44,7 +45,30 @@ namespace FlavorsTests
 		ASSERT_TRUE(CheckFileExists(TestData::BenchmarkResultFile));
 
 		//cleanup
-		//RemoveFile(TestData::BenchmarkResultFile);
+		RemoveFile(TestData::BenchmarkResultFile);
+	}
+
+	TEST_P(BenchmarkTest, MasksFind)
+	{
+		//given
+		auto params = GetParam();
+		int count = std::get<0>(params);
+		int seed = std::get<1>(params);
+		Configuration config = std::get<2>(params);
+
+		int maxLen = config.Length;
+		int minLen = maxLen / 2;
+
+		MasksFindBenchmark bench{count, seed, config, TestData::BenchmarkResultFile, minLen, maxLen};
+
+		//when
+		bench.Run();
+
+		//then
+		ASSERT_TRUE(CheckFileExists(TestData::BenchmarkResultFile));
+
+		//cleanup
+		RemoveFile(TestData::BenchmarkResultFile);
 	}
 
 	INSTANTIATE_TEST_CASE_P(

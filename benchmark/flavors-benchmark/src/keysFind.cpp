@@ -39,7 +39,7 @@ namespace FlavorsBenchmarks
 		return keys;
 	}
 
-	void KeysFindBenchmark::buildTree(Flavors::Keys& keys)
+	void KeysFindBenchmark::buildTreeFromKeys(Flavors::Keys& keys)
 	{
 		timer.Start();
 		Tree localTree{keys};
@@ -51,7 +51,7 @@ namespace FlavorsBenchmarks
 	void KeysFindBenchmark::runForKeys()
 	{
 		auto keys = prepareKeys();
-		buildTree(keys);
+		buildTreeFromKeys(keys);
 
 		timer.Start();
 		tree.FindKeys(keys, result.Get());

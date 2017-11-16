@@ -98,7 +98,13 @@
 								<inputType id="nvcc.compiler.input.cpp.160547200" superClass="nvcc.compiler.input.cpp"/>
 								<inputType id="nvcc.compiler.input.c.10668336" superClass="nvcc.compiler.input.c"/>
 							</tool>
-							<tool id="nvcc.linker.base.1680963622" name="NVCC Linker" superClass="nvcc.linker.base"/>
+							<tool id="nvcc.linker.base.1680963622" name="NVCC Linker" superClass="nvcc.linker.base">
+								<option defaultValue="true" id="nvcc.linker.option.shared.271820171" name="Shared (-shared)" superClass="nvcc.linker.option.shared" valueType="boolean"/>
+								<inputType id="nvcc.linker.input.1474066219" superClass="nvcc.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
 							<tool errorParsers="" id="nvcc.archiver.base.2051982784" name="NVCC Archiver" superClass="nvcc.archiver.base"/>
 							<tool errorParsers="org.eclipse.cdt.core.GASErrorParser" id="com.nvidia.host.assembler.1622243930" name="Host Assembler" superClass="com.nvidia.host.assembler">
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1271768034" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>

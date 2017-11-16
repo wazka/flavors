@@ -70,7 +70,7 @@ namespace Flavors
 	public:
 		Cuda2DArray(int depth, int count);
 
-		const int Depth;
+		int Depth;
 		unsigned* Get() { return store.Get(); }
 		unsigned** GetLevels() { return levels.Get(); }
 		unsigned* operator[](int level) const { return h_levels[level]; }

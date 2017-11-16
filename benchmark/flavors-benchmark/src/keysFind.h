@@ -18,10 +18,11 @@ namespace FlavorsBenchmarks
 			result(count)
 		{}
 
-		void Run();
+		virtual void Run();
 
 		const std::string Label = "Count;Seed;Config;Generation;Sort;Reshape;Build;Find;FindRandom;FindRandomSorted";
 
+		virtual ~KeysFindBenchmark() = default;
 	protected:
 		struct Measured
 		{
@@ -41,7 +42,7 @@ namespace FlavorsBenchmarks
 		std::string resultPath;
 		Flavors::Configuration config;
 
-		void recordParams();
+		virtual void recordParams();
 
 		Measured measured;
 		Flavors::CudaArray<unsigned> result;
@@ -49,7 +50,7 @@ namespace FlavorsBenchmarks
 		Timer timer;
 
 		Flavors::Tree tree;
-		void buildTree(Flavors::Keys& keys);
+		void buildTreeFromKeys(Flavors::Keys& keys);
 		Flavors::Keys prepareKeys();
 
 		void runForKeys();

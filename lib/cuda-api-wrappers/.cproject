@@ -96,6 +96,7 @@
 								<inputType id="nvcc.compiler.input.c.312132880" superClass="nvcc.compiler.input.c"/>
 							</tool>
 							<tool id="nvcc.linker.base.320179608" name="NVCC Linker" superClass="nvcc.linker.base">
+								<option defaultValue="true" id="nvcc.linker.option.shared.1057495688" name="Shared (-shared)" superClass="nvcc.linker.option.shared" valueType="boolean"/>
 								<inputType id="nvcc.linker.input.32817501" superClass="nvcc.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
