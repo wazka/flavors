@@ -44,7 +44,7 @@ namespace FlavorsTests
 		ASSERT_TRUE(CheckFileExists(TestData::BenchmarkResultFile));
 
 		//cleanup
-		RemoveFile(TestData::BenchmarkResultFile);
+		//RemoveFile(TestData::BenchmarkResultFile);
 	}
 
 	INSTANTIATE_TEST_CASE_P(

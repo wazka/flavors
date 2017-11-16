@@ -1,11 +1,11 @@
 #include "keysFind.h"
 #include "keys.h"
 #include "tree.h"
-#include "timer.h"
 
 #include <fstream>
 #include <iostream>
 #include <chrono>
+#include <thread>
 
 using namespace Flavors;
 
@@ -15,59 +15,73 @@ namespace FlavorsBenchmarks
 	{
 		recordParams();
 
-		Timer t;
+		runForKeys();
+		runForRandKeys();
 
-		t.Start();
+		measured.appendToFile(resultPath);
+	}
+
+	Flavors::Keys KeysFindBenchmark::prepareKeys()
+	{
+		timer.Start();
 		Keys rawKeys{Configuration::DefaultConfig32, count};
 		rawKeys.FillRandom(seed);
-		result.Generation = t.Stop();
+		measured.Generation = timer.Stop();
 
-		t.Start();
+		timer.Start();
 		rawKeys.Sort();
-		result.Sort = t.Stop();
+		measured.Sort = timer.Stop();
 
-		t.Start();
+		timer.Start();
 		auto keys = rawKeys.ReshapeKeys(config);
-		result.Reshape = t.Stop();
+		measured.Reshape = timer.Stop();
 
-		t.Start();
-		Tree tree{keys};
-		result.Build = t.Stop();
+		return keys;
+	}
 
-		CudaArray<unsigned> findResult{keys.Count};
+	void KeysFindBenchmark::buildTree(Flavors::Keys& keys)
+	{
+		timer.Start();
+		Tree localTree{keys};
+		measured.Build = timer.Stop();
 
-		t.Start();
-		tree.FindKeys(keys, findResult.Get());
-		result.Find = t.Stop();
+		tree = std::move(localTree);
+	}
 
+	void KeysFindBenchmark::runForKeys()
+	{
+		auto keys = prepareKeys();
+		buildTree(keys);
+
+		timer.Start();
+		tree.FindKeys(keys, result.Get());
+		measured.Find = timer.Stop();
+	}
+
+	void KeysFindBenchmark::runForRandKeys()
+	{
 		Keys randomKeys{config, count};
 		randomKeys.FillRandom(seed + 1);
 
-		t.Start();
-		tree.FindKeys(randomKeys, findResult.Get());
-		result.FindRandom = t.Stop();
+		timer.Start();
+		tree.FindKeys(randomKeys, result.Get());
+		measured.FindRandom = timer.Stop();
 
 		randomKeys.Sort();
 
-		t.Start();
-		tree.FindKeys(randomKeys, findResult.Get());
-		result.FindRandomSorted = t.Stop();
-
-		result.appendToFile(resultPath);
+		timer.Start();
+		tree.FindKeys(randomKeys, result.Get());
+		measured.FindRandomSorted = timer.Stop();
 	}
 
 	void KeysFindBenchmark::recordParams()
 	{
 		std::ofstream file{resultPath.c_str(), std::ios_base::app | std::ios_base::out};
-
-		if(!file)
-			file.open(resultPath.c_str(), std::ios_base::app | std::ios_base::out);
-
 		file << count << ";" << seed << ";" << config << ";";
 		file.close();
 	}
 
-	void KeysFindBenchmark::Result::appendToFile(std::string& path)
+	void KeysFindBenchmark::Measured::appendToFile(std::string& path)
 	{
 		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
 

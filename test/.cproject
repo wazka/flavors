@@ -29,6 +29,7 @@
 								<option id="nvcc.compiler.pic.856604738" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
 								<option id="nvcc.compiler.cpp11option.1461288449" name="Enable C++11 support (-std=c++11)" superClass="nvcc.compiler.cpp11option" value="true" valueType="boolean"/>
 								<option id="nvcc.compiler.include.paths.1963214749" name="Include paths (-I)" superClass="nvcc.compiler.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/src}&quot;"/>
@@ -44,8 +45,8 @@
 									<listOptionValue builtIn="false" value="pthread"/>
 								</option>
 								<option id="nvcc.linker.option.paths.557160022" name="Library search path (-L)" superClass="nvcc.linker.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/Debug}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers/Debug}&quot;"/>
 								</option>
 								<option id="nvcc.linker.option.userobjs.1977060784" name="Other objects" superClass="nvcc.linker.option.userobjs" valueType="userObjs">
 									<listOptionValue builtIn="false" value="/usr/lib/libgtest.a"/>
@@ -81,14 +82,14 @@
 				<externalSettings containerId="cuda-api-wrappers;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/cuda-api-wrappers"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/cuda-api-wrappers/Release"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/cuda-api-wrappers/Debug"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="cuda-api-wrappers" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 				<externalSettings containerId="flavors;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/flavors"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/flavors/Debug"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/flavors/Release"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="flavors" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
@@ -141,8 +142,8 @@
 								</option>
 								<option id="nvcc.linker.option.paths.92134620" name="Library search path (-L)" superClass="nvcc.linker.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors-benchmarks/Release}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/Debug}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/flavors/Release}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cuda-api-wrappers/Debug}&quot;"/>
 								</option>
 								<option id="nvcc.linker.option.userobjs.1536665747" name="Other objects" superClass="nvcc.linker.option.userobjs" valueType="userObjs">
 									<listOptionValue builtIn="false" value="/usr/lib/libgtest.a"/>
@@ -179,14 +180,14 @@
 				<externalSettings containerId="cuda-api-wrappers;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/cuda-api-wrappers"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/cuda-api-wrappers/Release"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/cuda-api-wrappers/Debug"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="cuda-api-wrappers" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
 				<externalSettings containerId="flavors;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/flavors"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/flavors/Debug"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/flavors/Release"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="flavors" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>

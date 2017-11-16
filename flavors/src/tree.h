@@ -8,11 +8,9 @@ namespace Flavors
 {
 	class Tree
 	{
-		Tree();
-
 	public:
+		Tree();
 		explicit Tree(Keys& keys);
-
 		explicit Tree(Masks& masks);
 
 		void FindKeys(Keys& keys, unsigned* result);
@@ -29,9 +27,9 @@ namespace Flavors
 		std::vector<unsigned> ChildrenCountsHost;
 
 		Tree(const Tree& other) = delete;
-		Tree(Tree&& other) noexcept = delete;
+		Tree(Tree&& other) noexcept = default;
 		Tree& operator=(const Tree& other) = delete;
-		Tree& operator=(Tree&& other) noexcept = delete;
+		Tree& operator=(Tree&& other) noexcept = default;
 	private:
 		void countNodes(Cuda2DArray& borders, Cuda2DArray& indexes);
 		void removeEmptyLevels();
