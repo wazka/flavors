@@ -7,7 +7,6 @@ import shutil
 import time
 import os
 
-
 def runKeysFind(caption, benchPath, configPath, resultsPath):
     sb.check_call([benchPath, configPath]);
     config = js.load(open(configPath))
@@ -29,27 +28,34 @@ def calculateThroughputs(data):
     
     return data
     
-def drawChart(maxData, meanData, minData, column, caption):
+def drawChart(maxData, meanData, minData, column, caption, groupColumn, chartKind):
     data = pd.DataFrame()
-    data['Count'] = maxData['Count']
+    data[groupColumn] = maxData[groupColumn]
     data[caption + '_max'] = maxData[column]
     data[caption + '_mean'] = meanData[column]
     data[caption + '_min'] = minData[column]
-    data.plot(x='Count', title=column, grid='on');
-    plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
+    data.plot(x=groupColumn, title=column, grid='on', kind=chartKind);
+    
+    if chartKind != 'bar':
+        plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
+    
+def drawCharts(data, caption, groupColumn, chartKind = 'line'):
+    byCountDataMax = data.groupby(groupColumn).max().reset_index(groupColumn)
+    byCountDataMin = data.groupby(groupColumn).min().reset_index(groupColumn)
+    byCountDataMean = data.groupby(groupColumn).mean().reset_index(groupColumn)
+
+    drawChart(byCountDataMax, byCountDataMean, byCountDataMin, 'BuildThroughput', caption, groupColumn, chartKind)
+    drawChart(byCountDataMax, byCountDataMean, byCountDataMin, 'FindThroughput', caption, groupColumn, chartKind)
+    drawChart(byCountDataMax, byCountDataMean, byCountDataMin, 'FindRandomThroughput', caption, groupColumn, chartKind)
+    drawChart(byCountDataMax, byCountDataMean, byCountDataMin, 'FindSortedThroughput', caption, groupColumn, chartKind)
 
 def findBenchmark(caption, benchPath, configPath, resultsPath):
     data = runKeysFind(caption, benchPath, configPath, resultsPath)
     data = calculateThroughputs(data)
-
-    byCountDataMax = data.groupby('Count').max().reset_index('Count')
-    byCountDataMin = data.groupby('Count').min().reset_index('Count')
-    byCountDataMean = data.groupby('Count').mean().reset_index('Count')
-
-    drawChart(byCountDataMax, byCountDataMean, byCountDataMin, 'BuildThroughput', caption)
-    drawChart(byCountDataMax, byCountDataMean, byCountDataMin, 'FindThroughput', caption)
-    drawChart(byCountDataMax, byCountDataMean, byCountDataMin, 'FindRandomThroughput', caption)
-    drawChart(byCountDataMax, byCountDataMean, byCountDataMin, 'FindSortedThroughput', caption)
+    
+    drawCharts(data, caption, 'Count')
+    drawCharts(data, caption, 'Seed')
+    drawCharts(data, caption, 'Config', 'bar')
     
 def keysFindBenchmark(caption = 'keysFindRun', benchPath = './../benchmark-run/Release/flavors-benchmarks-run', configPath = '../configurations/keysFind.json', resultsPath = '../../results/keysFind/'):
     findBenchmark(caption, benchPath, configPath, resultsPath)
