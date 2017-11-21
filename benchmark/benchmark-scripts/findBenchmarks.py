@@ -40,14 +40,14 @@ def drawChart(maxData, meanData, minData, column, caption, groupColumn, chartKin
         plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
     
 def drawCharts(data, caption, groupColumn, chartKind = 'line'):
-    byCountDataMax = data.groupby(groupColumn).max().reset_index(groupColumn)
-    byCountDataMin = data.groupby(groupColumn).min().reset_index(groupColumn)
-    byCountDataMean = data.groupby(groupColumn).mean().reset_index(groupColumn)
+    groupedDataMax = data.groupby(groupColumn).max().reset_index(groupColumn)
+    groupedDataMin = data.groupby(groupColumn).min().reset_index(groupColumn)
+    groupedDataMean = data.groupby(groupColumn).mean().reset_index(groupColumn)
 
-    drawChart(byCountDataMax, byCountDataMean, byCountDataMin, 'BuildThroughput', caption, groupColumn, chartKind)
-    drawChart(byCountDataMax, byCountDataMean, byCountDataMin, 'FindThroughput', caption, groupColumn, chartKind)
-    drawChart(byCountDataMax, byCountDataMean, byCountDataMin, 'FindRandomThroughput', caption, groupColumn, chartKind)
-    drawChart(byCountDataMax, byCountDataMean, byCountDataMin, 'FindSortedThroughput', caption, groupColumn, chartKind)
+    drawChart(groupedDataMax, groupedDataMean, groupedDataMin, 'BuildThroughput', caption, groupColumn, chartKind)
+    drawChart(groupedDataMax, groupedDataMean, groupedDataMin, 'FindThroughput', caption, groupColumn, chartKind)
+    drawChart(groupedDataMax, groupedDataMean, groupedDataMin, 'FindRandomThroughput', caption, groupColumn, chartKind)
+    drawChart(groupedDataMax, groupedDataMean, groupedDataMin, 'FindSortedThroughput', caption, groupColumn, chartKind)
 
 def findBenchmark(caption, benchPath, configPath, resultsPath):
     data = runKeysFind(caption, benchPath, configPath, resultsPath)
@@ -61,4 +61,33 @@ def keysFindBenchmark(caption = 'keysFindRun', benchPath = './../benchmark-run/R
     findBenchmark(caption, benchPath, configPath, resultsPath)
   
 def masksFindBenchmark(caption = 'masksFindRun', benchPath = './../benchmark-run/Release/flavors-benchmarks-run', configPath = '../configurations/masksFind.json', resultsPath = '../../results/masksFind/'):
-    findBenchmark(caption, benchPath, configPath, resultsPath)  
+    findBenchmark(caption, benchPath, configPath, resultsPath)
+    
+def benchmarkHistory(resultsPath, measures, params): 
+    
+    dataFrames = {p: {m: pd.DataFrame() for m in measures} for p in params}
+    
+    for fileName in os.listdir(resultsPath):
+        if fileName.endswith('.gz'):
+            fileData = calculateThroughputs(pd.read_csv(resultsPath + fileName, sep=';', compression='gzip'))
+            
+            for p in params:
+                groupedData = fileData.groupby(p).mean()
+            
+                for m in measures:
+                    (dataFrames[p][m])[os.path.splitext(os.path.splitext(fileName)[0])[0]] = groupedData[m]
+    
+    for p in params:  
+        for m in measures:
+            if p != 'Config':
+                (dataFrames[p][m]).plot(title = m + ' by ' + p, grid = 'on')
+                plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
+            else:
+                (dataFrames[p][m]).plot(title = m + ' by ' + p, grid = 'on', kind = 'bar')
+            
+def keysBenchmarkHistory(resultsPath = '../../results/keysFind/', measures = ['BuildThroughput', 'FindThroughput', 'FindRandomThroughput'], params = ['Count', 'Config', 'Seed']):
+    benchmarkHistory(resultsPath, measures, params)
+    
+def masksBenchmarkHistory(resultsPath = '../../results/masksFind/', measures = ['BuildThroughput', 'FindThroughput', 'FindRandomThroughput'], params = ['Count', 'Config', 'Seed']):
+    benchmarkHistory(resultsPath, measures, params)
+    
