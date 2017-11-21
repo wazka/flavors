@@ -91,7 +91,7 @@ namespace FlavorsBenchmarks
 			file.open(path.c_str(), std::ios_base::app | std::ios_base::out);
 
 		file << Generation << ";" << Sort << ";" << Reshape << ";" << Build
-				<< ";" << Find << ";" << FindRandom << ";" << FindRandomSorted << ";" << std::endl;
+				<< ";" << Find << ";" << FindRandom << ";" << FindRandomSorted << std::endl;
 		file.close();
 
 	}
