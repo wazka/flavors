@@ -7,3 +7,4 @@
 /lib/cuda-api-wrappers/Release
 /test/.settings
 /benchmark/benchmark-run/.settings
+*.pyc

@@ -6,12 +6,13 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <algorithm>
 
 using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
-	std::string KeysFindBenchmark::Label = "Count;Seed;Config;Generation;Sort;Reshape;Build;Find;FindRandom;FindRandomSorted";
+	std::string KeysFindBenchmark::Label = "Count;Seed;Config;Generation;Sort;Reshape;Build;Find;FindRandom;FindRandomSorted;LevelsSizes;HitRate";
 
 	void KeysFindBenchmark::Run()
 	{
@@ -21,6 +22,7 @@ namespace FlavorsBenchmarks
 		runForRandKeys();
 
 		measured.appendToFile(resultPath);
+		recordStatistics();
 	}
 
 	Flavors::Keys KeysFindBenchmark::prepareKeys()
@@ -83,6 +85,22 @@ namespace FlavorsBenchmarks
 		file.close();
 	}
 
+	void KeysFindBenchmark::recordStatistics()
+	{
+		std::ofstream file{resultPath.c_str(), std::ios_base::app | std::ios_base::out};
+
+		file << "{";
+		for(auto levelSize : tree.h_LevelsSizes)
+			file << levelSize << ",";
+		file << "}" << ";";
+
+		auto h_result = result.ToHost();
+		auto hitCount = std::count_if(h_result.begin(), h_result.end(), [](int r){ return r != 0;});
+
+		file << hitCount / static_cast<float>(count) << std::endl;
+		file.close();
+	}
+
 	void KeysFindBenchmark::Measured::appendToFile(std::string& path)
 	{
 		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
@@ -91,7 +109,7 @@ namespace FlavorsBenchmarks
 			file.open(path.c_str(), std::ios_base::app | std::ios_base::out);
 
 		file << Generation << ";" << Sort << ";" << Reshape << ";" << Build
-				<< ";" << Find << ";" << FindRandom << ";" << FindRandomSorted << std::endl;
+				<< ";" << Find << ";" << FindRandom << ";" << FindRandomSorted << ";";
 		file.close();
 
 	}

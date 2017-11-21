@@ -3,6 +3,7 @@
 #include "keys.h"
 #include "masks.h"
 #include "containers.h"
+#include "configuration.h"
 
 namespace Flavors
 {

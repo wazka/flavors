@@ -43,6 +43,7 @@ namespace FlavorsBenchmarks
 		Flavors::Configuration config;
 
 		virtual void recordParams();
+		void recordStatistics();
 
 		Measured measured;
 		Flavors::CudaArray<unsigned> result;
