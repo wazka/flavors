@@ -5,15 +5,15 @@
 #include "testData.h"
 #include "keysFind.h"
 #include "masksFind.h"
+#include "multiConfigKeys.h"
+#include "multiConfigMasks.h"
 
 using namespace Flavors;
 using namespace FlavorsBenchmarks;
 
-
-
 namespace FlavorsTests
 {
-	class BenchmarkTest : public ::testing::TestWithParam<std::tuple<int, int, Configuration>>
+	class BenchmarkTest
 	{
 	public:
 		bool CheckFileExists(const std::string& name)
@@ -28,7 +28,15 @@ namespace FlavorsTests
 		}
 	};
 
-	TEST_P(BenchmarkTest, KeysFind)
+	class FindBenchmarkTest : public BenchmarkTest, public ::testing::TestWithParam<std::tuple<int, int, Configuration>>
+	{
+	};
+
+	class MultiConfigBenchmarkTest : public BenchmarkTest, public ::testing::TestWithParam<std::tuple<int, int>>
+	{
+	};
+
+	TEST_P(FindBenchmarkTest, KeysFind)
 	{
 		//given
 		auto params = GetParam();
@@ -48,7 +56,7 @@ namespace FlavorsTests
 		RemoveFile(TestData::BenchmarkResultFile);
 	}
 
-	TEST_P(BenchmarkTest, MasksFind)
+	TEST_P(FindBenchmarkTest, MasksFind)
 	{
 		//given
 		auto params = GetParam();
@@ -73,7 +81,7 @@ namespace FlavorsTests
 
 	INSTANTIATE_TEST_CASE_P(
 			SmallData,
-			BenchmarkTest,
+			FindBenchmarkTest,
 			::testing::Combine(
 				::testing::ValuesIn(TestData::SmallCounts),
 				::testing::ValuesIn(TestData::Seeds),
@@ -82,12 +90,67 @@ namespace FlavorsTests
 
 	INSTANTIATE_TEST_CASE_P(
 		BigData,
-		BenchmarkTest,
+		FindBenchmarkTest,
 		::testing::Combine(
 			::testing::ValuesIn(TestData::BigCounts),
 			::testing::ValuesIn(TestData::Seeds),
 			::testing::ValuesIn(TestData::Configs))
 	);
+
+	TEST_P(MultiConfigBenchmarkTest, KeysFind)
+	{
+		auto params = GetParam();
+		int count = std::get<0>(params);
+		int seed = std::get<1>(params);
+
+		MultiConfigKeysBenchmark bench{count, seed, TestData::Configs, TestData::BenchmarkResultFile};
+
+		//when
+		bench.Run();
+
+		//then
+		ASSERT_TRUE(CheckFileExists(TestData::BenchmarkResultFile));
+
+		//cleanup
+		RemoveFile(TestData::BenchmarkResultFile);
+	}
+
+	TEST_P(MultiConfigBenchmarkTest, MasksFind)
+	{
+		auto params = GetParam();
+		int count = std::get<0>(params);
+		int seed = std::get<1>(params);
+
+		int maxLen = TestData::Configs[0].Length;
+		int minLen = maxLen / 2;
+
+		MultiConfigMasksBenchmark bench{count, seed, TestData::Configs, TestData::BenchmarkResultFile, minLen, maxLen};
+
+		//when
+		bench.Run();
+
+		//then
+		ASSERT_TRUE(CheckFileExists(TestData::BenchmarkResultFile));
+
+		//cleanup
+		RemoveFile(TestData::BenchmarkResultFile);
+	}
+
+	INSTANTIATE_TEST_CASE_P(
+			SmallData,
+			MultiConfigBenchmarkTest,
+			::testing::Combine(
+				::testing::ValuesIn(TestData::SmallCounts),
+				::testing::ValuesIn(TestData::Seeds))
+		);
+
+	INSTANTIATE_TEST_CASE_P(
+			BigData,
+			MultiConfigBenchmarkTest,
+			::testing::Combine(
+				::testing::ValuesIn(TestData::SmallCounts),
+				::testing::ValuesIn(TestData::Seeds))
+		);
 
 
 

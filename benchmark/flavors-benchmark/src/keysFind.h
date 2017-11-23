@@ -2,60 +2,27 @@
 #include <configuration.h>
 #include <string>
 
+#include "benchmark.h"
 #include "tree.h"
-#include "timer.h"
 
 namespace FlavorsBenchmarks
 {
-	class KeysFindBenchmark
+	class KeysFindBenchmark : public Benchmark
 	{
 	public:
+		static std::string Label;
+
 		KeysFindBenchmark(int count, int seed, const Flavors::Configuration& config, const std::string& resultPath) :
-			count(count),
-			seed(seed),
-			config(config),
-			resultPath(resultPath),
-			result(count)
+			Benchmark(count, seed, resultPath),
+			config(config)
 		{}
 
-		virtual void Run();
-
-		static std::string Label;
+		void Run() override;
 
 		virtual ~KeysFindBenchmark() = default;
 	protected:
-		struct Measured
-		{
-			float Generation;
-			float Sort;
-			float Reshape;
-			float Build;
-			float Find;
-			float FindRandom;
-			float FindRandomSorted;
 
-			void appendToFile(std::string& path);
-		};
-
-		int count;
-		int seed;
-		std::string resultPath;
 		Flavors::Configuration config;
-
-		virtual void recordParams();
-		void recordStatistics();
-
-		Measured measured;
-		Flavors::CudaArray<unsigned> result;
-
-		Timer timer;
-
-		Flavors::Tree tree;
-		void buildTreeFromKeys(Flavors::Keys& keys);
-		Flavors::Keys prepareKeys();
-
-		void runForKeys();
-		void runForRandKeys();
 	};
 
 }

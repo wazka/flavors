@@ -2,6 +2,12 @@
 
 namespace Flavors
 {
+	Cuda2DArray::Cuda2DArray() :
+		Depth(0),
+		count(0)
+	{
+	}
+
 	Cuda2DArray::Cuda2DArray(int depth, int count):
 		Depth(depth),
 		count(count),

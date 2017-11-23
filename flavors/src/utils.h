@@ -68,6 +68,7 @@ namespace Flavors
 	class Cuda2DArray
 	{
 	public:
+		Cuda2DArray();
 		Cuda2DArray(int depth, int count);
 
 		int Depth;

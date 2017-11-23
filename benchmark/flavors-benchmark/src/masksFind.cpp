@@ -1,6 +1,6 @@
 #include "masksFind.h"
 
-#include <configuration.h>
+#include "configuration.h"
 #include <fstream>
 #include <string>
 
@@ -12,21 +12,11 @@ namespace FlavorsBenchmarks
 
 	void MasksFindBenchmark::Run()
 	{
-		recordParams();
+		recordParameters(config);
 
-		runForMasks();
-		runForRandMasks();
-
-		measured.appendToFile(resultPath);
-		recordStatistics();
-	}
-
-	Flavors::Masks MasksFindBenchmark::prepareMasks()
-	{
 		timer.Start();
 		Masks rawMasks{Configuration::DefaultConfig32, count};
 		rawMasks.FillRandom(seed, maxLen, minLen);
-
 		measured.Generation = timer.Stop();
 
 		timer.Start();
@@ -34,33 +24,17 @@ namespace FlavorsBenchmarks
 		measured.Sort = timer.Stop();
 
 		timer.Start();
-		auto masks = rawMasks.ReshapeMasks(config);
+		Masks masks = rawMasks.ReshapeMasks(config);
 		measured.Reshape = timer.Stop();
 
-		return masks;
-	}
-
-	void MasksFindBenchmark::buildTreeFromMasks(Masks& masks)
-	{
 		timer.Start();
-		Tree localTree{masks};
+		Tree tree{masks};
 		measured.Build = timer.Stop();
-
-		tree = std::move(localTree);
-	}
-
-	void MasksFindBenchmark::runForMasks()
-	{
-		auto masks = prepareMasks();
-		buildTreeFromMasks(masks);
 
 		timer.Start();
 		tree.FindMasks(masks, result.Get());
 		measured.Find = timer.Stop();
-	}
 
-	void MasksFindBenchmark::runForRandMasks()
-	{
 		Masks randomMasks{config, count};
 		randomMasks.FillRandom(seed, maxLen, minLen);
 
@@ -73,13 +47,15 @@ namespace FlavorsBenchmarks
 		timer.Start();
 		tree.FindMasks(randomMasks, result.Get());
 		measured.FindRandomSorted = timer.Stop();
+
+		measured.appendToFileFull(resultPath);
+		recordStatistics(tree);
 	}
 
-	void MasksFindBenchmark::recordParams()
+	void MasksFindBenchmark::recordParameters(Flavors::Configuration& config)
 	{
 		std::ofstream file{resultPath.c_str(), std::ios_base::app | std::ios_base::out};
 		file << count << ";" << seed << ";" << config << ";" << minLen << ";" << maxLen << ";";
 		file.close();
 	}
-
 }

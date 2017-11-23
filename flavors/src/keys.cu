@@ -12,6 +12,11 @@
 
 namespace Flavors
 {
+	Keys::Keys() :
+		Count(0)
+	{
+	}
+
 	Keys::Keys(const Configuration& config, int count) : 
 		Store(config.Depth(), count),
 		Config(config),

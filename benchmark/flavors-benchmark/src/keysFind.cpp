@@ -6,7 +6,6 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
-#include <algorithm>
 
 using namespace Flavors;
 
@@ -16,17 +15,8 @@ namespace FlavorsBenchmarks
 
 	void KeysFindBenchmark::Run()
 	{
-		recordParams();
+		recordParameters(config);
 
-		runForKeys();
-		runForRandKeys();
-
-		measured.appendToFile(resultPath);
-		recordStatistics();
-	}
-
-	Flavors::Keys KeysFindBenchmark::prepareKeys()
-	{
 		timer.Start();
 		Keys rawKeys{Configuration::DefaultConfig32, count};
 		rawKeys.FillRandom(seed);
@@ -37,33 +27,17 @@ namespace FlavorsBenchmarks
 		measured.Sort = timer.Stop();
 
 		timer.Start();
-		auto keys = rawKeys.ReshapeKeys(config);
+		Keys keys = rawKeys.ReshapeKeys(config);
 		measured.Reshape = timer.Stop();
 
-		return keys;
-	}
-
-	void KeysFindBenchmark::buildTreeFromKeys(Flavors::Keys& keys)
-	{
 		timer.Start();
-		Tree localTree{keys};
+		Tree tree{keys};
 		measured.Build = timer.Stop();
-
-		tree = std::move(localTree);
-	}
-
-	void KeysFindBenchmark::runForKeys()
-	{
-		auto keys = prepareKeys();
-		buildTreeFromKeys(keys);
 
 		timer.Start();
 		tree.FindKeys(keys, result.Get());
 		measured.Find = timer.Stop();
-	}
 
-	void KeysFindBenchmark::runForRandKeys()
-	{
 		Keys randomKeys{config, count};
 		randomKeys.FillRandom(seed + 1);
 
@@ -76,42 +50,30 @@ namespace FlavorsBenchmarks
 		timer.Start();
 		tree.FindKeys(randomKeys, result.Get());
 		measured.FindRandomSorted = timer.Stop();
-	}
 
-	void KeysFindBenchmark::recordParams()
-	{
-		std::ofstream file{resultPath.c_str(), std::ios_base::app | std::ios_base::out};
-		file << count << ";" << seed << ";" << config << ";";
-		file.close();
-	}
-
-	void KeysFindBenchmark::recordStatistics()
-	{
-		std::ofstream file{resultPath.c_str(), std::ios_base::app | std::ios_base::out};
-
-		file << "{";
-		for(auto levelSize : tree.h_LevelsSizes)
-			file << levelSize << ",";
-		file << "}" << ";";
-
-		auto h_result = result.ToHost();
-		auto hitCount = std::count_if(h_result.begin(), h_result.end(), [](int r){ return r != 0;});
-
-		file << hitCount / static_cast<float>(count) << std::endl;
-		file.close();
-	}
-
-	void KeysFindBenchmark::Measured::appendToFile(std::string& path)
-	{
-		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
-
-		if(!file)
-			file.open(path.c_str(), std::ios_base::app | std::ios_base::out);
-
-		file << Generation << ";" << Sort << ";" << Reshape << ";" << Build
-				<< ";" << Find << ";" << FindRandom << ";" << FindRandomSorted << ";";
-		file.close();
-
+		measured.appendToFileFull(resultPath);
+		recordStatistics(tree);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

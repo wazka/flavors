@@ -8,6 +8,7 @@ namespace Flavors
 	class Keys
 	{
 	public:
+		Keys();
 		Keys(const Configuration& config, int count);
 		Keys(const Configuration& config, int count, unsigned* data);
 

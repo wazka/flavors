@@ -7,6 +7,7 @@ namespace Flavors
 	class Masks : public Keys
 	{
 	public:
+		Masks() = default;
 		Masks(const Configuration& config, int count);
 		Masks(const Configuration& config, int count, unsigned* data, unsigned* lengths);
 
