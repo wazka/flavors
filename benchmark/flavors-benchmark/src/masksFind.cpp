@@ -15,7 +15,7 @@ namespace FlavorsBenchmarks
 		recordParameters(config);
 
 		timer.Start();
-		Masks rawMasks{Configuration::DefaultConfig32, count};
+		Masks rawMasks{Configuration::Default32, count};
 		rawMasks.FillRandom(seed, maxLen, minLen);
 		measured.Generation = timer.Stop();
 

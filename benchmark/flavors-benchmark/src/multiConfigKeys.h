@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../json/json.hpp"
 #include "configuration.h"
 #include "benchmark.h"
 #include "keys.h"
@@ -26,6 +27,11 @@ namespace FlavorsBenchmarks
 		Flavors::Keys rawKeys;
 
 		void generateRawKeys();
+
+		std::vector<nlohmann::json> dataInfo;
+		virtual void getDataInfo(nlohmann::json& j);
+		void saveDataInfo();
+
 		virtual void runForConfig(Flavors::Configuration& config);
 	};
 }

@@ -10,7 +10,8 @@ namespace Flavors
 	class Configuration
 	{
 	public:
-		static Configuration DefaultConfig32;
+		static Configuration Default32;
+		static Configuration Binary32;
 
 		int Length;
 		CudaArray<unsigned> Levels;

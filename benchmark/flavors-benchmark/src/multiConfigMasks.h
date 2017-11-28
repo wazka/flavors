@@ -23,6 +23,7 @@ namespace FlavorsBenchmarks
 		Flavors::Masks rawMasks;
 
 		void generateRawMasks();
+		virtual void getDataInfo(nlohmann::json& j) override;
 		virtual void runForConfig(Flavors::Configuration& config) override;
 		virtual void recordParameters(Flavors::Configuration& config) override;
 	};

@@ -113,6 +113,7 @@ namespace FlavorsTests
 
 		//cleanup
 		RemoveFile(TestData::BenchmarkResultFile);
+		system("rm *.json");	//TODO: Doing this more elegantly
 	}
 
 	TEST_P(MultiConfigBenchmarkTest, MasksFind)
@@ -134,6 +135,7 @@ namespace FlavorsTests
 
 		//cleanup
 		RemoveFile(TestData::BenchmarkResultFile);
+		system("rm *.json");	//TODO: Doing this more elegantly
 	}
 
 	INSTANTIATE_TEST_CASE_P(

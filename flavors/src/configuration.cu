@@ -5,7 +5,11 @@
 
 namespace Flavors
 {
-	Configuration Configuration::DefaultConfig32{ std::vector <unsigned>{32} };
+	Configuration Configuration::Default32{ std::vector <unsigned>{32} };
+	Configuration Configuration::Binary32{ std::vector <unsigned>{1, 1, 1, 1, 1, 1, 1, 1,
+																  1, 1, 1, 1, 1, 1, 1, 1,
+																  1, 1, 1, 1, 1, 1, 1, 1,
+																  1, 1, 1, 1, 1, 1, 1, 1} };
 
 	Configuration::Configuration():
 		Length(0)

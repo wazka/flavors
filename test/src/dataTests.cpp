@@ -58,13 +58,13 @@ namespace FlavorsTests
 
 		static bool CheckSort(Keys& keys)
 		{
-			auto h_keys = keys.ReshapeKeys(Configuration::DefaultConfig32).ToHost();
+			auto h_keys = keys.ReshapeKeys(Configuration::Default32).ToHost();
 			return std::is_sorted(h_keys.begin()->begin(), h_keys.begin()->end());
 		}
 
 		static bool CheckSort(Masks& masks)
 		{
-			auto h_masks = masks.ReshapeMasks(Configuration::DefaultConfig32).ToHost();
+			auto h_masks = masks.ReshapeMasks(Configuration::Default32).ToHost();
 			auto h_lenghts = masks.Lengths.ToHost();
 
 			for (int mask = 1; mask < masks.Count; ++mask)
@@ -137,7 +137,7 @@ namespace FlavorsTests
 		ASSERT_EQ(count, newKeys.Count);
 		ASSERT_EQ(UniqueConfig32.Depth(), newKeys.Depth());
 		ASSERT_TRUE(CheckAgainstConfig(newKeys, UniqueConfig32));
-		ASSERT_EQ(keys.ReshapeKeys(Configuration::DefaultConfig32), newKeys.ReshapeKeys(Configuration::DefaultConfig32));
+		ASSERT_EQ(keys.ReshapeKeys(Configuration::Default32), newKeys.ReshapeKeys(Configuration::Default32));
 	}
 
 	TEST_P(DataTest, ReshapeMasks)
@@ -157,7 +157,7 @@ namespace FlavorsTests
 		ASSERT_EQ(count, newMasks.Count);
 		ASSERT_EQ(UniqueConfig32.Depth(), newMasks.Depth());
 		ASSERT_TRUE(CheckAgainstConfig(newMasks, UniqueConfig32));
-		ASSERT_EQ(masks.ReshapeKeys(Configuration::DefaultConfig32), newMasks.ReshapeKeys(Configuration::DefaultConfig32));
+		ASSERT_EQ(masks.ReshapeKeys(Configuration::Default32), newMasks.ReshapeKeys(Configuration::Default32));
 	}
 
 	TEST_P(DataTest, SortKeys)

@@ -18,7 +18,7 @@ namespace FlavorsBenchmarks
 		recordParameters(config);
 
 		timer.Start();
-		Keys rawKeys{Configuration::DefaultConfig32, count};
+		Keys rawKeys{Configuration::Default32, count};
 		rawKeys.FillRandom(seed);
 		measured.Generation = timer.Stop();
 

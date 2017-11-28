@@ -1,6 +1,8 @@
 #pragma once
 #include "utils.h"
 #include "configuration.h"
+#include "dataInfo.h"
+
 #include <ostream>
 
 namespace Flavors
@@ -36,6 +38,8 @@ namespace Flavors
 		Cuda2DArray Indexes(Cuda2DArray& borders);
 		static void Indexes(Cuda2DArray& borders, Cuda2DArray& indexes, int count, int depth);
 		Cuda2DArray Indexes();
+
+		std::vector<DataInfo> GetInfo();
 
 		virtual ~Keys() = default;
 

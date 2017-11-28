@@ -22,12 +22,14 @@ namespace FlavorsBenchmarks
 
 		for(auto config : configs)
 			runForConfig(config);
+
+		saveDataInfo();
 	}
 
 	void MultiConfigMasksBenchmark::generateRawMasks()
 	{
 		timer.Start();
-		rawMasks = Masks{Configuration::DefaultConfig32, count};
+		rawMasks = Masks{Configuration::Default32, count};
 		rawMasks.FillRandom(seed, maxLen, minLen);
 		measured.Generation = timer.Stop();
 
@@ -54,5 +56,10 @@ namespace FlavorsBenchmarks
 
 		measured.appendToFile(resultPath);
 		recordStatistics(tree);
+	}
+
+	void MultiConfigMasksBenchmark::getDataInfo(nlohmann::json& j)
+	{
+		j["dataInfo"] = rawMasks.ReshapeMasks(Configuration::Binary32).GetInfo();
 	}
 }

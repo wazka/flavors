@@ -1,5 +1,8 @@
 #include "multiConfigKeys.h"
 
+#include <fstream>
+#include <sstream>
+
 using namespace Flavors;
 
 namespace FlavorsBenchmarks
@@ -12,6 +15,8 @@ namespace FlavorsBenchmarks
 
 		for(auto config : configs)
 			runForConfig(config);
+
+		saveDataInfo();
 	}
 
 	void MultiConfigKeysBenchmark::runForConfig(Configuration& config)
@@ -37,12 +42,38 @@ namespace FlavorsBenchmarks
 	void MultiConfigKeysBenchmark::generateRawKeys()
 	{
 		timer.Start();
-		rawKeys = Keys{Configuration::DefaultConfig32, count};
+		rawKeys = Keys{Configuration::Default32, count};
 		rawKeys.FillRandom(seed);
 		measured.Generation = timer.Stop();
 
 		timer.Start();
 		rawKeys.Sort();
 		measured.Sort = timer.Stop();
+	}
+
+	void MultiConfigKeysBenchmark::getDataInfo(nlohmann::json& j)
+	{
+		j["dataInfo"] = rawKeys.ReshapeKeys(Configuration::Binary32).GetInfo();
+	}
+
+	void MultiConfigKeysBenchmark::saveDataInfo()
+	{
+		std::ofstream recordDataFile;
+
+		std::ostringstream fileName;
+		fileName << count << "_" << seed << ".json";
+
+		recordDataFile.open(fileName.str());
+		if (!recordDataFile.good())
+			return;
+
+		nlohmann::json j;
+
+		getDataInfo(j);
+		j["seed"] = seed;
+		j["count"] = count;
+
+		recordDataFile << j.dump(3);
+		recordDataFile.close();
 	}
 }
