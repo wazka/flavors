@@ -33,6 +33,9 @@ namespace Flavors
 		CudaArray<unsigned> Permutation;
 
 		Cuda2DArray Borders();
+		Cuda2DArray Indexes(Cuda2DArray& borders);
+		static void Indexes(Cuda2DArray& borders, Cuda2DArray& indexes, int count, int depth);
+		Cuda2DArray Indexes();
 
 		virtual ~Keys() = default;
 

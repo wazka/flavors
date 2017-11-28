@@ -21,8 +21,8 @@ namespace Flavors
 		Count = keys.Count;
 
 		Cuda2DArray borders = keys.Borders();
-		Cuda2DArray indexes{ Depth(), Count };
-		countNodes(borders, indexes);
+		Cuda2DArray indexes = keys.Indexes(borders);
+		levelsSizesToHost(indexes);
 		fillNodes(borders, indexes, keys);
 	}
 
@@ -51,16 +51,12 @@ namespace Flavors
 		buildItems(indexes, pathsEnds, tmpArray);
 	}
 
-	void Tree::countNodes(Cuda2DArray& borders, Cuda2DArray& indexes)
+	void Tree::levelsSizesToHost(Cuda2DArray& indexes)
 	{
-		thrust::fill_n(thrust::device, indexes[0], Count, 1u);
 		h_LevelsSizes[0] = 1;
 
 		for(int level = 1; level < Depth(); ++level)
-		{
-			thrust::inclusive_scan(thrust::device, borders[level], borders[level] + Count, indexes[level]);
 			cuda::memory::copy(h_LevelsSizes.data() + level, indexes[level] + Count - 1, sizeof(unsigned));
-		}
 	}
 
 	void Tree::removeEmptyLevels()
@@ -77,7 +73,9 @@ namespace Flavors
 
 	void Tree::countNodes(Cuda2DArray& borders, Cuda2DArray& indexes, Cuda2DArray& paths)
 	{
-		countNodes(borders, indexes);
+		Keys::Indexes(borders, indexes, Count, Depth());
+		levelsSizesToHost(indexes);
+
 		auto indexesMap = mapNewIndexes(indexes, paths);
 		thrust::transform(
 			thrust::device,
@@ -87,7 +85,10 @@ namespace Flavors
 			indexes.Get(),
 			thrust::multiplies<unsigned>());
 		removeEmptyNodes(borders, indexes, indexesMap);
-		countNodes(borders, indexes);
+
+		Keys::Indexes(borders, indexes, Count, Depth());
+		levelsSizesToHost(indexes);
+
 		removeEmptyLevels();
 	}
 

@@ -6,6 +6,7 @@
 
 #include "device_launch_parameters.h"
 #include <thrust/execution_policy.h>
+#include <thrust/reduce.h>
 #include "thrust/sequence.h"
 #include <thrust/gather.h>
 #include <thrust/sort.h>
@@ -237,4 +238,28 @@ namespace Flavors
 		thrust::gather(thrust::device, Permutation.Get(), Permutation.Get() + Count, Store[level], tmp.Get());
 		cuda::memory::copy(Store[level], tmp.Get(), Count * sizeof(unsigned));
 	}
+
+	void Keys::Indexes(Cuda2DArray& borders, Cuda2DArray& indexes, int count, int depth)
+	{
+		thrust::fill_n(thrust::device, indexes[0], count, 1u);
+
+		for(int level = 1; level < depth; ++level)
+			thrust::inclusive_scan(thrust::device, borders[level], borders[level] + count, indexes[level]);
+	}
+
+	Cuda2DArray Keys::Indexes(Cuda2DArray& borders)
+	{
+		Cuda2DArray indexes{ Depth(), Count };
+		Indexes(borders, indexes, Count, Depth());
+
+		return indexes;
+	}
+
+	Cuda2DArray Keys::Indexes()
+	{
+		auto borders = Borders();
+		return Indexes(borders);
+	}
 }
+
+

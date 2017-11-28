@@ -32,7 +32,7 @@ namespace Flavors
 		Tree& operator=(const Tree& other) = delete;
 		Tree& operator=(Tree&& other) noexcept = default;
 	private:
-		void countNodes(Cuda2DArray& borders, Cuda2DArray& indexes);
+		void levelsSizesToHost(Cuda2DArray& indexes);
 		void removeEmptyLevels();
 		void countNodes(Cuda2DArray& borders, Cuda2DArray& indexes, Cuda2DArray& paths);
 		void fillNodes(Cuda2DArray& borders, Cuda2DArray& indexes, Keys& keys, bool forMasks = false);
