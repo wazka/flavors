@@ -4,7 +4,7 @@ import findBenchmarks as fb
 #fb.keysFindBenchmark(caption = "ABCD")
 
 #Run keys find bnechmark history
-#fb.keysBenchmarkHistory()
+fb.keysBenchmarkHistory()
 
 #Run masks fin benchmark with default parameters
 #fb.masksFindBenchmark(caption='ABCD')

@@ -18,7 +18,7 @@ namespace FlavorsBenchmarks
 		{
 		}
 
-		virtual void Run() override;
+		void Run() override;
 
 		virtual ~MultiConfigKeysBenchmark() = default;
 	protected:
