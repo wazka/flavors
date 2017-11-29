@@ -7,7 +7,7 @@ using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
-	std::string MultiConfigKeysBenchmark::Label = "Count;Seed;Config;Generation;Sort;Reshape;Build;Find;LevelsSizes;HitRate";
+	std::string MultiConfigKeysBenchmark::Label = "Count;Seed;Config;Generation;Sort;Reshape;Build;Find;DataMemory;TreeMemory;LevelsSizes;HitRate";
 
 	void MultiConfigKeysBenchmark::Run()
 	{
@@ -26,10 +26,12 @@ namespace FlavorsBenchmarks
 		timer.Start();
 		auto keys = rawKeys.ReshapeKeys(config);
 		measured.Reshape = timer.Stop();
+		measured.DataMemory = keys.MemoryFootprint();
 
 		timer.Start();
 		Tree tree{keys};
 		measured.Build = timer.Stop();
+		measured.TreeMemory = tree.MemoryFootprint();
 
 		timer.Start();
 		tree.FindKeys(keys, result.Get());

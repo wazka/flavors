@@ -11,7 +11,7 @@ using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
-	std::string KeysFindBenchmark::Label = "Count;Seed;Config;Generation;Sort;Reshape;Build;Find;FindRandom;FindRandomSorted;LevelsSizes;HitRate";
+	std::string KeysFindBenchmark::Label = "Count;Seed;Config;Generation;Sort;Reshape;Build;Find;DataMemory;TreeMemory;FindRandom;FindRandomSorted;LevelsSizes;HitRate";
 
 	void KeysFindBenchmark::Run()
 	{
@@ -29,10 +29,12 @@ namespace FlavorsBenchmarks
 		timer.Start();
 		Keys keys = rawKeys.ReshapeKeys(config);
 		measured.Reshape = timer.Stop();
+		measured.DataMemory = keys.MemoryFootprint();
 
 		timer.Start();
 		Tree tree{keys};
 		measured.Build = timer.Stop();
+		measured.TreeMemory = tree.MemoryFootprint();
 
 		timer.Start();
 		tree.FindKeys(keys, result.Get());

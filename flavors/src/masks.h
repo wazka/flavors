@@ -32,5 +32,7 @@ namespace Flavors
 		Masks(Masks&& other) noexcept = default;
 		Masks& operator=(const Masks& other) = delete;
 		Masks& operator=(Masks&& other) = default;
+
+		virtual size_t MemoryFootprint() override;
 	};
 }

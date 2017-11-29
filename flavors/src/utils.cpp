@@ -20,6 +20,11 @@ namespace Flavors
 		cuda::memory::copy(levels.Get(), h_levels.data(), depth * sizeof(unsigned*));
 	}
 
+	size_t Cuda2DArray::MemoryFootprint()
+	{
+		return store.MemoryFootprint() + levels.MemoryFootprint();
+	}
+
 	std::vector<std::vector<unsigned>> Cuda2DArray::ToHost() const
 	{
 		std::vector<std::vector<unsigned>> h_store;
@@ -73,5 +78,15 @@ namespace Flavors
 		}
 
 		return h_store;
+	}
+
+	size_t CudaJaggedArray::MemoryFootprint()
+	{
+		size_t memory = levels.MemoryFootprint();
+
+		for(auto level : h_levels)
+			memory += level.MemoryFootprint();
+
+		return memory;
 	}
 }

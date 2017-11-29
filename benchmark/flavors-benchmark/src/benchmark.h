@@ -34,6 +34,9 @@ protected:
 			float FindRandom;
 			float FindRandomSorted;
 
+			size_t DataMemory;
+			size_t TreeMemory;
+
 			void appendToFileFull(const std::string& path);
 			void appendToFile(const std::string& path);
 		};

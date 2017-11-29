@@ -15,8 +15,16 @@ namespace FlavorsBenchmarks
 		if(!file)
 			file.open(path.c_str(), std::ios_base::app | std::ios_base::out);
 
-		file << Generation << ";" << Sort << ";" << Reshape << ";" << Build
-			<< ";" << Find << ";" << FindRandom << ";" << FindRandomSorted << ";";
+		file
+			<< Generation << ";"
+			<< Sort << ";"
+			<< Reshape << ";"
+			<< Build << ";"
+			<< Find << ";"
+			<< DataMemory << ";"
+			<< TreeMemory << ";"
+			<< FindRandom << ";"
+			<< FindRandomSorted << ";";
 		file.close();
 
 	}
@@ -28,8 +36,14 @@ namespace FlavorsBenchmarks
 		if(!file)
 			file.open(path.c_str(), std::ios_base::app | std::ios_base::out);
 
-		file << Generation << ";" << Sort << ";" << Reshape << ";" << Build
-				<< ";" << Find << ";";
+		file
+			<< Generation << ";"
+			<< Sort << ";"
+			<< Reshape << ";"
+			<< Build << ";"
+			<< Find << ";"
+			<< DataMemory << ";"
+			<< TreeMemory << ";";
 		file.close();
 
 	}

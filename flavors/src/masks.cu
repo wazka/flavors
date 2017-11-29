@@ -162,4 +162,9 @@ namespace Flavors
 	{
 		return !(lhs == rhs);
 	}
+
+	size_t Masks::MemoryFootprint()
+	{
+		return Keys::MemoryFootprint() + Lengths.MemoryFootprint();
+	}
 }

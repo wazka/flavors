@@ -576,4 +576,18 @@ namespace Flavors
 				permutation.Get());
 	}
 
+	size_t Tree::MemoryFootprint()
+	{
+		return
+				Children.MemoryFootprint() +
+				ChildrenCounts.MemoryFootprint() +
+				scan.MemoryFootprint() +
+				preScan.MemoryFootprint() +
+				permutation.MemoryFootprint() +
+				lengths.MemoryFootprint() +
+				masksParts.MemoryFootprint() +
+				containers.MemoryFootprint();
+
+	}
+
 }

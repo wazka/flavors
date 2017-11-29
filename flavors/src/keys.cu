@@ -270,6 +270,11 @@ namespace Flavors
 
 		return infos;
 	}
+
+	size_t Keys::MemoryFootprint()
+	{
+		return Store.MemoryFootprint() + Permutation.MemoryFootprint();
+	}
 }
 
 

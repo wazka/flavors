@@ -7,7 +7,7 @@ using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
-	std::string MultiConfigMasksBenchmark::Label = "Count;Seed;Config;MinLen;MaxLen;Generation;Sort;Reshape;Build;Find;LevelsSizes;HitRate";
+	std::string MultiConfigMasksBenchmark::Label = "Count;Seed;Config;MinLen;MaxLen;Generation;Sort;Reshape;Build;Find;DataMemory;TreeMemory;LevelsSizes;HitRate";
 
 	void MultiConfigMasksBenchmark::recordParameters(Flavors::Configuration& config)
 	{
@@ -45,10 +45,12 @@ namespace FlavorsBenchmarks
 		timer.Start();
 		auto masks = rawMasks.ReshapeMasks(config);
 		measured.Reshape = timer.Stop();
+		measured.DataMemory = masks.MemoryFootprint();
 
 		timer.Start();
 		Tree tree{masks};
 		measured.Build = timer.Stop();
+		measured.TreeMemory = tree.MemoryFootprint();
 
 		timer.Start();
 		tree.FindMasks(masks, result.Get());

@@ -31,6 +31,9 @@ namespace Flavors
 		Tree(Tree&& other) noexcept = default;
 		Tree& operator=(const Tree& other) = delete;
 		Tree& operator=(Tree&& other) noexcept = default;
+
+		virtual size_t MemoryFootprint();
+
 	private:
 		void levelsSizesToHost(Cuda2DArray& indexes);
 		void removeEmptyLevels();

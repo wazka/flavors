@@ -60,6 +60,12 @@ namespace Flavors
 		}
 
 		CudaArray& operator=(CudaArray&& other) noexcept = default;
+
+		size_t MemoryFootprint()
+		{
+			return count * sizeof(T);
+		}
+
 	private:
 		int count;
 		cuda::memory::device::unique_ptr<T[]> store;
@@ -82,6 +88,8 @@ namespace Flavors
 		Cuda2DArray& operator=(const Cuda2DArray& other) = delete;
 		Cuda2DArray(Cuda2DArray&& other) = default;
 		Cuda2DArray& operator=(Cuda2DArray&& other) = default;
+
+		size_t MemoryFootprint();
 	private:
 		int count;
 		CudaArray<unsigned> store;
@@ -106,6 +114,8 @@ namespace Flavors
 		CudaJaggedArray& operator=(const CudaJaggedArray& other) = delete;
 		CudaJaggedArray(CudaJaggedArray&& other) = default;
 		CudaJaggedArray& operator=(CudaJaggedArray&& other) = default;
+
+		size_t MemoryFootprint();
 	private:
 		CudaArray<unsigned*> levels;
 		std::vector<unsigned> sizes;

@@ -48,6 +48,8 @@ namespace Flavors
 		Keys& operator=(const Keys& other) = delete;
 		Keys& operator=(Keys&& other) = default;
 
+		virtual size_t MemoryFootprint();
+
 	protected:
 		void launchReshape(Configuration& newConfig, Keys& newKeys);
 		void copyPermutation(Keys& newKeys);
