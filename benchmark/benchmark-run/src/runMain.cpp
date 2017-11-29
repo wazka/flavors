@@ -83,13 +83,6 @@ void runKeysFind(nlohmann::json& j)
 	auto configs = tryReadFromJson<std::vector<std::vector<unsigned>>>(j, "configs");
 	auto path = tryReadFromJson<std::string>(j, "resultFilePath");
 
-	if(!exists(path))
-	{
-		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
-		file << FlavorsBenchmarks::KeysFindBenchmark::Label << std::endl;
-		file.close();
-	}
-
 	for(auto count : counts)
 		for(auto seed : seeds)
 			for(auto levels : configs)
@@ -103,6 +96,14 @@ void runKeysFind(nlohmann::json& j)
 
 					Flavors::Configuration config {levels};
 					FlavorsBenchmarks::KeysFindBenchmark bench{count, seed, config, path };
+
+					if(!exists(bench.ResultFullPath()))
+					{
+						std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+						file << FlavorsBenchmarks::KeysFindBenchmark::Label << std::endl;
+						file.close();
+					}
+
 					bench.Run();
 
 					std::cout << "success" << std::endl;
@@ -123,13 +124,6 @@ void runMasksFind(nlohmann::json& j)
 	auto minLen = tryReadFromJson<int>(j, "minLen");
 	auto maxLen = tryReadFromJson<int>(j, "maxLen");
 
-	if(!exists(path))
-	{
-		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
-		file << FlavorsBenchmarks::MasksFindBenchmark::Label << std::endl;
-		file.close();
-	}
-
 	for(auto count : counts)
 		for(auto seed : seeds)
 			for(auto levels : configs)
@@ -143,6 +137,14 @@ void runMasksFind(nlohmann::json& j)
 
 					Flavors::Configuration config {levels};
 					FlavorsBenchmarks::MasksFindBenchmark bench{count, seed, config, path, minLen, maxLen };
+
+					if(!exists(bench.ResultFullPath()))
+					{
+						std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+						file << FlavorsBenchmarks::MasksFindBenchmark::Label << std::endl;
+						file.close();
+					}
+
 					bench.Run();
 
 					std::cout << "success" << std::endl;
@@ -165,13 +167,6 @@ void runMultiConfigKeysFind(nlohmann::json& j)
 	for(auto config : h_configs)
 		configs.push_back(Flavors::Configuration{config});
 
-	if(!exists(path))
-	{
-		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
-		file << FlavorsBenchmarks::MultiConfigKeysBenchmark::Label << std::endl;
-		file.close();
-	}
-
 	for(auto count : counts)
 		for(auto seed : seeds)
 		{
@@ -179,6 +174,13 @@ void runMultiConfigKeysFind(nlohmann::json& j)
 			{
 				std::cout << "Starting benchmark for count = " << count << ", seed = " << seed << " ... ";
 				FlavorsBenchmarks::MultiConfigKeysBenchmark bench{count, seed, configs, path};
+
+				if(!exists(bench.ResultFullPath()))
+				{
+					std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+					file << FlavorsBenchmarks::MultiConfigKeysBenchmark::Label << std::endl;
+					file.close();
+				}
 
 				bench.Run();
 
@@ -204,13 +206,6 @@ void runMultiConfigMasksFind(nlohmann::json& j)
 	for(auto config : h_configs)
 		configs.push_back(Flavors::Configuration{config});
 
-	if(!exists(path))
-	{
-		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
-		file << FlavorsBenchmarks::MultiConfigMasksBenchmark::Label << std::endl;
-		file.close();
-	}
-
 	for(auto count : counts)
 		for(auto seed : seeds)
 		{
@@ -218,6 +213,13 @@ void runMultiConfigMasksFind(nlohmann::json& j)
 			{
 				std::cout << "Starting benchmark for count = " << count << ", seed = " << seed << " ... ";
 				FlavorsBenchmarks::MultiConfigMasksBenchmark bench{count, seed, configs, path, minLen, maxLen};
+
+				if(!exists(bench.ResultFullPath()))
+				{
+					std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+					file << FlavorsBenchmarks::MultiConfigMasksBenchmark::Label << std::endl;
+					file.close();
+				}
 
 				bench.Run();
 

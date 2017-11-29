@@ -9,8 +9,15 @@ namespace FlavorsBenchmarks
 	public:
 		static std::string Label;
 
-		MasksFindBenchmark(int count, int seed, const Flavors::Configuration& config, const std::string& resultPath, int minLen, int maxLen) :
-			KeysFindBenchmark(count, seed, config, resultPath),
+		MasksFindBenchmark(
+				int count,
+				int seed,
+				const Flavors::Configuration& config,
+				const std::string& resultPath,
+				int minLen,
+				int maxLen,
+				const std::string& resultName = "masksFindResult") :
+			KeysFindBenchmark(count, seed, config, resultPath, resultName),
 			minLen(minLen),
 			maxLen(maxLen)
 		{}

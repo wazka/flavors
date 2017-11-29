@@ -1,6 +1,6 @@
 {
   "benchmark": "multiConfigKeysFind",
-  "resultFilePath": "multiConfigKeysFind.csv",
+  "resultFilePath": "./",
   "configs": [
     [
       8,

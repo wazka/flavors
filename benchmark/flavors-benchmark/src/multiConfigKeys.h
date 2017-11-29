@@ -13,8 +13,13 @@ namespace FlavorsBenchmarks
 	public:
 		static std::string Label;
 
-		MultiConfigKeysBenchmark(int count, int seed, const std::vector<Flavors::Configuration>& configs, const std::string& resultPath) :
-			Benchmark(count, seed, resultPath),
+		MultiConfigKeysBenchmark(
+				int count,
+				int seed,
+				const std::vector<Flavors::Configuration>& configs,
+				const std::string& resultPath,
+				const std::string& resultName = "multiConfigKeysFindResult") :
+			Benchmark(count, seed, resultPath, resultName),
 			configs(configs)
 		{
 		}

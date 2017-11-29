@@ -51,7 +51,7 @@ namespace FlavorsBenchmarks
 		tree.FindKeys(randomKeys, result.Get());
 		measured.FindRandomSorted = timer.Stop();
 
-		measured.appendToFileFull(resultPath);
+		measured.appendToFileFull(ResultFullPath());
 		recordStatistics(tree);
 	}
 }

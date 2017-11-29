@@ -11,7 +11,7 @@ namespace FlavorsBenchmarks
 
 	void MultiConfigMasksBenchmark::recordParameters(Flavors::Configuration& config)
 	{
-		std::ofstream file{resultPath.c_str(), std::ios_base::app | std::ios_base::out};
+		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 		file << count << ";" << seed << ";" << config << ";" << minLen << ";" << maxLen << ";";
 		file.close();
 	}
@@ -54,7 +54,7 @@ namespace FlavorsBenchmarks
 		tree.FindMasks(masks, result.Get());
 		measured.Find = timer.Stop();
 
-		measured.appendToFile(resultPath);
+		measured.appendToFile(ResultFullPath());
 		recordStatistics(tree);
 	}
 

@@ -8,7 +8,7 @@ using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
-	void Benchmark::Measured::appendToFileFull(std::string& path)
+	void Benchmark::Measured::appendToFileFull(const std::string& path)
 	{
 		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
 
@@ -21,7 +21,7 @@ namespace FlavorsBenchmarks
 
 	}
 
-	void Benchmark::Measured::appendToFile(std::string& path)
+	void Benchmark::Measured::appendToFile(const std::string& path)
 	{
 		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
 
@@ -36,14 +36,14 @@ namespace FlavorsBenchmarks
 
 	void Benchmark::recordParameters(Configuration& config)
 	{
-		std::ofstream file{resultPath.c_str(), std::ios_base::app | std::ios_base::out};
+		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 		file << count << ";" << seed << ";" << config << ";";
 		file.close();
 	}
 
 	void Benchmark::recordStatistics(Tree& tree)
 	{
-		std::ofstream file{resultPath.c_str(), std::ios_base::app | std::ios_base::out};
+		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 
 		file << "{";
 		for(auto levelSize : tree.h_LevelsSizes)
@@ -55,5 +55,10 @@ namespace FlavorsBenchmarks
 
 		file << hitCount / static_cast<float>(count) << std::endl;
 		file.close();
+	}
+
+	std::string Benchmark::ResultFullPath()
+	{
+		return resultPath + resultName + ".csv";
 	}
 }

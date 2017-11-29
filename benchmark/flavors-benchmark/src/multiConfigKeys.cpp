@@ -35,7 +35,7 @@ namespace FlavorsBenchmarks
 		tree.FindKeys(keys, result.Get());
 		measured.Find = timer.Stop();
 
-		measured.appendToFile(resultPath);
+		measured.appendToFile(ResultFullPath());
 		recordStatistics(tree);
 	}
 
@@ -61,7 +61,7 @@ namespace FlavorsBenchmarks
 		std::ofstream recordDataFile;
 
 		std::ostringstream fileName;
-		fileName << count << "_" << seed << ".json";
+		fileName << resultPath << count << "_" << seed << ".json";
 
 		recordDataFile.open(fileName.str());
 		if (!recordDataFile.good())

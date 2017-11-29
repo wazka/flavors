@@ -1,6 +1,6 @@
 {
   "benchmark": "keysFind",
-  "resultFilePath": "keysFindResult.csv",
+  "resultFilePath": "./",
   "configs": [
     [
       8,

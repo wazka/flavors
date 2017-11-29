@@ -8,8 +8,15 @@ namespace FlavorsBenchmarks
 	public:
 		static std::string Label;
 
-		MultiConfigMasksBenchmark(int count, int seed, const std::vector<Flavors::Configuration>& configs, const std::string& resultPath, int minLen, int maxLen) :
-			MultiConfigKeysBenchmark(count, seed, configs, resultPath),
+		MultiConfigMasksBenchmark(
+				int count,
+				int seed,
+				const std::vector<Flavors::Configuration>& configs,
+				const std::string& resultPath,
+				int minLen,
+				int maxLen,
+				const std::string& resultName = "multiConfigMasksFindResult") :
+			MultiConfigKeysBenchmark(count, seed, configs, resultPath, resultName),
 			minLen(minLen),
 			maxLen(maxLen)
 		{

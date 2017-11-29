@@ -50,10 +50,10 @@ namespace FlavorsTests
 		bench.Run();
 
 		//then
-		ASSERT_TRUE(CheckFileExists(TestData::BenchmarkResultFile));
+		ASSERT_TRUE(CheckFileExists(bench.ResultFullPath()));
 
 		//cleanup
-		RemoveFile(TestData::BenchmarkResultFile);
+		RemoveFile(bench.ResultFullPath());
 	}
 
 	TEST_P(FindBenchmarkTest, MasksFind)
@@ -73,10 +73,10 @@ namespace FlavorsTests
 		bench.Run();
 
 		//then
-		ASSERT_TRUE(CheckFileExists(TestData::BenchmarkResultFile));
+		ASSERT_TRUE(CheckFileExists(bench.ResultFullPath()));
 
 		//cleanup
-		RemoveFile(TestData::BenchmarkResultFile);
+		RemoveFile(bench.ResultFullPath());
 	}
 
 	INSTANTIATE_TEST_CASE_P(
@@ -109,10 +109,10 @@ namespace FlavorsTests
 		bench.Run();
 
 		//then
-		ASSERT_TRUE(CheckFileExists(TestData::BenchmarkResultFile));
+		ASSERT_TRUE(CheckFileExists(bench.ResultFullPath()));
 
 		//cleanup
-		RemoveFile(TestData::BenchmarkResultFile);
+		RemoveFile(bench.ResultFullPath());
 		system("rm *.json");	//TODO: Doing this more elegantly
 	}
 
@@ -131,10 +131,10 @@ namespace FlavorsTests
 		bench.Run();
 
 		//then
-		ASSERT_TRUE(CheckFileExists(TestData::BenchmarkResultFile));
+		ASSERT_TRUE(CheckFileExists(bench.ResultFullPath()));
 
 		//cleanup
-		RemoveFile(TestData::BenchmarkResultFile);
+		RemoveFile(bench.ResultFullPath());
 		system("rm *.json");	//TODO: Doing this more elegantly
 	}
 

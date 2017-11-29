@@ -12,8 +12,13 @@ namespace FlavorsBenchmarks
 	public:
 		static std::string Label;
 
-		KeysFindBenchmark(int count, int seed, const Flavors::Configuration& config, const std::string& resultPath) :
-			Benchmark(count, seed, resultPath),
+		KeysFindBenchmark(
+				int count,
+				int seed,
+				const Flavors::Configuration& config,
+				const std::string& resultPath,
+				const std::string& resultName = "keysFindResult") :
+			Benchmark(count, seed, resultPath, resultName),
 			config(config)
 		{}
 
