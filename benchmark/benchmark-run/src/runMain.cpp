@@ -12,12 +12,14 @@
 #include "multiConfigKeys.h"
 #include "multiConfigMasks.h"
 #include "keysLen.h"
+#include "masksLen.h"
 
 void runKeysFind(nlohmann::json& j);
 void runMasksFind(nlohmann::json& j);
 void runMultiConfigKeysFind(nlohmann::json& j);
 void runMultiConfigMasksFind(nlohmann::json& j);
 void runKeysLen(nlohmann::json& j);
+void runMasksLen(nlohmann::json& j);
 
 int main(int argc, char** argv)
 {
@@ -50,6 +52,8 @@ int main(int argc, char** argv)
 		runMultiConfigMasksFind(j);
 	else if(j["benchmark"] == "keysLen")
 		runKeysLen(j);
+	else if(j["benchmark"] == "masksLen")
+		runMasksLen(j);
 	else
 	{
 		std::cerr << "Unknown benchmark type." << std::endl;
@@ -284,4 +288,60 @@ void runKeysLen(nlohmann::json& j)
 							std::cout << "failed due to exception: " << std::endl;
 						}
 					}
+}
+
+void runMasksLen(nlohmann::json& j)
+{
+	auto counts = tryReadFromJson<std::vector<int>>(j, "counts");
+	auto seeds = tryReadFromJson<std::vector<int>>(j, "seeds");
+	auto depths = tryReadFromJson<std::vector<unsigned>>(j, "depths");
+	auto firstLevelStrides = tryReadFromJson<std::vector<unsigned>>(j, "firstLevelStrides");
+	auto levelStrides = tryReadFromJson<std::vector<unsigned>>(j, "levelStrides");
+	auto path = tryReadFromJson<std::string>(j, "resultFilePath");
+
+	for(auto count : counts)
+		for(auto seed : seeds)
+			for(auto depth : depths)
+			{
+				int max = depth;
+				int min = 0.5 * max;
+
+				for(auto firstLevelStride : firstLevelStrides)
+					for(auto levelStride : levelStrides)
+					{
+						try
+						{
+							std::cout << "Starting benchmark for count = " << count
+									<< ", seed = " << seed
+									<< ", depth = " << depth
+									<< ", first level stride = " << firstLevelStride
+									<< ", level stride = " << levelStride << "... ";
+
+							FlavorsBenchmarks::MasksLenBenchmark bench{
+								count,
+								seed,
+								depth,
+								firstLevelStride,
+								levelStride,
+								max,
+								min,
+								path};
+
+							if(!exists(bench.ResultFullPath()))
+							{
+								std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+								file << FlavorsBenchmarks::MasksLenBenchmark::Label << std::endl;
+								file.close();
+							}
+
+							bench.Run();
+
+							std::cout << "success" << std::endl;
+						}
+						catch(...)
+						{
+							std::cout << "failed due to exception: " << std::endl;
+						}
+					}
+			}
 }

@@ -24,7 +24,7 @@ namespace FlavorsBenchmarks
 
 	{}
 
-		void Run() override;
+		virtual void Run() override;
 
 	protected:
 		unsigned depth;
@@ -32,7 +32,7 @@ namespace FlavorsBenchmarks
 		unsigned levelStride;
 
 		Flavors::Configuration prepareConfig();
-		void recordParameters(Flavors::Configuration& config) override;
+		virtual void recordParameters(Flavors::Configuration& config) override;
 	};
 
 }

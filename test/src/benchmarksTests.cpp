@@ -8,6 +8,7 @@
 #include "multiConfigKeys.h"
 #include "multiConfigMasks.h"
 #include "keysLen.h"
+#include "masksLen.h"
 
 using namespace Flavors;
 using namespace FlavorsBenchmarks;
@@ -179,6 +180,38 @@ namespace FlavorsTests
 			depth,
 			firstLevelStride,
 			levelStride,
+			TestData::BenchmarkResultFile};
+
+		//when
+		bench.Run();
+
+		//then
+		ASSERT_TRUE(CheckFileExists(bench.ResultFullPath()));
+
+		//cleanup
+		RemoveFile(bench.ResultFullPath());
+	}
+
+	TEST_P(LenBenchmarkTest, MasksFind)
+	{
+		//given
+		auto params = GetParam();
+		int count = std::get<0>(params);
+		int seed = std::get<1>(params);
+		unsigned depth = std::get<2>(params);
+		unsigned firstLevelStride = std::get<3>(params);
+		unsigned levelStride = std::get<4>(params);
+		int max = depth;
+		int min = 0.5 * max;
+
+		MasksLenBenchmark bench{
+			count,
+			seed,
+			depth,
+			firstLevelStride,
+			levelStride,
+			max,
+			min,
 			TestData::BenchmarkResultFile};
 
 		//when

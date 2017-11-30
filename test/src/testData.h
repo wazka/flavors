@@ -11,8 +11,8 @@ namespace FlavorsTests
 		const std::vector<int> Seeds = { 1234, 5765, 8304, 2365, 4968 };
 
 		const std::vector<unsigned> Depths = { 32, 48, 64, 80, 96};
-		const std::vector<unsigned> FirstLevelStrides = { 16, 8, 4 };
-		const std::vector<unsigned> LevelStrides = { 8, 4 };
+		const std::vector<unsigned> FirstLevelStrides = {16, 8, 4};
+		const std::vector<unsigned> LevelStrides = {8, 4};
 
 		const std::vector<Flavors::Configuration> Configs =
 		{
