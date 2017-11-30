@@ -14,39 +14,43 @@ namespace FlavorsBenchmarks
 		recordParameters(config);
 
 		timer.Start();
-		Keys keys{config, count};
-		keys.FillRandom(seed);
+		Keys rawKeys{Configuration::Default(depth), count};
+		rawKeys.FillRandom(seed);
 		measured.Generation = timer.Stop();
+
+		timer.Start();
+		rawKeys.Sort();
+		measured.Sort = timer.Stop();
+
+		timer.Start();
+		Keys keys = rawKeys.ReshapeKeys(config);
+		measured.Reshape = timer.Stop();
 		measured.DataMemory = keys.MemoryFootprint();
 
 		timer.Start();
-		keys.Sort();
-		measured.Sort = timer.Stop();
+		Tree tree{keys};
+		measured.Build = timer.Stop();
+		measured.TreeMemory = tree.MemoryFootprint();
 
-//		timer.Start();
-//		Tree tree{keys};
-//		measured.Build = timer.Stop();
-//		measured.TreeMemory = tree.MemoryFootprint();
-//
-//		timer.Start();
-//		tree.FindKeys(keys, result.Get());
-//		measured.Find = timer.Stop();
-//
-//		Keys randomKeys{config, count};
-//		randomKeys.FillRandom(seed + 1);
-//
-//		timer.Start();
-//		tree.FindKeys(randomKeys, result.Get());
-//		measured.FindRandom = timer.Stop();
-//
-//		randomKeys.Sort();
-//
-//		timer.Start();
-//		tree.FindKeys(randomKeys, result.Get());
-//		measured.FindRandomSorted = timer.Stop();
-//
-//		measured.appendToFileFull(ResultFullPath());
-//		recordStatistics(tree);
+		timer.Start();
+		tree.FindKeys(keys, result.Get());
+		measured.Find = timer.Stop();
+
+		Keys randomKeys{config, count};
+		randomKeys.FillRandom(seed + 1);
+
+		timer.Start();
+		tree.FindKeys(randomKeys, result.Get());
+		measured.FindRandom = timer.Stop();
+
+		randomKeys.Sort();
+
+		timer.Start();
+		tree.FindKeys(randomKeys, result.Get());
+		measured.FindRandomSorted = timer.Stop();
+
+		measured.appendToFileFull(ResultFullPath());
+		recordStatistics(tree);
 	}
 
 	Configuration KeysLenBenchmark::prepareConfig()
