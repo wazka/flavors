@@ -10,6 +10,10 @@ namespace FlavorsTests
 		const std::vector<int> BigCounts = { 10000, 20000, 30000, 40000, 50000, 100000, 200000, 300000, 400000, 500000, 1000000 };
 		const std::vector<int> Seeds = { 1234, 5765, 8304, 2365, 4968 };
 
+		const std::vector<unsigned> Depths = { 32, 48, 64, 80, 96};
+		const std::vector<unsigned> FirstLevelStrides = { 16, 8, 4 };
+		const std::vector<unsigned> LevelStrides = { 8, 4 };
+
 		const std::vector<Flavors::Configuration> Configs =
 		{
 			Flavors::Configuration{ std::vector<unsigned>{8, 8, 8, 8} },

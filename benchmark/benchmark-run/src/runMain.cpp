@@ -11,11 +11,13 @@
 #include "masksFind.h"
 #include "multiConfigKeys.h"
 #include "multiConfigMasks.h"
+#include "keysLen.h"
 
 void runKeysFind(nlohmann::json& j);
 void runMasksFind(nlohmann::json& j);
 void runMultiConfigKeysFind(nlohmann::json& j);
 void runMultiConfigMasksFind(nlohmann::json& j);
+void runKeysLen(nlohmann::json& j);
 
 int main(int argc, char** argv)
 {
@@ -46,6 +48,8 @@ int main(int argc, char** argv)
 		runMultiConfigKeysFind(j);
 	else if (j["benchmark"] == "multiConfigMasksFind")
 		runMultiConfigMasksFind(j);
+	else if(j["benchmark"] == "keysLen")
+		runKeysLen(j);
 	else
 	{
 		std::cerr << "Unknown benchmark type." << std::endl;
@@ -228,6 +232,56 @@ void runMultiConfigMasksFind(nlohmann::json& j)
 			catch(...)
 			{
 				std::cout << "failed due to exception" << std::endl;
+				cuda::device::current::get().reset();
 			}
 		}
+}
+
+void runKeysLen(nlohmann::json& j)
+{
+	auto counts = tryReadFromJson<std::vector<int>>(j, "counts");
+	auto seeds = tryReadFromJson<std::vector<int>>(j, "seeds");
+	auto depths = tryReadFromJson<std::vector<unsigned>>(j, "depths");
+	auto firstLevelStrides = tryReadFromJson<std::vector<unsigned>>(j, "firstLevelStrides");
+	auto levelStrides = tryReadFromJson<std::vector<unsigned>>(j, "levelStrides");
+	auto path = tryReadFromJson<std::string>(j, "resultFilePath");
+
+	for(auto count : counts)
+		for(auto seed : seeds)
+			for(auto depth : depths)
+				for(auto firstLevelStride : firstLevelStrides)
+					for(auto levelStride : levelStrides)
+					{
+						try
+						{
+							std::cout << "Starting benchmark for count = " << count
+									<< ", seed = " << seed
+									<< ", depth = " << depth
+									<< ", first level stride = " << firstLevelStride
+									<< ", level stride = " << levelStride << "... ";
+
+							FlavorsBenchmarks::KeysLenBenchmark bench{
+								count,
+								seed,
+								depth,
+								firstLevelStride,
+								levelStride,
+								path};
+
+							if(!exists(bench.ResultFullPath()))
+							{
+								std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+								file << FlavorsBenchmarks::KeysLenBenchmark::Label << std::endl;
+								file.close();
+							}
+
+							bench.Run();
+
+							std::cout << "success" << std::endl;
+						}
+						catch(...)
+						{
+							std::cout << "failed due to exception: " << std::endl;
+						}
+					}
 }

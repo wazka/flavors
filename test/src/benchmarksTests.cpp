@@ -7,6 +7,7 @@
 #include "masksFind.h"
 #include "multiConfigKeys.h"
 #include "multiConfigMasks.h"
+#include "keysLen.h"
 
 using namespace Flavors;
 using namespace FlavorsBenchmarks;
@@ -33,6 +34,10 @@ namespace FlavorsTests
 	};
 
 	class MultiConfigBenchmarkTest : public BenchmarkTest, public ::testing::TestWithParam<std::tuple<int, int>>
+	{
+	};
+
+	class LenBenchmarkTest : public BenchmarkTest, public ::testing::TestWithParam<std::tuple<int, int, unsigned, unsigned, unsigned>>
 	{
 	};
 
@@ -80,13 +85,13 @@ namespace FlavorsTests
 	}
 
 	INSTANTIATE_TEST_CASE_P(
-			SmallData,
-			FindBenchmarkTest,
-			::testing::Combine(
-				::testing::ValuesIn(TestData::SmallCounts),
-				::testing::ValuesIn(TestData::Seeds),
-				::testing::ValuesIn(TestData::Configs))
-		);
+		SmallData,
+		FindBenchmarkTest,
+		::testing::Combine(
+			::testing::ValuesIn(TestData::SmallCounts),
+			::testing::ValuesIn(TestData::Seeds),
+			::testing::ValuesIn(TestData::Configs))
+	);
 
 	INSTANTIATE_TEST_CASE_P(
 		BigData,
@@ -113,7 +118,9 @@ namespace FlavorsTests
 
 		//cleanup
 		RemoveFile(bench.ResultFullPath());
-		system("rm *.json");	//TODO: Doing this more elegantly
+
+		auto status = system("rm *.json");
+		ASSERT_TRUE(WIFEXITED(status));
 	}
 
 	TEST_P(MultiConfigBenchmarkTest, MasksFind)
@@ -135,25 +142,74 @@ namespace FlavorsTests
 
 		//cleanup
 		RemoveFile(bench.ResultFullPath());
-		system("rm *.json");	//TODO: Doing this more elegantly
+
+		auto status = system("rm *.json");
+		ASSERT_TRUE(WIFEXITED(status));
 	}
 
 	INSTANTIATE_TEST_CASE_P(
-			SmallData,
-			MultiConfigBenchmarkTest,
-			::testing::Combine(
-				::testing::ValuesIn(TestData::SmallCounts),
-				::testing::ValuesIn(TestData::Seeds))
-		);
+		SmallData,
+		MultiConfigBenchmarkTest,
+		::testing::Combine(
+			::testing::ValuesIn(TestData::SmallCounts),
+			::testing::ValuesIn(TestData::Seeds))
+	);
 
 	INSTANTIATE_TEST_CASE_P(
-			BigData,
-			MultiConfigBenchmarkTest,
-			::testing::Combine(
-				::testing::ValuesIn(TestData::SmallCounts),
-				::testing::ValuesIn(TestData::Seeds))
-		);
+		BigData,
+		MultiConfigBenchmarkTest,
+		::testing::Combine(
+			::testing::ValuesIn(TestData::SmallCounts),
+			::testing::ValuesIn(TestData::Seeds))
+	);
 
+	TEST_P(LenBenchmarkTest, KeysFind)
+	{
+		//given
+		auto params = GetParam();
+		int count = std::get<0>(params);
+		int seed = std::get<1>(params);
+		unsigned depth = std::get<2>(params);
+		unsigned firstLevelStride = std::get<3>(params);
+		unsigned levelStride = std::get<4>(params);
 
+		KeysLenBenchmark bench{
+			count,
+			seed,
+			depth,
+			firstLevelStride,
+			levelStride,
+			TestData::BenchmarkResultFile};
 
+		//when
+		bench.Run();
+
+		//then
+		ASSERT_TRUE(CheckFileExists(bench.ResultFullPath()));
+
+		//cleanup
+		RemoveFile(bench.ResultFullPath());
+	}
+
+	INSTANTIATE_TEST_CASE_P(
+		SmallData,
+		LenBenchmarkTest,
+		::testing::Combine(
+			::testing::ValuesIn(TestData::SmallCounts),
+			::testing::ValuesIn(TestData::Seeds),
+			::testing::ValuesIn(TestData::Depths),
+			::testing::ValuesIn(TestData::FirstLevelStrides),
+			::testing::ValuesIn(TestData::LevelStrides))
+	);
+
+	INSTANTIATE_TEST_CASE_P(
+		BigData,
+		LenBenchmarkTest,
+		::testing::Combine(
+			::testing::ValuesIn(TestData::SmallCounts),
+			::testing::ValuesIn(TestData::Seeds),
+			::testing::ValuesIn(TestData::Depths),
+			::testing::ValuesIn(TestData::FirstLevelStrides),
+			::testing::ValuesIn(TestData::LevelStrides))
+	);
 }
