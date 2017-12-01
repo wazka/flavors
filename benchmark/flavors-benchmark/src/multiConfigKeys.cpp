@@ -25,19 +25,19 @@ namespace FlavorsBenchmarks
 
 		timer.Start();
 		auto keys = rawKeys.ReshapeKeys(config);
-		measured.Reshape = timer.Stop();
-		measured.DataMemory = keys.MemoryFootprint();
+		measured["Reshape"] = timer.Stop();
+		measured["DataMemory"] = keys.MemoryFootprint();
 
 		timer.Start();
 		Tree tree{keys};
-		measured.Build = timer.Stop();
-		measured.TreeMemory = tree.MemoryFootprint();
+		measured["Build"] = timer.Stop();
+		measured["TreeMemory"] = tree.MemoryFootprint();
 
 		timer.Start();
 		tree.FindKeys(keys, result.Get());
-		measured.Find = timer.Stop();
+		measured["Find"] = timer.Stop();
 
-		measured.appendToFile(ResultFullPath());
+		measured.AppendToFile(ResultFullPath());
 		recordStatistics(tree);
 	}
 
@@ -46,11 +46,11 @@ namespace FlavorsBenchmarks
 		timer.Start();
 		rawKeys = Keys{Configuration::Default32, count};
 		rawKeys.FillRandom(seed);
-		measured.Generation = timer.Stop();
+		measured["Generation"] = timer.Stop();
 
 		timer.Start();
 		rawKeys.Sort();
-		measured.Sort = timer.Stop();
+		measured["Sort"] = timer.Stop();
 	}
 
 	void MultiConfigKeysBenchmark::getDataInfo(nlohmann::json& j)

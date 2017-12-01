@@ -8,44 +8,23 @@ using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
-	void Benchmark::Measured::appendToFileFull(const std::string& path)
+
+	float& Measured::operator [](std::string&& measuredValue)
 	{
-		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
-
-		if(!file)
-			file.open(path.c_str(), std::ios_base::app | std::ios_base::out);
-
-		file
-			<< Generation << ";"
-			<< Sort << ";"
-			<< Reshape << ";"
-			<< Build << ";"
-			<< Find << ";"
-			<< DataMemory << ";"
-			<< TreeMemory << ";"
-			<< FindRandom << ";"
-			<< FindRandomSorted << ";";
-		file.close();
-
+		return measuredValues[measuredValue];
 	}
 
-	void Benchmark::Measured::appendToFile(const std::string& path)
+	void Measured::AppendToFile(const std::string& path)
 	{
 		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
 
 		if(!file)
 			file.open(path.c_str(), std::ios_base::app | std::ios_base::out);
 
-		file
-			<< Generation << ";"
-			<< Sort << ";"
-			<< Reshape << ";"
-			<< Build << ";"
-			<< Find << ";"
-			<< DataMemory << ";"
-			<< TreeMemory << ";";
-		file.close();
+		for(auto m : measuredValues)
+			file << m.second << ";";
 
+		file.close();
 	}
 
 	void Benchmark::recordParameters(Configuration& config)

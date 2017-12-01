@@ -13,6 +13,7 @@
 #include "multiConfigMasks.h"
 #include "keysLen.h"
 #include "masksLen.h"
+#include "dictionary.h"
 
 void runKeysFind(nlohmann::json& j);
 void runMasksFind(nlohmann::json& j);
@@ -20,6 +21,7 @@ void runMultiConfigKeysFind(nlohmann::json& j);
 void runMultiConfigMasksFind(nlohmann::json& j);
 void runKeysLen(nlohmann::json& j);
 void runMasksLen(nlohmann::json& j);
+void runDictionary(nlohmann::json& j);
 
 int main(int argc, char** argv)
 {
@@ -344,4 +346,14 @@ void runMasksLen(nlohmann::json& j)
 						}
 					}
 			}
+}
+
+void runDictionary(nlohmann::json& j)
+{
+	auto path = tryReadFromJson<std::string>(j, "resultFilePath");
+	auto dictionaryFile = tryReadFromJson<std::string>(j, "dictionaryFile");
+	auto bookFiles = tryReadFromJson<std::vector<std::string>>(j, "bookFiles");
+
+
+
 }

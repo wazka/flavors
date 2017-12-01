@@ -17,40 +17,40 @@ namespace FlavorsBenchmarks
 		timer.Start();
 		Masks rawMasks{Configuration::Default32, count};
 		rawMasks.FillRandom(seed, maxLen, minLen);
-		measured.Generation = timer.Stop();
+		measured["Generation"] = timer.Stop();
 
 		timer.Start();
 		rawMasks.Sort();
-		measured.Sort = timer.Stop();
+		measured["Sort"] = timer.Stop();
 
 		timer.Start();
 		Masks masks = rawMasks.ReshapeMasks(config);
-		measured.Reshape = timer.Stop();
-		measured.DataMemory = masks.MemoryFootprint();
+		measured["Reshape"] = timer.Stop();
+		measured["DataMemory"] = masks.MemoryFootprint();
 
 		timer.Start();
 		Tree tree{masks};
-		measured.Build = timer.Stop();
-		measured.TreeMemory = tree.MemoryFootprint();
+		measured["Build"] = timer.Stop();
+		measured["TreeMemory"] = tree.MemoryFootprint();
 
 		timer.Start();
 		tree.FindMasks(masks, result.Get());
-		measured.Find = timer.Stop();
+		measured["Find"] = timer.Stop();
 
 		Masks randomMasks{config, count};
 		randomMasks.FillRandom(seed, maxLen, minLen);
 
 		timer.Start();
 		tree.FindMasks(randomMasks, result.Get());
-		measured.FindRandom = timer.Stop();
+		measured["FindRandom"] = timer.Stop();
 
 		randomMasks.Sort();
 
 		timer.Start();
 		tree.FindMasks(randomMasks, result.Get());
-		measured.FindRandomSorted = timer.Stop();
+		measured["FindRandomSorted"] = timer.Stop();
 
-		measured.appendToFileFull(ResultFullPath());
+		measured.AppendToFile(ResultFullPath());
 		recordStatistics(tree);
 	}
 

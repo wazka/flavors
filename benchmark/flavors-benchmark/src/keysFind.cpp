@@ -20,40 +20,40 @@ namespace FlavorsBenchmarks
 		timer.Start();
 		Keys rawKeys{Configuration::Default32, count};
 		rawKeys.FillRandom(seed);
-		measured.Generation = timer.Stop();
+		measured["Generation"] = timer.Stop();
 
 		timer.Start();
 		rawKeys.Sort();
-		measured.Sort = timer.Stop();
+		measured["Sort"] = timer.Stop();
 
 		timer.Start();
 		Keys keys = rawKeys.ReshapeKeys(config);
-		measured.Reshape = timer.Stop();
-		measured.DataMemory = keys.MemoryFootprint();
+		measured["Reshape"] = timer.Stop();
+		measured["DataMemory"] = keys.MemoryFootprint();
 
 		timer.Start();
 		Tree tree{keys};
-		measured.Build = timer.Stop();
-		measured.TreeMemory = tree.MemoryFootprint();
+		measured["Build"] = timer.Stop();
+		measured["TreeMemory"] = tree.MemoryFootprint();
 
 		timer.Start();
 		tree.FindKeys(keys, result.Get());
-		measured.Find = timer.Stop();
+		measured["Find"] = timer.Stop();
 
 		Keys randomKeys{config, count};
 		randomKeys.FillRandom(seed + 1);
 
 		timer.Start();
 		tree.FindKeys(randomKeys, result.Get());
-		measured.FindRandom = timer.Stop();
+		measured["FindRandom"] = timer.Stop();
 
 		randomKeys.Sort();
 
 		timer.Start();
 		tree.FindKeys(randomKeys, result.Get());
-		measured.FindRandomSorted = timer.Stop();
+		measured["FindRandomSorted"] = timer.Stop();
 
-		measured.appendToFileFull(ResultFullPath());
+		measured.AppendToFile(ResultFullPath());
 		recordStatistics(tree);
 	}
 }
