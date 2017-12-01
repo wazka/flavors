@@ -9,6 +9,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cuda-api-wrappers", "lib\cu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flavors-benchmarks", "benchmark\flavors-benchmark\flavors-benchmarks.vcxproj", "{6A810E03-2538-442C-86FA-2CE6AC36897F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flavors-benchmarks-run", "benchmark\benchmark-run\flavors-benchmarks-run.vcxproj", "{F5E61F60-A25A-49C9-BBF8-FE23D8986893}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6A810E03-2538-442C-86FA-2CE6AC36897F} = {6A810E03-2538-442C-86FA-2CE6AC36897F}
+		{06A7268E-221F-4F4A-82BA-39CB23445B3E} = {06A7268E-221F-4F4A-82BA-39CB23445B3E}
+		{B050A4AE-0997-479F-B12E-7DDEAE0EF7DB} = {B050A4AE-0997-479F-B12E-7DDEAE0EF7DB}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -27,6 +34,10 @@ Global
 		{6A810E03-2538-442C-86FA-2CE6AC36897F}.Debug|x64.Build.0 = Debug|x64
 		{6A810E03-2538-442C-86FA-2CE6AC36897F}.Release|x64.ActiveCfg = Release|x64
 		{6A810E03-2538-442C-86FA-2CE6AC36897F}.Release|x64.Build.0 = Release|x64
+		{F5E61F60-A25A-49C9-BBF8-FE23D8986893}.Debug|x64.ActiveCfg = Debug|x64
+		{F5E61F60-A25A-49C9-BBF8-FE23D8986893}.Debug|x64.Build.0 = Debug|x64
+		{F5E61F60-A25A-49C9-BBF8-FE23D8986893}.Release|x64.ActiveCfg = Release|x64
+		{F5E61F60-A25A-49C9-BBF8-FE23D8986893}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
