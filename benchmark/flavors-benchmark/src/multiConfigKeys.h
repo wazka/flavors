@@ -6,6 +6,12 @@
 #include "keys.h"
 #include "tree.h"
 
+//TODO: Could this be done more elegantly?
+namespace Flavors
+{
+	void to_json(nlohmann::json& j, const DataInfo& info);
+}
+
 namespace FlavorsBenchmarks
 {
 	class MultiConfigKeysBenchmark : public Benchmark

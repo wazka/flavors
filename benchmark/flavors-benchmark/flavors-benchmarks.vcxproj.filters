@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{c1e9509e-d571-4d86-9e3c-0991cac79391}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\benchmark.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\keysFind.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\masksFind.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\multiConfigKeys.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\multiConfigMasks.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\benchmark.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\keysFind.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\masksFind.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\multiConfigKeys.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\multiConfigMasks.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\timer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
