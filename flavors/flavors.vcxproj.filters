@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{94024a74-460b-4d4f-b79a-d3a7a09adb3a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="src\configuration.cu">
+      <Filter>src</Filter>
+    </CudaCompile>
+    <CudaCompile Include="src\dataInfo.cu">
+      <Filter>src</Filter>
+    </CudaCompile>
+    <CudaCompile Include="src\keys.cu">
+      <Filter>src</Filter>
+    </CudaCompile>
+    <CudaCompile Include="src\masks.cu">
+      <Filter>src</Filter>
+    </CudaCompile>
+    <CudaCompile Include="src\tree.cu">
+      <Filter>src</Filter>
+    </CudaCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\configuration.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\containers.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dataInfo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\keys.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\masks.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tree.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\utils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dataInfo.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

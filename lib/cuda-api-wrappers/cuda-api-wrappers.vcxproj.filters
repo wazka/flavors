@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="api">
+      <UniqueIdentifier>{f8a4b106-debf-4761-af65-2a99dbada58d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="api\constants.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\current_device.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\device.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\device_count.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\device_function.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\device_properties.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\error.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\event.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\ipc.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\kernel_launch.cuh">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\memory.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\multi_wrapper_impls.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\pci_id.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\pci_id.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\pointer.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\stream.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\types.h">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\unique_ptr.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api\versions.hpp">
+      <Filter>api</Filter>
+    </ClInclude>
+    <ClInclude Include="api_wrappers.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="api\device_properties.cpp">
+      <Filter>api</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

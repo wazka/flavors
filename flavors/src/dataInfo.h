@@ -5,8 +5,6 @@
 
 #include <cmath>
 
-#include "../json/json.hpp"
-
 namespace Flavors
 {
 	struct DataInfo
@@ -30,7 +28,4 @@ namespace Flavors
 		__host__ __device__ DataInfo operator()(const float& x) const;
 		__host__ __device__ DataInfo operator()(const DataInfo& x, const DataInfo& y) const;
 	};
-
-	void to_json(nlohmann::json& j, const DataInfo& info);
-
 }
