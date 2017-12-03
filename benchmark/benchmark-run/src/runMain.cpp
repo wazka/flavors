@@ -83,6 +83,7 @@ void runKeysFind(nlohmann::json& j)
 	auto configs = tryReadFromJson<std::vector<std::vector<unsigned>>>(j, "configs");
 	auto path = tryReadFromJson<std::string>(j, "resultFilePath");
 
+
 	for(auto count : counts)
 		for(auto seed : seeds)
 			for(auto levels : configs)
@@ -111,6 +112,7 @@ void runKeysFind(nlohmann::json& j)
 				catch(...)
 				{
 					std::cout << "failed due to exception" << std::endl;
+					cuda::outstanding_error::clear();
 				}
 			}
 }
@@ -152,6 +154,7 @@ void runMasksFind(nlohmann::json& j)
 				catch(...)
 				{
 					std::cout << "failed due to exception" << std::endl;
+					cuda::outstanding_error::clear();
 				}
 			}
 }
@@ -189,6 +192,7 @@ void runMultiConfigKeysFind(nlohmann::json& j)
 			catch(...)
 			{
 				std::cout << "failed due to exception" << std::endl;
+				cuda::outstanding_error::clear();
 			}
 		}
 }
@@ -228,6 +232,7 @@ void runMultiConfigMasksFind(nlohmann::json& j)
 			catch(...)
 			{
 				std::cout << "failed due to exception" << std::endl;
+				cuda::outstanding_error::clear();
 			}
 		}
 }
