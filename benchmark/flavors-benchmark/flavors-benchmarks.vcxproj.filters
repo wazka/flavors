@@ -21,6 +21,15 @@
     <ClCompile Include="src\multiConfigMasks.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\dictionary.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\keysLen.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\masksLen.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\benchmark.h">
@@ -39,6 +48,15 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\timer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dictionary.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\keysLen.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\masksLen.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

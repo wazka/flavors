@@ -120,8 +120,11 @@ namespace FlavorsTests
 		//cleanup
 		RemoveFile(bench.ResultFullPath());
 
+		errno = 0;
 		auto status = system("rm *.json");
-		ASSERT_TRUE(WIFEXITED(status));
+
+		ASSERT_EQ(status, 0);
+		ASSERT_EQ(errno, 0);
 	}
 
 	TEST_P(MultiConfigBenchmarkTest, MasksFind)
@@ -144,8 +147,11 @@ namespace FlavorsTests
 		//cleanup
 		RemoveFile(bench.ResultFullPath());
 
+		errno = 0;
 		auto status = system("rm *.json");
-		ASSERT_TRUE(WIFEXITED(status));
+
+		ASSERT_EQ(status, 0);
+		ASSERT_EQ(errno, 0);
 	}
 
 	INSTANTIATE_TEST_CASE_P(

@@ -292,6 +292,7 @@ void runKeysLen(nlohmann::json& j)
 						catch(...)
 						{
 							std::cout << "failed due to exception: " << std::endl;
+							cuda::device::current::get().reset();
 						}
 					}
 }
@@ -347,6 +348,7 @@ void runMasksLen(nlohmann::json& j)
 						catch(...)
 						{
 							std::cout << "failed due to exception: " << std::endl;
+							cuda::device::current::get().reset();
 						}
 					}
 			}

@@ -12,15 +12,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\benchmark.cpp" />
+    <ClCompile Include="src\dictionary.cpp" />
     <ClCompile Include="src\keysFind.cpp" />
+    <ClCompile Include="src\keysLen.cpp" />
     <ClCompile Include="src\masksFind.cpp" />
+    <ClCompile Include="src\masksLen.cpp" />
     <ClCompile Include="src\multiConfigKeys.cpp" />
     <ClCompile Include="src\multiConfigMasks.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\benchmark.h" />
+    <ClInclude Include="src\dictionary.h" />
     <ClInclude Include="src\keysFind.h" />
+    <ClInclude Include="src\keysLen.h" />
     <ClInclude Include="src\masksFind.h" />
+    <ClInclude Include="src\masksLen.h" />
     <ClInclude Include="src\multiConfigKeys.h" />
     <ClInclude Include="src\multiConfigMasks.h" />
     <ClInclude Include="src\timer.h" />
