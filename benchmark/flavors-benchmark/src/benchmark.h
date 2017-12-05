@@ -5,8 +5,20 @@
 #include "configuration.h"
 #include "tree.h"
 
+#include <map>
+
 namespace FlavorsBenchmarks
 {
+	class Measured
+	{
+	public:
+		float& operator[](std::string&& measuredValue);
+		void AppendToFile(const std::string& path);
+
+	private:
+		std::map<std::string, float> measuredValues;
+	};
+
 	class Benchmark
 	{
 public:
@@ -24,23 +36,6 @@ public:
 
 		virtual ~Benchmark() = default;
 protected:
-		struct Measured
-		{
-			float Generation;
-			float Sort;
-			float Reshape;
-			float Build;
-			float Find;
-			float FindRandom;
-			float FindRandomSorted;
-
-			size_t DataMemory;
-			size_t TreeMemory;
-
-			void appendToFileFull(const std::string& path);
-			void appendToFile(const std::string& path);
-		};
-
 		int count;
 		int seed;
 		std::string resultPath;

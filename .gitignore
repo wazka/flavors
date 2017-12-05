@@ -10,3 +10,5 @@
 *.pyc
 /.vs/flavors/v15
 *.pdb
+/lib/cuda-api-wrappers/.settings/org.eclipse.cdt.codan.core.prefs
+/lib/cuda-api-wrappers/.settings/org.eclipse.cdt.core.prefs

@@ -1,0 +1,21 @@
+{
+  "benchmark": "keysLen",
+  "resultFilePath": "./",
+  "depths": [ 32, 48, 64, 80, 96 ],
+  "firstLevelStrides": [ 16, 8, 4 ],
+  "levelStrides": [ 8, 4 ],
+  "counts": [
+      100000,
+      200000,
+      300000,
+      400000,
+      500000
+  ],
+  "seeds": [
+      30503,
+      30040,
+      29379,
+      90116,
+      91010
+    ]
+}

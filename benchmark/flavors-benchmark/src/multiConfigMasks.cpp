@@ -31,11 +31,11 @@ namespace FlavorsBenchmarks
 		timer.Start();
 		rawMasks = Masks{Configuration::Default32, count};
 		rawMasks.FillRandom(seed, maxLen, minLen);
-		measured.Generation = timer.Stop();
+		measured["Generation"] = timer.Stop();
 
 		timer.Start();
 		rawMasks.Sort();
-		measured.Sort = timer.Stop();
+		measured["Sort"] = timer.Stop();
 	}
 
 	void MultiConfigMasksBenchmark::runForConfig(Flavors::Configuration& config)
@@ -44,19 +44,19 @@ namespace FlavorsBenchmarks
 
 		timer.Start();
 		auto masks = rawMasks.ReshapeMasks(config);
-		measured.Reshape = timer.Stop();
-		measured.DataMemory = masks.MemoryFootprint();
+		measured["Reshape"] = timer.Stop();
+		measured["DataMemory"] = masks.MemoryFootprint();
 
 		timer.Start();
 		Tree tree{masks};
-		measured.Build = timer.Stop();
-		measured.TreeMemory = tree.MemoryFootprint();
+		measured["Build"] = timer.Stop();
+		measured["TreeMemory"] = tree.MemoryFootprint();
 
 		timer.Start();
 		tree.FindMasks(masks, result.Get());
-		measured.Find = timer.Stop();
+		measured["Find"] = timer.Stop();
 
-		measured.appendToFile(ResultFullPath());
+		measured.AppendToFile(ResultFullPath());
 		recordStatistics(tree);
 	}
 

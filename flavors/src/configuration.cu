@@ -11,6 +11,23 @@ namespace Flavors
 																  1, 1, 1, 1, 1, 1, 1, 1,
 																  1, 1, 1, 1, 1, 1, 1, 1} };
 
+	Configuration Configuration::Default(unsigned depth)
+	{
+		std::vector<unsigned> levels;
+		auto currentDepth = depth;
+
+		while(currentDepth > 32)
+		{
+			levels.push_back(32);
+			currentDepth -= 32;
+		}
+
+		if(currentDepth > 0)
+			levels.push_back(currentDepth);
+
+		return Configuration{levels};
+	}
+
 	Configuration::Configuration():
 		Length(0)
 	{

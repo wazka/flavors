@@ -1,22 +1,21 @@
-#include "masksFind.h"
+#include "masksLen.h"
 
-#include "configuration.h"
 #include <fstream>
-#include <string>
 
 using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
-	std::string MasksFindBenchmark::Label = "Count;Seed;Config;MinLen;MaxLen;Generation;Sort;Reshape;Build;Find;DataMemory;TreeMemory;FindRandom;FindRandomSorted;LevelsSizes;HitRate";
+	std::string MasksLenBenchmark::Label = "Count;Seed;Max;Min;Depth;Config;Generation;Sort;Reshape;Build;Find;DataMemory;TreeMemory;FindRandom;FindRandomSorted;LevelsSizes;HitRate";
 
-	void MasksFindBenchmark::Run()
+	void MasksLenBenchmark::Run()
 	{
+		auto config = prepareConfig();
 		recordParameters(config);
 
 		timer.Start();
-		Masks rawMasks{Configuration::Default32, count};
-		rawMasks.FillRandom(seed, maxLen, minLen);
+		Masks rawMasks{Configuration::Default(depth), count};
+		rawMasks.FillRandom(seed, max, min);
 		measured["Generation"] = timer.Stop();
 
 		timer.Start();
@@ -38,7 +37,7 @@ namespace FlavorsBenchmarks
 		measured["Find"] = timer.Stop();
 
 		Masks randomMasks{config, count};
-		randomMasks.FillRandom(seed, maxLen, minLen);
+		randomMasks.FillRandom(seed + 1);
 
 		timer.Start();
 		tree.FindMasks(randomMasks, result.Get());
@@ -54,10 +53,11 @@ namespace FlavorsBenchmarks
 		recordStatistics(tree);
 	}
 
-	void MasksFindBenchmark::recordParameters(Flavors::Configuration& config)
+	void MasksLenBenchmark::recordParameters(Configuration& config)
 	{
 		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
-		file << count << ";" << seed << ";" << config << ";" << minLen << ";" << maxLen << ";";
+		file << count << ";" << seed << ";" << max << ";" << min << ";" << depth << ";" << config << ";";
 		file.close();
 	}
+
 }

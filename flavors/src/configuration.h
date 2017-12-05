@@ -13,6 +13,8 @@ namespace Flavors
 		static Configuration Default32;
 		static Configuration Binary32;
 
+		static Configuration Default(unsigned depth);
+
 		int Length;
 		CudaArray<unsigned> Levels;
 

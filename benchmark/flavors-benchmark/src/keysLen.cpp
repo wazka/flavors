@@ -1,24 +1,20 @@
-#include "keysFind.h"
-#include "keys.h"
-#include "tree.h"
+#include "keysLen.h"
 
 #include <fstream>
-#include <iostream>
-#include <chrono>
-#include <thread>
 
 using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
-	std::string KeysFindBenchmark::Label = "Count;Seed;Config;Generation;Sort;Reshape;Build;Find;DataMemory;TreeMemory;FindRandom;FindRandomSorted;LevelsSizes;HitRate";
+	std::string KeysLenBenchmark::Label = "Count;Seed;Depth;Config;Generation;Sort;Reshape;Build;Find;DataMemory;TreeMemory;FindRandom;FindRandomSorted;LevelsSizes;HitRate";
 
-	void KeysFindBenchmark::Run()
+	void KeysLenBenchmark::Run()
 	{
+		auto config = prepareConfig();
 		recordParameters(config);
 
 		timer.Start();
-		Keys rawKeys{Configuration::Default32, count};
+		Keys rawKeys{Configuration::Default(depth), count};
 		rawKeys.FillRandom(seed);
 		measured["Generation"] = timer.Stop();
 
@@ -56,26 +52,28 @@ namespace FlavorsBenchmarks
 		measured.AppendToFile(ResultFullPath());
 		recordStatistics(tree);
 	}
+
+	Configuration KeysLenBenchmark::prepareConfig()
+	{
+		std::vector<unsigned> levels {firstLevelStride};
+
+		auto currentDepth = firstLevelStride;
+		while(currentDepth + levelStride <= depth)
+		{
+			levels.push_back(levelStride);
+			currentDepth += levelStride;
+		}
+
+		if(currentDepth < depth)
+			levels.push_back(depth - currentDepth);
+
+		return Configuration{levels};
+	}
+
+	void KeysLenBenchmark::recordParameters(Flavors::Configuration& config)
+	{
+		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+		file << count << ";" << seed << ";" << depth << ";" << config << ";";
+		file.close();
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
