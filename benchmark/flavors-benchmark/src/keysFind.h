@@ -7,7 +7,7 @@
 
 namespace FlavorsBenchmarks
 {
-	class KeysFindBenchmark : public Benchmark
+	class KeysFindBenchmark : public RandomBenchmark
 	{
 	public:
 		static std::string Label;
@@ -18,7 +18,7 @@ namespace FlavorsBenchmarks
 				const Flavors::Configuration& config,
 				const std::string& resultPath,
 				const std::string& resultName = "keysFindResult") :
-			Benchmark(count, seed, resultPath, resultName),
+			RandomBenchmark(count, seed, resultPath, resultName),
 			config(config)
 		{}
 

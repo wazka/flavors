@@ -21,27 +21,39 @@ namespace FlavorsBenchmarks
 
 	class Benchmark
 	{
-public:
-		Benchmark(int count, int seed, const std::string& resultPath, const std::string& resultName) :
-			count(count),
-			seed(seed),
+	public:
+		Benchmark(const std::string& resultPath, const std::string& resultName) :
 			resultPath(resultPath),
-			resultName(resultName),
-			result(count)
+			resultName(resultName)
 		{}
 
 		virtual void Run() = 0;
-
-		std::string ResultFullPath();
-
 		virtual ~Benchmark() = default;
+
+	protected:
+		std::string resultPath;
+		std::string resultName;
+
+		Timer timer;
+		Measured measured;
+
+		std::string resultFullPath();
+		void recordStatistics(Flavors::Tree& tree, Flavors::CudaArray<unsigned>& result);
+	};
+
+	class RandomBenchmark : public Benchmark
+	{
+	public:
+		RandomBenchmark(int count, int seed, const std::string& resultPath, const std::string& resultName) :
+			Benchmark(resultPath, resultName),
+			count(count),
+			seed(seed),
+			result(count)
+		{}
+
 protected:
 		int count;
 		int seed;
-		std::string resultPath;
-		std::string resultName;
-		Timer timer;
-		Measured measured;
 		Flavors::CudaArray<unsigned> result;
 
 		virtual void recordParameters(Flavors::Configuration& config);

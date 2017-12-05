@@ -14,7 +14,7 @@ namespace Flavors
 
 namespace FlavorsBenchmarks
 {
-	class MultiConfigKeysBenchmark : public Benchmark
+	class MultiConfigKeysBenchmark : public RandomBenchmark
 	{
 	public:
 		static std::string Label;
@@ -25,7 +25,7 @@ namespace FlavorsBenchmarks
 				const std::vector<Flavors::Configuration>& configs,
 				const std::string& resultPath,
 				const std::string& resultName = "multiConfigKeysFindResult") :
-			Benchmark(count, seed, resultPath, resultName),
+			RandomBenchmark(count, seed, resultPath, resultName),
 			configs(configs)
 		{
 		}

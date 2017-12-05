@@ -4,7 +4,7 @@
 
 namespace FlavorsBenchmarks
 {
-	class KeysLenBenchmark : public Benchmark
+	class KeysLenBenchmark : public RandomBenchmark
 	{
 	public:
 		static std::string Label;
@@ -17,7 +17,7 @@ namespace FlavorsBenchmarks
 				unsigned levelStride,
 				const std::string& resultPath,
 				const std::string& resultName = "keysLenResult") :
-			Benchmark(count, seed, resultPath, resultName),
+			RandomBenchmark(count, seed, resultPath, resultName),
 			depth(depth),
 			firstLevelStride(firstLevelStride),
 			levelStride(levelStride)

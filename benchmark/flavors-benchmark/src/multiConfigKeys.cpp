@@ -52,7 +52,7 @@ namespace FlavorsBenchmarks
 		tree.FindKeys(keys, result.Get());
 		measured["Find"] = timer.Stop();
 
-		measured.AppendToFile(ResultFullPath());
+		measured.AppendToFile(resultFullPath());
 		recordStatistics(tree);
 	}
 

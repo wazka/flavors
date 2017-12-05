@@ -49,7 +49,7 @@ namespace FlavorsBenchmarks
 		tree.FindKeys(randomKeys, result.Get());
 		measured["FindRandomSorted"] = timer.Stop();
 
-		measured.AppendToFile(ResultFullPath());
+		measured.AppendToFile(resultFullPath());
 		recordStatistics(tree);
 	}
 
@@ -72,7 +72,7 @@ namespace FlavorsBenchmarks
 
 	void KeysLenBenchmark::recordParameters(Flavors::Configuration& config)
 	{
-		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+		std::ofstream file{resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 		file << count << ";" << seed << ";" << depth << ";" << config << ";";
 		file.close();
 	}

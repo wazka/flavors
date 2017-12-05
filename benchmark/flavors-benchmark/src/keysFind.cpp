@@ -53,7 +53,7 @@ namespace FlavorsBenchmarks
 		tree.FindKeys(randomKeys, result.Get());
 		measured["FindRandomSorted"] = timer.Stop();
 
-		measured.AppendToFile(ResultFullPath());
+		measured.AppendToFile(resultFullPath());
 		recordStatistics(tree);
 	}
 }

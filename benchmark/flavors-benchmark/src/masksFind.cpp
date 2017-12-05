@@ -50,13 +50,13 @@ namespace FlavorsBenchmarks
 		tree.FindMasks(randomMasks, result.Get());
 		measured["FindRandomSorted"] = timer.Stop();
 
-		measured.AppendToFile(ResultFullPath());
+		measured.AppendToFile(resultFullPath());
 		recordStatistics(tree);
 	}
 
 	void MasksFindBenchmark::recordParameters(Flavors::Configuration& config)
 	{
-		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+		std::ofstream file{resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 		file << count << ";" << seed << ";" << config << ";" << minLen << ";" << maxLen << ";";
 		file.close();
 	}

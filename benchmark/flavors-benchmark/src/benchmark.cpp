@@ -27,16 +27,14 @@ namespace FlavorsBenchmarks
 		file.close();
 	}
 
-	void Benchmark::recordParameters(Configuration& config)
+	std::string Benchmark::resultFullPath()
 	{
-		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
-		file << count << ";" << seed << ";" << config << ";";
-		file.close();
+		return resultPath + resultName + ".csv";
 	}
 
-	void Benchmark::recordStatistics(Tree& tree)
+	void Benchmark::recordStatistics(Flavors::Tree& tree, Flavors::CudaArray<unsigned>& result)
 	{
-		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+		std::ofstream file{resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 
 		file << "{";
 		for(auto levelSize : tree.h_LevelsSizes)
@@ -46,12 +44,19 @@ namespace FlavorsBenchmarks
 		auto h_result = result.ToHost();
 		auto hitCount = std::count_if(h_result.begin(), h_result.end(), [](int r){ return r != 0;});
 
-		file << hitCount / static_cast<float>(count) << std::endl;
+		file << hitCount / static_cast<float>(h_result.size()) << std::endl;
 		file.close();
 	}
 
-	std::string Benchmark::ResultFullPath()
+	void RandomBenchmark::recordParameters(Configuration& config)
 	{
-		return resultPath + resultName + ".csv";
+		std::ofstream file{resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+		file << count << ";" << seed << ";" << config << ";";
+		file.close();
+	}
+
+	void RandomBenchmark::recordStatistics(Tree& tree)
+	{
+		Benchmark::recordStatistics(tree, result);
 	}
 }
