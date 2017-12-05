@@ -16,6 +16,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flavors-benchmarks-run", "b
 		{B050A4AE-0997-479F-B12E-7DDEAE0EF7DB} = {B050A4AE-0997-479F-B12E-7DDEAE0EF7DB}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flavors-tests", "test\flavors-tests.vcxproj", "{A577BED5-94D5-45C5-8AC8-D724A8EFCED5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -38,6 +40,10 @@ Global
 		{F5E61F60-A25A-49C9-BBF8-FE23D8986893}.Debug|x64.Build.0 = Debug|x64
 		{F5E61F60-A25A-49C9-BBF8-FE23D8986893}.Release|x64.ActiveCfg = Release|x64
 		{F5E61F60-A25A-49C9-BBF8-FE23D8986893}.Release|x64.Build.0 = Release|x64
+		{A577BED5-94D5-45C5-8AC8-D724A8EFCED5}.Debug|x64.ActiveCfg = Debug|x64
+		{A577BED5-94D5-45C5-8AC8-D724A8EFCED5}.Debug|x64.Build.0 = Debug|x64
+		{A577BED5-94D5-45C5-8AC8-D724A8EFCED5}.Release|x64.ActiveCfg = Release|x64
+		{A577BED5-94D5-45C5-8AC8-D724A8EFCED5}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
