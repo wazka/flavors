@@ -17,6 +17,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flavors-benchmarks-run", "b
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "flavors-tests", "test\flavors-tests.vcxproj", "{A577BED5-94D5-45C5-8AC8-D724A8EFCED5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6A810E03-2538-442C-86FA-2CE6AC36897F} = {6A810E03-2538-442C-86FA-2CE6AC36897F}
+		{06A7268E-221F-4F4A-82BA-39CB23445B3E} = {06A7268E-221F-4F4A-82BA-39CB23445B3E}
+		{B050A4AE-0997-479F-B12E-7DDEAE0EF7DB} = {B050A4AE-0997-479F-B12E-7DDEAE0EF7DB}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
