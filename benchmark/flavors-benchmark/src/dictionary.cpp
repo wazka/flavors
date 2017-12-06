@@ -3,6 +3,7 @@
 #include <fstream>
 #include <algorithm>
 #include <string>
+#include <cctype>
 
 using namespace Flavors;
 
