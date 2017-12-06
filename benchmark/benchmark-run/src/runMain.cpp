@@ -91,6 +91,7 @@ T tryReadFromJson(nlohmann::json& j, std::string&& field)
 void runKeysFind(nlohmann::json& j)
 {
 	auto counts = tryReadFromJson<std::vector<int>>(j, "counts");
+	auto countsToFind = tryReadFromJson<std::vector<int>>(j, "countsToFind");
 	auto seeds = tryReadFromJson<std::vector<int>>(j, "seeds");
 	auto configs = tryReadFromJson<std::vector<std::vector<unsigned>>>(j, "configs");
 	auto path = tryReadFromJson<std::string>(j, "resultFilePath");
@@ -108,7 +109,7 @@ void runKeysFind(nlohmann::json& j)
 					std::cout << "} ... ";
 
 					Flavors::Configuration config {levels};
-					FlavorsBenchmarks::KeysFindBenchmark bench{count, seed, config, path };
+					FlavorsBenchmarks::KeysFindBenchmark bench{count, seed, config, countsToFind, path };
 
 					if(!exists(bench.ResultFullPath()))
 					{
@@ -132,6 +133,7 @@ void runKeysFind(nlohmann::json& j)
 void runMasksFind(nlohmann::json& j)
 {
 	auto counts = tryReadFromJson<std::vector<int>>(j, "counts");
+	auto countsToFind = tryReadFromJson<std::vector<int>>(j, "countsToFind");
 	auto seeds = tryReadFromJson<std::vector<int>>(j, "seeds");
 	auto configs = tryReadFromJson<std::vector<std::vector<unsigned>>>(j, "configs");
 	auto path = tryReadFromJson<std::string>(j, "resultFilePath");
@@ -150,7 +152,7 @@ void runMasksFind(nlohmann::json& j)
 					std::cout << "} ... ";
 
 					Flavors::Configuration config {levels};
-					FlavorsBenchmarks::MasksFindBenchmark bench{count, seed, config, path, minLen, maxLen };
+					FlavorsBenchmarks::MasksFindBenchmark bench{count, seed, config, countsToFind, path, minLen, maxLen };
 
 					if(!exists(bench.ResultFullPath()))
 					{

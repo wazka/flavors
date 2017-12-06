@@ -16,10 +16,12 @@ namespace FlavorsBenchmarks
 				int count,
 				int seed,
 				const Flavors::Configuration& config,
+				std::vector<int> countsToFind,
 				const std::string& resultPath,
 				const std::string& resultName = "keysFindResult") :
 			RandomBenchmark(count, seed, resultPath, resultName),
-			config(config)
+			config(config),
+			countsToFind(countsToFind)
 		{}
 
 		void Run() override;
@@ -28,6 +30,7 @@ namespace FlavorsBenchmarks
 	protected:
 
 		Flavors::Configuration config;
+		std::vector<int> countsToFind;
 	};
 
 }

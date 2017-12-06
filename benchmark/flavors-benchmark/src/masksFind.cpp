@@ -8,12 +8,10 @@ using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
-	std::string MasksFindBenchmark::Label = "Count;Seed;Config;MinLen;MaxLen;Generation;Sort;Reshape;Build;Find;DataMemory;TreeMemory;FindRandom;FindRandomSorted;LevelsSizes;HitRate";
+	std::string MasksFindBenchmark::Label = "Count;Seed;Config;MinLen;MaxLen;Generation;Sort;Reshape;Build;Find;DataMemory;TreeMemory;RandomCount;FindRandom;RandomSort;FindRandomSorted;LevelsSizes;HitRate";
 
 	void MasksFindBenchmark::Run()
 	{
-		recordParameters(config);
-
 		timer.Start();
 		Masks rawMasks{Configuration::Default32, count};
 		rawMasks.FillRandom(seed, maxLen, minLen);
@@ -37,21 +35,34 @@ namespace FlavorsBenchmarks
 		tree.FindMasks(masks, result.Get());
 		measured["Find"] = timer.Stop();
 
-		Masks randomMasks{config, count};
-		randomMasks.FillRandom(seed, maxLen, minLen);
+		std::cout << std::endl;
+		for(auto countToFind : countsToFind)
+		{
+			std::cout << "\tRunning for count to find = " << countToFind << "... ";
 
-		timer.Start();
-		tree.FindMasks(randomMasks, result.Get());
-		measured["FindRandom"] = timer.Stop();
+			Masks randomMasks{config, countToFind};
+			randomMasks.FillRandom(seed, maxLen, minLen);
 
-		randomMasks.Sort();
+			measured["RandomCount"] = countToFind;
 
-		timer.Start();
-		tree.FindMasks(randomMasks, result.Get());
-		measured["FindRandomSorted"] = timer.Stop();
+			timer.Start();
+			tree.FindMasks(randomMasks, result.Get());
+			measured["FindRandom"] = timer.Stop();
 
-		measured.AppendToFile(ResultFullPath());
-		recordStatistics(tree);
+			timer.Start();
+			randomMasks.Sort();
+			measured["RandomSort"] = timer.Stop();
+
+			timer.Start();
+			tree.FindMasks(randomMasks, result.Get());
+			measured["FindRandomSorted"] = timer.Stop();
+
+			recordParameters(config);
+			measured.AppendToFile(ResultFullPath());
+			recordStatistics(tree);
+
+			std::cout << "finished" << std::endl;
+		}
 	}
 
 	void MasksFindBenchmark::recordParameters(Flavors::Configuration& config)

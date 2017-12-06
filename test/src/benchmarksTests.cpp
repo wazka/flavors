@@ -51,7 +51,7 @@ namespace FlavorsTests
 		int seed = std::get<1>(params);
 		Configuration config = std::get<2>(params);
 
-		KeysFindBenchmark bench{ count, seed, config, TestData::BenchmarkResultFile};
+		KeysFindBenchmark bench{ count, seed, config, TestData::BigCounts, TestData::BenchmarkResultFile};
 
 		//when
 		bench.Run();
@@ -74,7 +74,7 @@ namespace FlavorsTests
 		int maxLen = config.Length;
 		int minLen = maxLen / 2;
 
-		MasksFindBenchmark bench{count, seed, config, TestData::BenchmarkResultFile, minLen, maxLen};
+		MasksFindBenchmark bench{count, seed, config, TestData::BigCounts, TestData::BenchmarkResultFile, minLen, maxLen};
 
 		//when
 		bench.Run();
@@ -265,9 +265,9 @@ namespace FlavorsTests
 		bench.Run();
 
 		//then
-		ASSERT_TRUE(CheckFileExists(bench.ResultFullPath()));
+		ASSERT_TRUE(BenchmarkTest::CheckFileExists(bench.ResultFullPath()));
 
 		//cleanup
-		RemoveFile(bench.ResultFullPath());
+		BenchmarkTest::RemoveFile(bench.ResultFullPath());
 	}
 }

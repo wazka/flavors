@@ -13,11 +13,12 @@ namespace FlavorsBenchmarks
 				int count,
 				int seed,
 				const Flavors::Configuration& config,
+				std::vector<int> countsToFind,
 				const std::string& resultPath,
 				int minLen,
 				int maxLen,
 				const std::string& resultName = "masksFindResult") :
-			KeysFindBenchmark(count, seed, config, resultPath, resultName),
+			KeysFindBenchmark(count, seed, config, countsToFind,resultPath, resultName),
 			minLen(minLen),
 			maxLen(maxLen)
 		{}
