@@ -56,6 +56,8 @@ int main(int argc, char** argv)
 		runKeysLen(j);
 	else if(j["benchmark"] == "masksLen")
 		runMasksLen(j);
+	else if(j["benchmark"] == "dictionary")
+		runDictionary(j);
 	else
 	{
 		std::cerr << "Unknown benchmark type." << std::endl;
@@ -108,9 +110,9 @@ void runKeysFind(nlohmann::json& j)
 					Flavors::Configuration config {levels};
 					FlavorsBenchmarks::KeysFindBenchmark bench{count, seed, config, path };
 
-					if(!exists(bench.resultFullPath()))
+					if(!exists(bench.ResultFullPath()))
 					{
-						std::ofstream file{bench.resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+						std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 						file << FlavorsBenchmarks::KeysFindBenchmark::Label << std::endl;
 						file.close();
 					}
@@ -150,9 +152,9 @@ void runMasksFind(nlohmann::json& j)
 					Flavors::Configuration config {levels};
 					FlavorsBenchmarks::MasksFindBenchmark bench{count, seed, config, path, minLen, maxLen };
 
-					if(!exists(bench.resultFullPath()))
+					if(!exists(bench.ResultFullPath()))
 					{
-						std::ofstream file{bench.resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+						std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 						file << FlavorsBenchmarks::MasksFindBenchmark::Label << std::endl;
 						file.close();
 					}
@@ -188,9 +190,9 @@ void runMultiConfigKeysFind(nlohmann::json& j)
 				std::cout << "Starting benchmark for count = " << count << ", seed = " << seed << " ... ";
 				FlavorsBenchmarks::MultiConfigKeysBenchmark bench{count, seed, configs, path};
 
-				if(!exists(bench.resultFullPath()))
+				if(!exists(bench.ResultFullPath()))
 				{
-					std::ofstream file{bench.resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+					std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 					file << FlavorsBenchmarks::MultiConfigKeysBenchmark::Label << std::endl;
 					file.close();
 				}
@@ -228,9 +230,9 @@ void runMultiConfigMasksFind(nlohmann::json& j)
 				std::cout << "Starting benchmark for count = " << count << ", seed = " << seed << " ... ";
 				FlavorsBenchmarks::MultiConfigMasksBenchmark bench{count, seed, configs, path, minLen, maxLen};
 
-				if(!exists(bench.resultFullPath()))
+				if(!exists(bench.ResultFullPath()))
 				{
-					std::ofstream file{bench.resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+					std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 					file << FlavorsBenchmarks::MultiConfigMasksBenchmark::Label << std::endl;
 					file.close();
 				}
@@ -278,9 +280,9 @@ void runKeysLen(nlohmann::json& j)
 								levelStride,
 								path};
 
-							if(!exists(bench.resultFullPath()))
+							if(!exists(bench.ResultFullPath()))
 							{
-								std::ofstream file{bench.resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+								std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 								file << FlavorsBenchmarks::KeysLenBenchmark::Label << std::endl;
 								file.close();
 							}
@@ -334,9 +336,9 @@ void runMasksLen(nlohmann::json& j)
 								min,
 								path};
 
-							if(!exists(bench.resultFullPath()))
+							if(!exists(bench.ResultFullPath()))
 							{
-								std::ofstream file{bench.resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+								std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 								file << FlavorsBenchmarks::MasksLenBenchmark::Label << std::endl;
 								file.close();
 							}
@@ -360,6 +362,30 @@ void runDictionary(nlohmann::json& j)
 	auto dictionaryFile = tryReadFromJson<std::string>(j, "dictionaryFile");
 	auto bookFiles = tryReadFromJson<std::vector<std::string>>(j, "bookFiles");
 
+	try
+	{
+		std::cout << "Starting benchmark for dictionary = " << dictionaryFile << "... ";
 
+		FlavorsBenchmarks::DictionaryBenchmark bench{
+			dictionaryFile,
+			bookFiles,
+			path};
+
+		if(!exists(bench.ResultFullPath()))
+		{
+			std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+			file << FlavorsBenchmarks::DictionaryBenchmark::Label << std::endl;
+			file.close();
+		}
+
+		bench.Run();
+
+		std::cout << "success" << std::endl;
+	}
+	catch(...)
+	{
+		std::cout << "failed due to exception: " << std::endl;
+		cuda::device::current::get().reset();
+	}
 
 }

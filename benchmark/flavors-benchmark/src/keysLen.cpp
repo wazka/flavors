@@ -49,30 +49,18 @@ namespace FlavorsBenchmarks
 		tree.FindKeys(randomKeys, result.Get());
 		measured["FindRandomSorted"] = timer.Stop();
 
-		measured.AppendToFile(resultFullPath());
+		measured.AppendToFile(ResultFullPath());
 		recordStatistics(tree);
 	}
 
 	Configuration KeysLenBenchmark::prepareConfig()
 	{
-		std::vector<unsigned> levels {firstLevelStride};
-
-		auto currentDepth = firstLevelStride;
-		while(currentDepth + levelStride <= depth)
-		{
-			levels.push_back(levelStride);
-			currentDepth += levelStride;
-		}
-
-		if(currentDepth < depth)
-			levels.push_back(depth - currentDepth);
-
-		return Configuration{levels};
+		return Benchmark::prepareConfig(firstLevelStride, levelStride, depth);
 	}
 
 	void KeysLenBenchmark::recordParameters(Flavors::Configuration& config)
 	{
-		std::ofstream file{resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 		file << count << ";" << seed << ";" << depth << ";" << config << ";";
 		file.close();
 	}

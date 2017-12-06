@@ -9,6 +9,7 @@
 #include "multiConfigMasks.h"
 #include "keysLen.h"
 #include "masksLen.h"
+#include "dictionary.h"
 
 using namespace Flavors;
 using namespace FlavorsBenchmarks;
@@ -18,13 +19,13 @@ namespace FlavorsTests
 	class BenchmarkTest
 	{
 	public:
-		bool CheckFileExists(const std::string& name)
+		static bool CheckFileExists(const std::string& name)
 		{
 			std::ifstream f(name.c_str());
 			return f.good();
 		}
 
-		void RemoveFile(const std::string& name)
+		static void RemoveFile(const std::string& name)
 		{
 			remove(name.c_str());
 		}
@@ -251,4 +252,22 @@ namespace FlavorsTests
 			::testing::ValuesIn(TestData::FirstLevelStrides),
 			::testing::ValuesIn(TestData::LevelStrides))
 	);
+
+	TEST(DictionaryBenchmarkTest, Runs)
+	{
+		//given
+		DictionaryBenchmark bench {
+			TestData::DictionaryPath,
+			TestData::BookPaths,
+			TestData::BenchmarkResultFile};
+
+		//when
+		bench.Run();
+
+		//then
+		ASSERT_TRUE(CheckFileExists(bench.ResultFullPath()));
+
+		//cleanup
+		RemoveFile(bench.ResultFullPath());
+	}
 }

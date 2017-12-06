@@ -17,6 +17,7 @@ namespace FlavorsBenchmarks
 
 	private:
 		std::map<std::string, float> measuredValues;
+		std::vector<std::string> labels;
 	};
 
 	class Benchmark
@@ -27,6 +28,7 @@ namespace FlavorsBenchmarks
 			resultName(resultName)
 		{}
 
+		std::string ResultFullPath();
 		virtual void Run() = 0;
 		virtual ~Benchmark() = default;
 
@@ -37,8 +39,8 @@ namespace FlavorsBenchmarks
 		Timer timer;
 		Measured measured;
 
-		std::string resultFullPath();
 		void recordStatistics(Flavors::Tree& tree, Flavors::CudaArray<unsigned>& result);
+		Flavors::Configuration prepareConfig(unsigned firstLevelStride, unsigned levelStride, unsigned depth);
 	};
 
 	class RandomBenchmark : public Benchmark

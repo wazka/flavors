@@ -1,0 +1,9 @@
+{
+  "benchmark": "dictionary",
+  "resultFilePath": "./",
+  "dictionaryFile": "./data/dictionary/dictionary.txt",
+  "bookFiles": [
+	"./data/dictionary/books/oliverTwist.txt", 
+	"./data/dictionary/books/pictureOfDorianGray.txt", 
+	"./data/dictionary/books/treasureIsland.txt"]
+}

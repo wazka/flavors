@@ -11,6 +11,9 @@ namespace FlavorsBenchmarks
 
 	float& Measured::operator [](std::string&& measuredValue)
 	{
+		if(measuredValues.count(measuredValue) == 0)
+			labels.push_back(measuredValue);
+
 		return measuredValues[measuredValue];
 	}
 
@@ -21,20 +24,20 @@ namespace FlavorsBenchmarks
 		if(!file)
 			file.open(path.c_str(), std::ios_base::app | std::ios_base::out);
 
-		for(auto m : measuredValues)
-			file << m.second << ";";
+		for(auto l : labels)
+			file << measuredValues[l] << ";";
 
 		file.close();
 	}
 
-	std::string Benchmark::resultFullPath()
+	std::string Benchmark::ResultFullPath()
 	{
 		return resultPath + resultName + ".csv";
 	}
 
 	void Benchmark::recordStatistics(Flavors::Tree& tree, Flavors::CudaArray<unsigned>& result)
 	{
-		std::ofstream file{resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 
 		file << "{";
 		for(auto levelSize : tree.h_LevelsSizes)
@@ -48,9 +51,26 @@ namespace FlavorsBenchmarks
 		file.close();
 	}
 
+	Configuration Benchmark::prepareConfig(unsigned firstLevelStride, unsigned levelStride, unsigned depth)
+	{
+		std::vector<unsigned> levels {firstLevelStride};
+
+		auto currentDepth = firstLevelStride;
+		while(currentDepth + levelStride <= depth)
+		{
+			levels.push_back(levelStride);
+			currentDepth += levelStride;
+		}
+
+		if(currentDepth < depth)
+			levels.push_back(depth - currentDepth);
+
+		return Configuration{levels};
+	}
+
 	void RandomBenchmark::recordParameters(Configuration& config)
 	{
-		std::ofstream file{resultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
+		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 		file << count << ";" << seed << ";" << config << ";";
 		file.close();
 	}

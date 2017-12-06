@@ -24,5 +24,11 @@ namespace FlavorsTests
 		};
 
 		const std::string BenchmarkResultFile = "";
+		const std::string DictionaryPath = "./data/dictionary/dictionary.txt";
+		const std::vector<std::string> BookPaths = {
+				"./data/dictionary/books/oliverTwist.txt",
+				"./data/dictionary/books/pictureOfDorianGray.txt",
+				"./data/dictionary/books/treasureIsland.txt"
+		};
 	}
 }
