@@ -115,7 +115,7 @@ namespace FlavorsTests
 			return true;
 		}
 
-		static bool CheckMasksFindResult(CudaArray<unsigned>& result, Masks& masks, Tree& tree)
+		static bool CheckMasksFindResult(CudaArray<unsigned>& result, Masks& masks)
 		{
 			auto h_result = result.ToHost();
 			auto h_masks = masks.ToHost();
@@ -128,6 +128,29 @@ namespace FlavorsTests
 				{
 					auto retrivedMask = std::find(h_permutation.begin(), h_permutation.end(), h_result[mask] - 1) - h_permutation.begin();
 					if (!CmpKeys(h_masks, mask, retrivedMask) || h_lengths[mask] != h_lengths[retrivedMask])
+						return false;
+				}
+			}
+
+			return true;
+		}
+
+		static bool CheckMatchResult(CudaArray<unsigned>& result, Masks& masks)
+		{
+			//This works, since in tests, we match masks with themselves and empty values are filled with 0.
+			//That is why, we can compare using CmpKeys.
+
+			auto h_result = result.ToHost();
+			auto h_masks = masks.ToHost();
+			auto h_permutation = masks.Permutation.ToHost();
+			auto h_lengths = masks.Lengths.ToHost();
+
+			for (int mask = 0; mask < masks.Count; ++mask)
+			{
+				if (h_permutation[mask] != h_result[mask] - 1)
+				{
+					auto retrivedMask = std::find(h_permutation.begin(), h_permutation.end(), h_result[mask] - 1) - h_permutation.begin();
+					if (!CmpKeys(h_masks, mask, retrivedMask) || h_lengths[mask] > h_lengths[retrivedMask])
 						return false;
 				}
 			}
@@ -235,7 +258,28 @@ namespace FlavorsTests
 		tree.FindMasks(masks, result.Get());
 
 		//then
-		ASSERT_TRUE(CheckMasksFindResult(result, masks, tree));
+		ASSERT_TRUE(CheckMasksFindResult(result, masks));
+	}
+
+	TEST_P(TreeTest, MatchKeys)
+	{
+		//given
+		auto params = GetParam();
+		int count = std::get<0>(params);
+		int seed = std::get<1>(params);
+		Configuration config = std::get<2>(params);
+
+		Masks masks{ config, count };
+		masks.FillRandom(seed);
+		Tree tree{ masks };
+
+		//when
+		CudaArray<unsigned> result{ masks.Count };
+		tree.Match(masks, result.Get());
+
+		//then
+		ASSERT_TRUE(CheckMatchResult(result, masks));
+
 	}
 
 	INSTANTIATE_TEST_CASE_P(

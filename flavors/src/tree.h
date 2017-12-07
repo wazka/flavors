@@ -16,6 +16,7 @@ namespace Flavors
 
 		void FindKeys(Keys& keys, unsigned* result);
 		void FindMasks(Masks& masks, unsigned* result);
+		void Match(Keys& keys, unsigned* result);
 
 		Configuration Config;
 		std::vector<unsigned> h_LevelsSizes;

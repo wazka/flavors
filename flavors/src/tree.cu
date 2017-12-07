@@ -423,36 +423,46 @@ namespace Flavors
 			
 	}
 
-	__global__ void findKeysKernel(unsigned* children, unsigned* childrenSizes, unsigned* keysToFind, unsigned keysToFindCount, unsigned* result, int level)
+	__global__ void findKeysKernel(
+			unsigned** children,
+			unsigned* childrenSizes,
+			unsigned** keysToFind,
+			unsigned keysToFindCount,
+			unsigned* result,
+			int depth)
 	{
 		int key = blockDim.x * blockIdx.x + threadIdx.x;
 		if (key >= keysToFindCount)
 			return;
 
-		int currentNode = result[key];
+		int currentNode = children[0][keysToFind[0][key]];
 
 		if (currentNode == 0)
 			return;
 
-		result[key] = children[(currentNode - 1) * childrenSizes[level] + keysToFind[key]];
-		
+		for(int level = 1; level < depth; ++level)
+		{
+			currentNode = children[level][(currentNode - 1) * childrenSizes[level] + keysToFind[level][key]];
+
+			if (currentNode == 0)
+				return;
+		}
+
+		result[key] = currentNode;
 	}
 
 	void Tree::FindKeys(Keys& keys, unsigned* result)
 	{
 		auto kernelConfig = make_launch_config(keys.Count);
-		thrust::fill_n(thrust::device, result, keys.Count, 1);
-
-		for (int level = 0; level < Depth(); ++level)
-			cuda::launch(
-				findKeysKernel,
-				kernelConfig,
-				Children[level],
-				ChildrenCounts.Get(),
-				keys.Store[level],
-				keys.Count,
-				result,
-				level);
+		cuda::launch(
+			findKeysKernel,
+			kernelConfig,
+			Children.GetLevels(),
+			ChildrenCounts.Get(),
+			keys.Store.GetLevels(),
+			keys.Count,
+			result,
+			Depth());
 	}
 
 	__global__ void findMaskNodeKernel(
@@ -574,6 +584,116 @@ namespace Flavors
 				masks.Store[level],
 				masks.Lengths.Get(),
 				permutation.Get());
+	}
+
+	__global__ void findPathKernel(
+			unsigned** children,
+			unsigned* childrenSizes,
+			unsigned** keysToMatch,
+			unsigned keysCount,
+			unsigned** path,
+			int depth)
+	{
+		int key = blockDim.x * blockIdx.x + threadIdx.x;
+		if (key >= keysCount)
+			return;
+
+		int currentNode = children[0][keysToMatch[0][key]];
+		if (currentNode == 0)
+			return;
+
+		path[1][key] = currentNode;
+
+		for(int level = 1; level < depth - 1; ++level)
+		{
+			currentNode = children[level][(currentNode - 1) * childrenSizes[level] + keysToMatch[level][key]];
+
+			if (currentNode == 0)
+				return;
+
+			path[level + 1][key] = currentNode;
+		}
+	}
+
+	__global__ void matchKeyKernel(
+			int keysCount,
+			int depth,
+			unsigned** currentNodes,
+			unsigned** listsStarts,
+			unsigned** listsLenghts,
+			unsigned* listsItems,
+			unsigned* masksParts,
+			unsigned* masksLengths,
+			unsigned* stridesScan,
+			unsigned* permutation,
+			unsigned** keysToMatch,
+			unsigned* result)
+	{
+		int key = blockDim.x * blockIdx.x + threadIdx.x;
+		if (key >= keysCount)
+			return;
+
+		for(int level = depth - 1; level >= 0; --level)
+		{
+			int currentNode = currentNodes[level][key];
+
+			if(currentNode == 0)
+				continue;
+
+			unsigned startIndex = listsStarts[level][currentNode - 1];
+			unsigned listLength = listsLenghts[level][currentNode - 1];
+
+			for(int itemIndex = 0; itemIndex < listLength; ++itemIndex)
+			{
+				unsigned itemValue = listsItems[startIndex + itemIndex];
+				unsigned irrelevantBits = stridesScan[level] - masksLengths[itemValue];
+
+				unsigned maskPart = masksParts[itemValue] >> irrelevantBits;
+				unsigned keyPart = keysToMatch[level][key] >> irrelevantBits;
+
+				if(maskPart == keyPart)
+				{
+					result[key] = permutation[itemValue];
+					return;
+				}
+			}
+		}
+	}
+
+	void Tree::Match(Keys& keys, unsigned* result)
+	{
+		Cuda2DArray currentNodes{ Depth(), keys.Count};
+		thrust::fill_n(thrust::device, currentNodes.Get(), keys.Count, 1);
+
+		auto kernelConfig = make_launch_config(keys.Count);
+		cuda::launch(
+			findPathKernel,
+			kernelConfig,
+			Children.GetLevels(),
+			ChildrenCounts.Get(),
+			keys.Store.GetLevels(),
+			keys.Count,
+			currentNodes.GetLevels(),
+			Depth());
+
+		//cuda::memory::copy(result, currentNodes[Depth() - 1], keys.Count * sizeof(unsigned));
+
+		//matchowanie od końca
+		cuda::launch(
+			matchKeyKernel,
+			kernelConfig,
+			keys.Count,
+			Depth(),
+			currentNodes.GetLevels(),
+			containers.Starts.GetLevels(),
+			containers.Lengths.GetLevels(),
+			containers.Items.Get(),
+			masksParts.Get(),
+			lengths.Get(),
+			scan.Get(),
+			permutation.Get(),
+			keys.Store.GetLevels(),
+			result);
 	}
 
 	size_t Tree::MemoryFootprint()

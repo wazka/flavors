@@ -107,6 +107,7 @@ namespace Flavors
 		int Depth() const;
 
 		unsigned* operator[](int level);
+		unsigned** GetLevels() { return levels.Get(); };
 
 		std::vector<std::vector<unsigned>> ToHost();
 
