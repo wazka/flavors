@@ -96,7 +96,6 @@ void runKeysFind(nlohmann::json& j)
 	auto configs = tryReadFromJson<std::vector<std::vector<unsigned>>>(j, "configs");
 	auto path = tryReadFromJson<std::string>(j, "resultFilePath");
 
-
 	for(auto count : counts)
 		for(auto seed : seeds)
 			for(auto levels : configs)
@@ -110,13 +109,6 @@ void runKeysFind(nlohmann::json& j)
 
 					Flavors::Configuration config {levels};
 					FlavorsBenchmarks::KeysFindBenchmark bench{count, seed, config, countsToFind, path };
-
-					if(!exists(bench.ResultFullPath()))
-					{
-						std::ofstream file{bench.ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
-						file << FlavorsBenchmarks::KeysFindBenchmark::Label << std::endl;
-						file.close();
-					}
 
 					bench.Run();
 

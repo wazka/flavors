@@ -42,7 +42,6 @@ namespace FlavorsBenchmarks
 	Flavors::Configuration DictionaryBenchmark::prepareConfig(unsigned bitsPerLetter, unsigned maxWordLen)
 	{
 		return Benchmark::prepareConfig(bitsPerLetter, bitsPerLetter, bitsPerLetter * maxWordLen);
-
 	}
 
 	Flavors::Masks DictionaryBenchmark::wordsToMasks(std::vector<std::string>& words, Flavors::Configuration& config)

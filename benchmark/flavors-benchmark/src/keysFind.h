@@ -10,8 +10,6 @@ namespace FlavorsBenchmarks
 	class KeysFindBenchmark : public RandomBenchmark
 	{
 	public:
-		static std::string Label;
-
 		KeysFindBenchmark(
 				int count,
 				int seed,

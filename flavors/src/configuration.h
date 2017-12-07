@@ -28,7 +28,8 @@ namespace Flavors
 
 		void PopLastLevel();
 
-		friend std::ostream& operator<<(std::ostream& os, const Configuration& obj);
+		std::string ToString();
+		friend std::ostream& operator<<(std::ostream& os, Configuration& obj);
 
 		friend bool operator==(const Configuration& lhs, const Configuration& rhs);
 		friend bool operator!=(const Configuration& lhs, const Configuration& rhs);

@@ -3,12 +3,12 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 
 using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
-
 	float& Measured::operator [](std::string&& measuredValue)
 	{
 		if(measuredValues.count(measuredValue) == 0)
@@ -17,17 +17,73 @@ namespace FlavorsBenchmarks
 		return measuredValues[measuredValue];
 	}
 
+	void Measured::Add(std::string&& label, Flavors::Configuration& config)
+	{
+		if (values.count(label) == 0)
+			labels.push_back(label);
+
+		values[label] = config.ToString();
+	}
+
+	void Measured::Add(std::string && label, Flavors::Tree & tree)
+	{
+		std::stringstream ss;
+
+		ss << "{";
+		for (auto levelSize : tree.h_LevelsSizes)
+			ss << levelSize << ",";
+		ss << "}";
+
+		if (values.count(label) == 0)
+			labels.push_back(label);
+
+		values[label] = ss.str();
+	}
+
+	void Measured::Add(std::string && label, std::string& value)
+	{
+		if (values.count(label) == 0)
+			labels.push_back(label);
+
+		values[label] = value;
+	}
+
+	void Measured::AddHitCount(Flavors::CudaArray<unsigned>& result)
+	{
+		auto h_result = result.ToHost();
+		auto hitCount = std::count_if(h_result.begin(), h_result.end(), [](int r) { return r != 0; });
+
+		Add("HitRate", hitCount / static_cast<float>(h_result.size()));
+	}
+
 	void Measured::AppendToFile(const std::string& path)
 	{
-		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
+		bool addLabel = !exists(path);
 
+		std::ofstream file{path.c_str(), std::ios_base::app | std::ios_base::out};
 		if(!file)
 			file.open(path.c_str(), std::ios_base::app | std::ios_base::out);
 
-		for(auto l : labels)
-			file << measuredValues[l] << ";";
+		if (addLabel)
+			file << fileLabel();
 
+		for(auto l : labels)
+			file << values[l] << ";";
+
+		file << std::endl;
 		file.close();
+	}
+
+	std::string Measured::fileLabel()
+	{
+		std::stringstream ss;
+
+		for (auto label : labels)
+			ss << label << ";";
+
+		ss << std::endl;
+
+		return ss.str();
 	}
 
 	std::string Benchmark::ResultFullPath()
@@ -37,18 +93,7 @@ namespace FlavorsBenchmarks
 
 	void Benchmark::recordStatistics(Flavors::Tree& tree, Flavors::CudaArray<unsigned>& result)
 	{
-		std::ofstream file{ResultFullPath().c_str(), std::ios_base::app | std::ios_base::out};
 
-		file << "{";
-		for(auto levelSize : tree.h_LevelsSizes)
-			file << levelSize << ",";
-		file << "}" << ";";
-
-		auto h_result = result.ToHost();
-		auto hitCount = std::count_if(h_result.begin(), h_result.end(), [](int r){ return r != 0;});
-
-		file << hitCount / static_cast<float>(h_result.size()) << std::endl;
-		file.close();
 	}
 
 	Configuration Benchmark::prepareConfig(unsigned firstLevelStride, unsigned levelStride, unsigned depth)

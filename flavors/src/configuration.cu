@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <thrust/execution_policy.h>
+#include <sstream>
 
 namespace Flavors
 {
@@ -60,11 +61,20 @@ namespace Flavors
 		h_levels.pop_back();
 	}
 
-	std::ostream& operator<<(std::ostream& os, const Configuration& obj)
+	std::string Configuration::ToString()
 	{
-		os << "{";
-		std::copy(obj.h_levels.begin(), obj.h_levels.end() - 1, std::ostream_iterator<unsigned>(os, ", "));
-		os << *(obj.h_levels.end() - 1) << "}";
+		std::stringstream ss;
+
+		ss << "{";
+		std::copy(h_levels.begin(), h_levels.end() - 1, std::ostream_iterator<unsigned>(ss, ", "));
+		ss << *(h_levels.end() - 1) << "}";
+
+		return ss.str();
+	}
+
+	std::ostream& operator<<(std::ostream& os, Configuration& obj)
+	{
+		os << obj.ToString();
 
 		return os;
 	}

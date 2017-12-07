@@ -11,32 +11,35 @@ using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
-	std::string KeysFindBenchmark::Label = "Count;Seed;Config;Generation;Sort;Reshape;Build;Find;DataMemory;TreeMemory;RandomCount;FindRandom;RandomSort;FindRandomSorted;LevelsSizes;HitRate";
-
 	void KeysFindBenchmark::Run()
 	{
+		measured.Add("Count", count);
+		measured.Add("Seed", seed);
+		measured.Add("Config", config);
+
 		timer.Start();
 		Keys rawKeys{Configuration::Default32, count};
 		rawKeys.FillRandom(seed);
-		measured["Generation"] = timer.Stop();
+		measured.Add("Generation", timer.Stop());
 
 		timer.Start();
 		rawKeys.Sort();
-		measured["Sort"] = timer.Stop();
+		measured.Add("Sort", timer.Stop());
 
 		timer.Start();
 		Keys keys = rawKeys.ReshapeKeys(config);
-		measured["Reshape"] = timer.Stop();
-		measured["DataMemory"] = keys.MemoryFootprint();
+		measured.Add("Reshape", timer.Stop());
+		measured.Add("DataMemory", keys.MemoryFootprint());
 
 		timer.Start();
 		Tree tree{keys};
-		measured["Build"] = timer.Stop();
-		measured["TreeMemory"] = tree.MemoryFootprint();
+		measured.Add("Build", timer.Stop());
+		measured.Add("TreeMemory", tree.MemoryFootprint());
+		measured.Add("TreeLevels", tree);
 
 		timer.Start();
 		tree.FindKeys(keys, result.Get());
-		measured["Find"] = timer.Stop();
+		measured.Add("Find", timer.Stop());
 
 		std::cout << std::endl;
 		for(auto countToFind : countsToFind)
@@ -45,24 +48,22 @@ namespace FlavorsBenchmarks
 
 			Keys randomKeys{config, countToFind};
 			randomKeys.FillRandom(seed + 1);
-
-			measured["RandomCount"] = countToFind;
+			measured.Add("RandomCount", countToFind);
 
 			timer.Start();
 			tree.FindKeys(randomKeys, result.Get());
-			measured["FindRandom"] = timer.Stop();
+			measured.Add("FindRandom", timer.Stop());
 
 			timer.Start();
 			randomKeys.Sort();
-			measured["RandomSort"] = timer.Stop();
+			measured.Add("RandomSort", timer.Stop());
 
 			timer.Start();
 			tree.FindKeys(randomKeys, result.Get());
-			measured["FindRandomSorted"] = timer.Stop();
+			measured.Add("FindRandomSorted", timer.Stop());
+			measured.AddHitCount(result);
 
-			recordParameters(config);
 			measured.AppendToFile(ResultFullPath());
-			recordStatistics(tree);
 
 			std::cout << "finished" << std::endl;
 		}

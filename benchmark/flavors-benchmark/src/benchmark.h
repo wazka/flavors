@@ -6,6 +6,8 @@
 #include "tree.h"
 
 #include <map>
+#include <fstream>
+#include <type_traits>
 
 namespace FlavorsBenchmarks
 {
@@ -13,11 +15,38 @@ namespace FlavorsBenchmarks
 	{
 	public:
 		float& operator[](std::string&& measuredValue);
+
+		template<
+			typename T, 
+			typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+		inline void Add(std::string && label, T value)
+		{
+			if (values.count(label) == 0)
+				labels.push_back(label);
+
+			values[label] = std::to_string(value);
+		}
+
+		void Add(std::string&& label, Flavors::Configuration& config);
+		void Add(std::string&& label, Flavors::Tree& tree);
+		void Add(std::string&& label, std::string& value);
+		void AddHitCount(Flavors::CudaArray<unsigned>& result);
+
 		void AppendToFile(const std::string& path);
 
 	private:
 		std::map<std::string, float> measuredValues;
+
+		std::map<std::string, std::string> values;
 		std::vector<std::string> labels;
+
+		inline bool exists(const std::string& name)
+		{
+			std::ifstream f(name.c_str());
+			return f.good();
+		}
+
+		std::string fileLabel();
 	};
 
 	class Benchmark
@@ -61,5 +90,4 @@ protected:
 		virtual void recordParameters(Flavors::Configuration& config);
 		void recordStatistics(Flavors::Tree& tree);
 	};
-
 }
