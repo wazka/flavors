@@ -17,7 +17,8 @@ namespace Flavors
 		static Configuration Binary(unsigned depth);
 
 		int Length;
-		CudaArray<unsigned> Levels;
+
+		unsigned* Get();
 
 		Configuration();
 		explicit Configuration(const std::vector<unsigned>& levels);
@@ -42,5 +43,6 @@ namespace Flavors
 		Configuration& operator=(Configuration&& other) noexcept = default;
 	private:
 		std::vector<unsigned> h_levels;
+		CudaArray<unsigned> levels;
 	};
 }

@@ -42,25 +42,29 @@ namespace Flavors
 
 	Configuration::Configuration(const std::vector<unsigned>& levels):
 		Length(0),
-		h_levels(levels),
-		Levels(levels.size())
+		h_levels(levels)
 	{
 		for (auto level : h_levels)
 			Length += level;
-
-		cuda::memory::copy(Levels.Get(), h_levels.data(), Depth() * sizeof(unsigned));
 	}
 
 	void Configuration::Create(const std::vector<unsigned>& levels)
 	{
 		h_levels = levels;
-		Levels = CudaArray<unsigned>{levels.size()};
-
 		Length = 0;
 		for (auto level : h_levels)
 			Length += level;
+	}
 
-		cuda::memory::copy(Levels.Get(), h_levels.data(), Depth() * sizeof(unsigned));
+	unsigned* Configuration::Get()
+	{
+		if(levels.Count() == 0)
+		{
+			levels = CudaArray<unsigned>{h_levels.size()};
+			cuda::memory::copy(levels.Get(), h_levels.data(), Depth() * sizeof(unsigned));
+		}
+
+		return levels.Get();
 	}
 
 	unsigned Configuration::operator[](int level) const

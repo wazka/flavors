@@ -48,7 +48,7 @@ namespace Flavors
 			kernelConfig,
 			Count,
 			Depth(),
-			Config.Levels.Get(),
+			Config.Get(),
 			Lengths.Get(),
 			Store.GetLevels());
 	}
@@ -85,7 +85,7 @@ namespace Flavors
 			kernelConfig,
 			Count,
 			Depth(),
-			Config.Levels.Get(),
+			Config.Get(),
 			Lengths.Get(),
 			Store.GetLevels());
 	}
@@ -111,7 +111,7 @@ namespace Flavors
 	Masks Masks::ReshapeMasks(Configuration& newConfig)
 	{
 		Masks newMasks{ newConfig, Count };
-		launchReshape(newConfig, newMasks);
+		launchReshape(newMasks);
 		copyPermutation(newMasks);
 
 		cuda::memory::copy(

@@ -41,9 +41,12 @@ namespace Flavors
 		CudaArray(const CudaArray& other)
 			: count(other.count)
 		{
-			auto currentDevice = cuda::device::current::get();
-			store = cuda::memory::device::make_unique<T[]>(currentDevice, count);
-			cuda::memory::copy(store.get(), other.store.get(), count * sizeof(unsigned));
+			if(count > 0)
+			{
+				auto currentDevice = cuda::device::current::get();
+				store = cuda::memory::device::make_unique<T[]>(currentDevice, count);
+				cuda::memory::copy(store.get(), other.store.get(), count * sizeof(T));
+			}
 		}
 
 		CudaArray(CudaArray&& other) noexcept = default;
@@ -53,9 +56,13 @@ namespace Flavors
 			if (this == &other)
 				return *this;
 			count = other.count;
-			auto currentDevice = cuda::device::current::get();
-			store = cuda::memory::device::make_unique<T[]>(currentDevice, count);
-			cuda::memory::copy(store.get(), other.store.get(), count * sizeof(unsigned));
+
+			if(count > 0)
+			{
+				auto currentDevice = cuda::device::current::get();
+				store = cuda::memory::device::make_unique<T[]>(currentDevice, count);
+				cuda::memory::copy(store.get(), other.store.get(), count * sizeof(T));
+			}
 			return *this;
 		}
 
@@ -64,6 +71,11 @@ namespace Flavors
 		size_t MemoryFootprint()
 		{
 			return count * sizeof(T);
+		}
+
+		int Count()
+		{
+			return count;
 		}
 
 	private:

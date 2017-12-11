@@ -300,8 +300,8 @@ namespace Flavors
 		scan = CudaArray<unsigned>{ Depth() };
 		preScan = CudaArray<unsigned>{ Depth() };
 		
-		thrust::inclusive_scan(thrust::device, Config.Levels.Get(), Config.Levels.Get() + Depth(), scan.Get());
-		thrust::exclusive_scan(thrust::device, Config.Levels.Get(), Config.Levels.Get() + Depth(), preScan.Get());
+		thrust::inclusive_scan(thrust::device, Config.Get(), Config.Get() + Depth(), scan.Get());
+		thrust::exclusive_scan(thrust::device, Config.Get(), Config.Get() + Depth(), preScan.Get());
 	}
 
 	void Tree::buildListsLenghts(Cuda2DArray& indexes, Cuda2DArray& pathsEnds, CudaArray<unsigned>& tmpArray)

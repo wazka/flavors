@@ -230,12 +230,12 @@ namespace FlavorsTests
 			::testing::ValuesIn(TestData::Configs))
 	);
 
-//	INSTANTIATE_TEST_CASE_P(
-//		BigData,
-//		DataTest,
-//		::testing::Combine(
-//			::testing::ValuesIn(TestData::BigCounts),
-//			::testing::ValuesIn(TestData::Seeds),
-//			::testing::ValuesIn(TestData::Configs))
-//	);
+	INSTANTIATE_TEST_CASE_P(
+		BigData,
+		DataTest,
+		::testing::Combine(
+			::testing::ValuesIn(TestData::BigCounts),
+			::testing::ValuesIn(TestData::Seeds),
+			::testing::ValuesIn(TestData::Configs))
+	);
 }

@@ -51,7 +51,7 @@ namespace Flavors
 		virtual size_t MemoryFootprint();
 
 	protected:
-		void launchReshape(Configuration& newConfig, Keys& newKeys);
+		void launchReshape(Keys& newKeys);
 		void copyPermutation(Keys& newKeys);
 		void initPermutation();
 		void updatePermutation(int level, CudaArray<unsigned>& tmp);

@@ -137,7 +137,7 @@ namespace Flavors
 		}
 	}
 
-	void Keys::launchReshape(Configuration& newConfig, Keys& newKeys)
+	void Keys::launchReshape(Keys& newKeys)
 	{
 		auto kernelConfig = make_launch_config(Count);
 		cuda::launch(
@@ -146,10 +146,10 @@ namespace Flavors
 			Count,
 			Config.Length,
 			Config.Depth(),
-			Config.Levels.Get(),
+			Config.Get(),
 			Store.GetLevels(),
-			newConfig.Depth(),
-			newConfig.Levels.Get(),
+			newKeys.Config.Depth(),
+			newKeys.Config.Get(),
 			newKeys.Store.GetLevels()
 		);
 	}
@@ -166,7 +166,7 @@ namespace Flavors
 	Keys Keys::ReshapeKeys(Configuration& newConfig)
 	{
 		Keys newKeys{ newConfig, Count };
-		launchReshape(newConfig, newKeys);
+		launchReshape(newKeys);
 		copyPermutation(newKeys);
 
 		return newKeys;
