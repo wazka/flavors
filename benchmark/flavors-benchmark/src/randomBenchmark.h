@@ -35,7 +35,7 @@ namespace FlavorsBenchmarks
 			caseCount = counts.size() * seeds.size();
 
 			if(configs.size() > 0)
-				dataItemLength = configs[0].Depth();
+				dataItemLength = configs[0].Length;
 		}
 
 		RandomBenchmark(nlohmann::json& j, int maxMaskLength = 0, int minMaskLength = 0):
@@ -161,6 +161,7 @@ namespace FlavorsBenchmarks
 				for(int randomCount : randomCounts)
 				{
 					std::cout << "\t\t\t Starting random find for random count = " << randomCount << std::endl;
+					Flavors::CudaArray<unsigned> randomResult {randomCount};
 
 					try
 					{
@@ -170,7 +171,7 @@ namespace FlavorsBenchmarks
 						measured.Add("RandomCount", randomCount);
 
 						timer.Start();
-						tree.Find(randomData, result.Get());
+						tree.Find(randomData, randomResult.Get());
 
 						measured.Add("FindRandom", timer.Stop());
 
@@ -179,8 +180,7 @@ namespace FlavorsBenchmarks
 						measured.Add("RandomSort", timer.Stop());
 
 						timer.Start();
-						tree.Find(randomData, result.Get());
-
+						tree.Find(randomData, randomResult.Get());
 						measured.Add("FindRandomSorted", timer.Stop());
 						measured.AddHitCount(result);
 
