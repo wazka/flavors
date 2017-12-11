@@ -14,12 +14,14 @@ namespace Flavors
 		static Configuration Binary32;
 
 		static Configuration Default(unsigned depth);
+		static Configuration Binary(unsigned depth);
 
 		int Length;
 		CudaArray<unsigned> Levels;
 
 		Configuration();
 		explicit Configuration(const std::vector<unsigned>& levels);
+		void Create(const std::vector<unsigned>& levels);
 
 		unsigned operator[](int level) const;
 

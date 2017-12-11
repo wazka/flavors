@@ -1,6 +1,5 @@
 #pragma once
 
-#include "timer.h"
 #include "utils.h"
 #include "configuration.h"
 #include "tree.h"
@@ -8,14 +7,41 @@
 #include <map>
 #include <fstream>
 #include <type_traits>
+#include <chrono>
+
+#include "json.hpp"
+
+namespace Flavors
+{
+	void to_json(nlohmann::json& j, const DataInfo& info);
+	void from_json(const nlohmann::json& j, Configuration& config);
+}
 
 namespace FlavorsBenchmarks
 {
+	int tryReadIntFromJson(nlohmann::json& j, std::string&& field);
+	float tryReadFloatFromJson(nlohmann::json& j, std::string&& field);
+
+	template<typename T>
+	T tryReadFromJson(nlohmann::json& j, std::string&& field)
+	{
+		T val;
+		try
+		{
+			val = j.at(field).get<T>();
+			return val;
+		}
+		catch(...)
+		{
+			std::cout << field << " missing from configuration file." << std::endl;
+		}
+
+		return val;
+	}
+
 	class Measured
 	{
 	public:
-		float& operator[](std::string&& measuredValue);
-
 		template<
 			typename T, 
 			typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
@@ -49,45 +75,24 @@ namespace FlavorsBenchmarks
 		std::string fileLabel();
 	};
 
-	class Benchmark
+	class Timer
 	{
 	public:
-		Benchmark(const std::string& resultPath, const std::string& resultName) :
-			resultPath(resultPath),
-			resultName(resultName)
-		{}
+		void Start()
+		{
+			start = std::chrono::high_resolution_clock::now();
+		}
 
-		std::string ResultFullPath();
-		virtual void Run() = 0;
-		virtual ~Benchmark() = default;
+		float Stop()
+		{
+			auto end = std::chrono::high_resolution_clock::now();
+			auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>( end - start ).count();
 
-	protected:
-		std::string resultPath;
-		std::string resultName;
+			return duration;
+		}
 
-		Timer timer;
-		Measured measured;
+	private:
+		std::chrono::high_resolution_clock::time_point start;
 
-		void recordStatistics(Flavors::Tree& tree, Flavors::CudaArray<unsigned>& result);
-		Flavors::Configuration prepareConfig(unsigned firstLevelStride, unsigned levelStride, unsigned depth);
-	};
-
-	class RandomBenchmark : public Benchmark
-	{
-	public:
-		RandomBenchmark(int count, int seed, const std::string& resultPath, const std::string& resultName) :
-			Benchmark(resultPath, resultName),
-			count(count),
-			seed(seed),
-			result(count)
-		{}
-
-protected:
-		int count;
-		int seed;
-		Flavors::CudaArray<unsigned> result;
-
-		virtual void recordParameters(Flavors::Configuration& config);
-		void recordStatistics(Flavors::Tree& tree);
 	};
 }

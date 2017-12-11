@@ -451,6 +451,11 @@ namespace Flavors
 		result[key] = currentNode;
 	}
 
+	void Tree::Find(Keys& keys, unsigned* result)
+	{
+		FindKeys(keys, result);
+	}
+
 	void Tree::FindKeys(Keys& keys, unsigned* result)
 	{
 		auto kernelConfig = make_launch_config(keys.Count);
@@ -542,6 +547,11 @@ namespace Flavors
 			++item;
 			itemValue = listsItems[startIndex + item];
 		}
+	}
+
+	void Tree::Find(Masks& masks, unsigned* result)
+	{
+		FindMasks(masks, result);
 	}
 
 	void Tree::FindMasks(Masks& masks, unsigned* result)

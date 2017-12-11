@@ -29,6 +29,12 @@ namespace Flavors
 		return Configuration{levels};
 	}
 
+	Configuration Configuration::Binary(unsigned depth)
+	{
+		std::vector<unsigned> levels(depth, 1u);
+		return Configuration{levels};
+	}
+
 	Configuration::Configuration():
 		Length(0)
 	{
@@ -39,6 +45,18 @@ namespace Flavors
 		h_levels(levels),
 		Levels(levels.size())
 	{
+		for (auto level : h_levels)
+			Length += level;
+
+		cuda::memory::copy(Levels.Get(), h_levels.data(), Depth() * sizeof(unsigned));
+	}
+
+	void Configuration::Create(const std::vector<unsigned>& levels)
+	{
+		h_levels = levels;
+		Levels = CudaArray<unsigned>{levels.size()};
+
+		Length = 0;
 		for (auto level : h_levels)
 			Length += level;
 

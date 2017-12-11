@@ -14,6 +14,9 @@ namespace Flavors
 		explicit Tree(Keys& keys);
 		explicit Tree(Masks& masks);
 
+		void Find(Keys& data, unsigned* result);
+		void Find(Masks& data, unsigned* result);
+
 		void FindKeys(Keys& keys, unsigned* result);
 		void FindMasks(Masks& masks, unsigned* result);
 		void Match(Keys& keys, unsigned* result);

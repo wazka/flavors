@@ -9,9 +9,6 @@ using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
-	std::string DictionaryBenchmark::Label = "DictSourceRead;DictSourceWordCount;DictSourceMemory;DictSourceWordsSort;DictBuild;DictMemory;BookRead;BookWordCount;BookMemory;Find;BookSort;FindSorted;LevelsSizes;HitRate";
-
-
 	std::vector<std::string> DictionaryBenchmark::readWords(std::string path, unsigned& maxWordLen)
 	{
 		std::vector<std::string> words;
@@ -41,7 +38,8 @@ namespace FlavorsBenchmarks
 
 	Flavors::Configuration DictionaryBenchmark::prepareConfig(unsigned bitsPerLetter, unsigned maxWordLen)
 	{
-		return Benchmark::prepareConfig(bitsPerLetter, bitsPerLetter, bitsPerLetter * maxWordLen);
+		std::vector<unsigned> levels(maxWordLen, bitsPerLetter);
+		return Configuration{levels};
 	}
 
 	Flavors::Masks DictionaryBenchmark::wordsToMasks(std::vector<std::string>& words, Flavors::Configuration& config)
@@ -92,18 +90,20 @@ namespace FlavorsBenchmarks
 	{
 		timer.Start();
 		auto dictSourceWords = loadDictionary();
-		measured["DictSourceRead"] = timer.Stop();
-		measured["DictSourceWordCount"] = dictSourceWords.Count;
-		measured["DictSourceMemory"] = dictSourceWords.MemoryFootprint();
+		measured.Add("DictSourceRead",timer.Stop());
+		measured.Add("DictSourceWordCount", dictSourceWords.Count);
+		measured.Add("DictSourceMemory", dictSourceWords.MemoryFootprint());
 
 		timer.Start();
 		dictSourceWords.Sort();
-		measured["DictSourceWordsSort"] = timer.Stop();
+		measured.Add("DictSourceWordsSort", timer.Stop());
 
 		timer.Start();
 		Tree dict{dictSourceWords};
-		measured["DictBuild"] = timer.Stop();
-		measured["DictMemory"] = dict.MemoryFootprint();
+		measured.Add("DictBuild", timer.Stop());
+		measured.Add("DictMemory", dict.MemoryFootprint());
+		measured.Add("DictLevels", dict);
+		measured.Add("Depth", dict.Depth());
 
 		for(auto bookPath : bookPaths)
 		{
@@ -111,26 +111,26 @@ namespace FlavorsBenchmarks
 
 			timer.Start();
 			auto book = loadBook(bookPath, dictSourceWords.Config);
-			measured["BookRead"] = timer.Stop();
-			measured["BookWordCount"] = book.Count;
-			measured["BookMemory"] = book.MemoryFootprint();
+			measured.Add("BookRead", timer.Stop());
+			measured.Add("BookWordCount", book.Count);
+			measured.Add("BookMemory", book.MemoryFootprint());
 
 			CudaArray<unsigned> result{book.Count};
 
 			timer.Start();
 			dict.FindMasks(book, result.Get());
-			measured["Find"] = timer.Stop();
+			measured.Add("Find", timer.Stop());
 
 			timer.Start();
 			book.Sort();
-			measured["BookSort"] = timer.Stop();
+			measured.Add("BookSort", timer.Stop());
 
 			timer.Start();
 			dict.FindMasks(book, result.Get());
-			measured["FindSorted"] = timer.Stop();
+			measured.Add("FindSorted", timer.Stop());
+			measured.AddHitCount(result);
 
-			measured.AppendToFile(ResultFullPath());
-			Benchmark::recordStatistics(dict, result);
+			measured.AppendToFile(resultFile);
 
 			std::cout << "finished";
 		}

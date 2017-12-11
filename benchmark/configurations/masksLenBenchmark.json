@@ -1,0 +1,30 @@
+{
+  "benchmark": "masksLenBenchmark",
+  "resultFile": "masksLenResults.csv",
+  "dataInfoDirectory": "./dataInfo/",
+  "keyLenghts": [ 32, 48, 64 ],
+  "firstLevelStrides": [ 16, 8, 4 ],
+  "levelStrides": [ 8, 4 ],
+  "maxMaskLength": 1.0,
+  "minMaskLength": 0.75,
+  "counts": [
+      100000,
+      200000,
+      300000,
+      400000,
+      500000
+  ],
+  "randomCounts": [
+    400000,
+    500000,
+    700000,
+    800000
+  ],
+  "seeds": [
+      30503,
+      30040,
+      29379,
+      90116,
+      91010
+    ]
+}
