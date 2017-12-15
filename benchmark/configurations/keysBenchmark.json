@@ -2,6 +2,7 @@
   "benchmark": "keysBenchmark",
   "resultFile": "keysResults.csv",
   "dataInfoDirectory": "./dataInfo/",
+  "deviceId": 0,
   "configs": [
     [
       8,

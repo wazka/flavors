@@ -2,6 +2,7 @@
   "benchmark": "dictionary",
   "resultFile": "./dictionaryResult.csv",
   "dictionaryFile": "./data/dictionary/dictionary.txt",
+  "deviceId": 0,
   "bookFiles": [
 	"./data/dictionary/books/oliverTwist.txt", 
 	"./data/dictionary/books/pictureOfDorianGray.txt", 
