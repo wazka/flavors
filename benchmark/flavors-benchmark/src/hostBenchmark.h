@@ -70,6 +70,10 @@ namespace FlavorsBenchmarks
 
 			try
 			{
+				measured.Add("Count", count);
+				measured.Add("Seed", seed);
+				measured.Add("DataItemLenght", 32);
+
 				auto data = prepareData(count, seed);
 				std::map<unsigned, int> dict;
 
@@ -111,10 +115,6 @@ namespace FlavorsBenchmarks
 
 		std::vector<unsigned> prepareData(int count, int seed)
 		{
-			measured.Add("Count", count);
-			measured.Add("Seed", seed);
-			measured.Add("DataItemLenght", 32);
-
 			std::mt19937 mt(seed);
 			std::vector<unsigned> randomValues(count);
 			std::generate(randomValues.begin(), randomValues.end(), mt);
