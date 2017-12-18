@@ -196,10 +196,12 @@ namespace FlavorsBenchmarks
 
 					try
 					{
-						T randomData{config, randomCount};
-						fillRandom(randomData, seed);
+						T randomRawData{rawData.Config, randomCount};
+						fillRandom(randomRawData, seed);
 
 						measured.Add("RandomCount", randomCount);
+
+						auto randomData = reshapeData(randomRawData, config);
 
 						timer.Start();
 						tree.Find(randomData, randomResult.Get());
@@ -207,8 +209,10 @@ namespace FlavorsBenchmarks
 						measured.Add("FindRandom", timer.Stop());
 
 						timer.Start();
-						randomData.Sort();
+						randomRawData.Sort();
 						measured.Add("RandomSort", timer.Stop());
+
+						randomData = reshapeData(randomRawData, config);
 
 						timer.Start();
 						tree.Find(randomData, randomResult.Get());
