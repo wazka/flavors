@@ -59,16 +59,16 @@ namespace FlavorsBenchmarks
 			std::cout << "Starting benchmark. Results will be saved to: \t" << resultFile << std::endl;
 
 			//TODO: Dlaczego to nie działa z Thrustem?
-//			try
-//			{
-//				cuda::device::current::set(deviceId);
-//			}
-//			catch(...)
-//			{
-//				std::cout << "\t\t ERROR: Wrong device ID" << std::endl;
-//				cuda::outstanding_error::clear();
-//				return;
-//			}
+			try
+			{
+				cuda::device::current::set(deviceId);
+			}
+			catch(...)
+			{
+				std::cout << "\t\t ERROR: Wrong device ID" << std::endl;
+				cuda::outstanding_error::clear();
+				return;
+			}
 
 			measured.Add("deviceId", deviceId);
 			deviceName = cuda::device::current::get().name();
