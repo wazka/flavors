@@ -137,12 +137,18 @@ namespace FlavorsBenchmarks
 			start = std::chrono::high_resolution_clock::now();
 		}
 
-		int Stop()
+		template<typename Unit>
+		unsigned long long Stop()
 		{
 			auto end = std::chrono::high_resolution_clock::now();
-			auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>( end - start ).count();
+			auto duration = std::chrono::duration_cast<Unit>( end - start ).count();
 
 			return duration;
+		}
+
+		unsigned long long Stop()
+		{
+			return Stop<std::chrono::nanoseconds>();
 		}
 
 	private:
