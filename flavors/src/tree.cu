@@ -686,9 +686,6 @@ namespace Flavors
 			currentNodes.GetLevels(),
 			Depth());
 
-		//cuda::memory::copy(result, currentNodes[Depth() - 1], keys.Count * sizeof(unsigned));
-
-		//matchowanie od końca
 		cuda::launch(
 			matchKeyKernel,
 			kernelConfig,

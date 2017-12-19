@@ -19,6 +19,7 @@ namespace FlavorsBenchmarks
 			std::vector<Flavors::Configuration>&& configs,
 			std::string resultFile,
 			std::string dataInfoDirectory,
+			int deviceId,
 			int maxMaskLength = 0,
 			int minMaskLength = 0):
 				counts(counts),
@@ -29,6 +30,7 @@ namespace FlavorsBenchmarks
 				dataInfoDirectory(dataInfoDirectory),
 				caseIndex(1),
 				dataItemLength(0),
+				deviceId(deviceId),
 				maxMaskLength(maxMaskLength),
 				minMaskLength(minMaskLength)
 		{
@@ -46,6 +48,7 @@ namespace FlavorsBenchmarks
 				tryReadFromJson<std::vector<Flavors::Configuration>>(j, "configs"),
 				tryReadFromJson<std::string>(j, "resultFile"),
 				tryReadFromJson<std::string>(j, "dataInfoDirectory"),
+				tryReadIntFromJson(j, "deviceId"),
 				maxMaskLength,
 				minMaskLength)
 		{
@@ -55,6 +58,23 @@ namespace FlavorsBenchmarks
 		{
 			std::cout << "Starting benchmark. Results will be saved to: \t" << resultFile << std::endl;
 
+			//TODO: Dlaczego to nie działa z Thrustem?
+			try
+			{
+				cuda::device::current::set(deviceId);
+			}
+			catch(...)
+			{
+				std::cout << "\t\t ERROR: Wrong device ID" << std::endl;
+				cuda::outstanding_error::clear();
+				return;
+			}
+
+			measured.Add("deviceId", deviceId);
+			deviceName = cuda::device::current::get().name();
+			deviceName.erase(remove_if(deviceName.begin(), deviceName.end(), isspace), deviceName.end());
+			measured.Add("deviceName", deviceName);
+
 			for(int count : counts)
 				for(int seed : seeds)
 					runCase(count, seed);
@@ -63,6 +83,9 @@ namespace FlavorsBenchmarks
 	private:
 		Measured measured;
 		Timer timer;
+
+		int deviceId;
+		std::string deviceName;
 
 		T prepareRawData(int count, int seed)
 		{
@@ -85,7 +108,16 @@ namespace FlavorsBenchmarks
 			rawData.Sort();
 			measured.Add("Sort", timer.Stop());
 
-			saveDataInfo(rawData, count, seed);
+			saveDataInfo(
+					rawData,
+					count,
+					seed,
+					dataItemLength,
+					deviceId,
+					deviceName,
+					dataInfoDirectory,
+					maxMaskLength,
+					minMaskLength);
 
 			return rawData;
 		}
@@ -101,7 +133,6 @@ namespace FlavorsBenchmarks
 				for(auto config : configs)
 				{
 					measured.Add("Config", config);
-
 					runCaseForConfig(rawData, config, seed);
 				}
 			}
@@ -165,10 +196,12 @@ namespace FlavorsBenchmarks
 
 					try
 					{
-						T randomData{config, randomCount};
-						fillRandom(randomData, seed);
+						T randomRawData{rawData.Config, randomCount};
+						fillRandom(randomRawData, seed);
 
 						measured.Add("RandomCount", randomCount);
+
+						auto randomData = reshapeData(randomRawData, config);
 
 						timer.Start();
 						tree.Find(randomData, randomResult.Get());
@@ -176,8 +209,10 @@ namespace FlavorsBenchmarks
 						measured.Add("FindRandom", timer.Stop());
 
 						timer.Start();
-						randomData.Sort();
+						randomRawData.Sort();
 						measured.Add("RandomSort", timer.Stop());
+
+						randomData = reshapeData(randomRawData, config);
 
 						timer.Start();
 						tree.Find(randomData, randomResult.Get());
@@ -202,47 +237,6 @@ namespace FlavorsBenchmarks
 				std::cout << "\t\t\t ERROR: Running case failed due to exception" << std::endl;
 				cuda::outstanding_error::clear();
 			}
-		}
-
-		void saveDataInfo(T& rawKeys, int count, int seed)
-		{
-			nlohmann::json j;
-
-			Flavors::Configuration binaryConfig = Flavors::Configuration::Binary(dataItemLength);
-			j["dataInfo"] = rawKeys.ReshapeKeys(binaryConfig).GetInfo();
-			j["seed"] = seed;
-			j["count"] = count;
-			j["dataItemLength"] = dataItemLength;
-
-			std::stringstream fileName;
-			fileName << std::to_string(count) << "_" << std::to_string(seed) << "_" << std::to_string(dataItemLength);
-
-			if(maxMaskLength != 0)
-			{
-				j["maxMaskLength"] = maxMaskLength;
-				j["minMaskLength"] = minMaskLength;
-
-				fileName << "_" << maxMaskLength << "_" << minMaskLength;
-			}
-
-			fileName << ".json";
-
-			std::ofstream dataInfoFile;
-			dataInfoFile.open(dataInfoDirectory + fileName.str());
-
-			if(!dataInfoFile.good())
-			{
-				std::cout << "\t WARNING: Unable to open data info file. File will be written to current directory" << std::endl;
-				dataInfoFile.open(fileName.str());
-			}
-
-			if(dataInfoFile.good())
-			{
-				dataInfoFile << j.dump(3);
-				dataInfoFile.close();
-			}
-			else
-				std::cout << "\t ERROR: Unable to open data info file." << std::endl;
 		}
 
 		int caseIndex;

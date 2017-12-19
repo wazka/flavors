@@ -9,6 +9,7 @@
 #include "configuration.h"
 #include "randomBenchmark.h"
 #include "dictionary.h"
+#include "hostBenchmark.h"
 
 int main(int argc, char** argv)
 {
@@ -72,6 +73,11 @@ int main(int argc, char** argv)
 	else if(j["benchmark"] == "dictionary")
 	{
 		FlavorsBenchmarks::DictionaryBenchmark bench{j};
+		bench.Run();
+	}
+	else if(j["benchmark"] == "host")
+	{
+		FlavorsBenchmarks::HostBenchmark bench{j};
 		bench.Run();
 	}
 	else

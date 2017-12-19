@@ -1,6 +1,7 @@
 {
   "benchmark": "masksBenchmark",
   "resultFile": "masksResults.csv",
+  "deviceId": 0,
   "maxMaskLength": 32,
   "minMaskLength": 20,
   "dataInfoDirectory": "./dataInfo/",

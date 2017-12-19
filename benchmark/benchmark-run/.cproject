@@ -32,7 +32,7 @@
 								<option id="nvcc.compiler.option.level.1070665311" name="Generate host debug information (-g)" superClass="nvcc.compiler.option.level" value="true" valueType="boolean"/>
 								<option defaultValue="nvcc.compiler.optimization.level.none" id="nvcc.compiler.optimization.level.843868536" name="Optimization Level" superClass="nvcc.compiler.optimization.level" valueType="enumerated"/>
 								<option id="nvcc.compiler.pic.253052538" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
-								<option id="nvcc.compiler.cpp11option.384220872" superClass="nvcc.compiler.cpp11option" value="true" valueType="boolean"/>
+								<option id="nvcc.compiler.cpp11option.384220872" name="Enable C++11 support (-std=c++11)" superClass="nvcc.compiler.cpp11option" value="true" valueType="boolean"/>
 								<inputType id="nvcc.compiler.input.cu.1188665344" superClass="nvcc.compiler.input.cu"/>
 								<inputType id="nvcc.compiler.input.cpp.1775262125" superClass="nvcc.compiler.input.cpp"/>
 								<inputType id="nvcc.compiler.input.c.1006832724" superClass="nvcc.compiler.input.c"/>
@@ -68,10 +68,10 @@
 			</storageModule>
 			<storageModule moduleId="com.nvidia.cuda.ide.build.project.ICudaProjectConfiguration">
 				<executable devicelink="false">
-					<sass major="6" minor="0"/>
-					<ptx major="6" minor="0"/>
+					<sass major="6" minor="1"/>
+					<sass major="5" minor="2"/>
 				</executable>
-				<editor-arch major="6" minor="0"/>
+				<editor-arch major="6" minor="1"/>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
 				<externalSettings containerId="cuda-api-wrappers;com.nvidia.cuda.ide.eight_zero.configuration.debug.577456600" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
@@ -128,7 +128,7 @@
 								<option id="nvcc.compiler.option.level.1063398805" name="Generate host debug information (-g)" superClass="nvcc.compiler.option.level"/>
 								<option defaultValue="nvcc.compiler.optimization.level.most" id="nvcc.compiler.optimization.level.1736371931" name="Optimization Level" superClass="nvcc.compiler.optimization.level" valueType="enumerated"/>
 								<option id="nvcc.compiler.pic.481841705" name="Position Independent Code (-fPIC)" superClass="nvcc.compiler.pic"/>
-								<option id="nvcc.compiler.cpp11option.1731768744" superClass="nvcc.compiler.cpp11option" value="true" valueType="boolean"/>
+								<option id="nvcc.compiler.cpp11option.1731768744" name="Enable C++11 support (-std=c++11)" superClass="nvcc.compiler.cpp11option" value="true" valueType="boolean"/>
 								<inputType id="nvcc.compiler.input.cu.1180752003" superClass="nvcc.compiler.input.cu"/>
 								<inputType id="nvcc.compiler.input.cpp.1439150187" superClass="nvcc.compiler.input.cpp"/>
 								<inputType id="nvcc.compiler.input.c.717721233" superClass="nvcc.compiler.input.c"/>
@@ -164,10 +164,10 @@
 			</storageModule>
 			<storageModule moduleId="com.nvidia.cuda.ide.build.project.ICudaProjectConfiguration">
 				<executable devicelink="false">
-					<sass major="6" minor="0"/>
-					<ptx major="6" minor="0"/>
+					<sass major="6" minor="1"/>
+					<sass major="5" minor="2"/>
 				</executable>
-				<editor-arch major="6" minor="0"/>
+				<editor-arch major="6" minor="1"/>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
 				<externalSettings containerId="cuda-api-wrappers;com.nvidia.cuda.ide.eight_zero.configuration.release.270531869" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">

@@ -39,6 +39,60 @@ namespace FlavorsBenchmarks
 		return val;
 	}
 
+	template<typename T>
+	void saveDataInfo(
+			T& rawKeys,
+			int count,
+			int seed,
+			int dataItemLength,
+			int deviceId,
+			std::string& deviceName,
+			std::string& dataInfoDirectory,
+			int maxMaskLength = 0,
+			int minMaskLength = 0)
+	{
+		nlohmann::json j;
+
+		Flavors::Configuration binaryConfig = Flavors::Configuration::Binary(dataItemLength);
+		j["dataInfo"] = rawKeys.ReshapeKeys(binaryConfig).GetInfo();
+		j["seed"] = seed;
+		j["count"] = count;
+		j["dataItemLength"] = dataItemLength;
+		j["deviceId"] = deviceId;
+		j["deviceName"] = deviceName;
+
+		std::stringstream fileName;
+		fileName << std::to_string(count) << "_" << std::to_string(seed) << "_" << std::to_string(dataItemLength);
+		fileName << "_" << deviceId << "_" << deviceName;
+
+		if(maxMaskLength != 0)
+		{
+			j["maxMaskLength"] = maxMaskLength;
+			j["minMaskLength"] = minMaskLength;
+
+			fileName << "_" << maxMaskLength << "_" << minMaskLength;
+		}
+
+		fileName << ".json";
+
+		std::ofstream dataInfoFile;
+		dataInfoFile.open(dataInfoDirectory + fileName.str());
+
+		if(!dataInfoFile.good())
+		{
+			std::cout << "\t WARNING: Unable to open data info file. File will be written to current directory" << std::endl;
+			dataInfoFile.open(fileName.str());
+		}
+
+		if(dataInfoFile.good())
+		{
+			dataInfoFile << j.dump(3);
+			dataInfoFile.close();
+		}
+		else
+			std::cout << "\t ERROR: Unable to open data info file." << std::endl;
+	}
+
 	class Measured
 	{
 	public:
@@ -83,12 +137,18 @@ namespace FlavorsBenchmarks
 			start = std::chrono::high_resolution_clock::now();
 		}
 
-		float Stop()
+		template<typename Unit>
+		unsigned long long Stop()
 		{
 			auto end = std::chrono::high_resolution_clock::now();
-			auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>( end - start ).count();
+			auto duration = std::chrono::duration_cast<Unit>( end - start ).count();
 
 			return duration;
+		}
+
+		unsigned long long Stop()
+		{
+			return Stop<std::chrono::nanoseconds>();
 		}
 
 	private:

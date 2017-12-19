@@ -12,10 +12,12 @@ namespace FlavorsBenchmarks
 		DictionaryBenchmark(
 				std::string dictionaryPath,
 				std::vector<std::string> bookPaths,
-				const std::string& resultFile) :
+				const std::string& resultFile,
+				int deviceId) :
 			dictionaryPath(dictionaryPath),
 			bookPaths(bookPaths),
 			resultFile(resultFile),
+			deviceId(deviceId),
 			maxWordLen(0)
 		{}
 
@@ -23,7 +25,8 @@ namespace FlavorsBenchmarks
 			DictionaryBenchmark(
 					tryReadFromJson<std::string>(j, "dictionaryFile"),
 					tryReadFromJson<std::vector<std::string>>(j, "bookFiles"),
-					tryReadFromJson<std::string>(j, "resultFile"))
+					tryReadFromJson<std::string>(j, "resultFile"),
+					tryReadIntFromJson(j, "deviceId"))
 		{
 		}
 
@@ -39,6 +42,9 @@ namespace FlavorsBenchmarks
 
 		Timer timer;
 		Measured measured;
+
+		int deviceId;
+		std::string deviceName;
 
 	private:
 		std::vector<std::string> readWords(std::string path, unsigned& maxWordLen);

@@ -1,6 +1,7 @@
 {
   "benchmark": "keysLenBenchmark",
   "resultFile": "keysLenResults.csv",
+  "deviceId": 0,
   "dataInfoDirectory": "./dataInfo/",
   "keyLenghts": [ 32, 48, 64 ],
   "firstLevelStrides": [ 16, 8, 4 ],
