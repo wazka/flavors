@@ -60,7 +60,7 @@ namespace Flavors
 	{
 		if(levels.Count() == 0)
 		{
-			levels = CudaArray<unsigned>{h_levels.size()};
+			levels = CudaArray<unsigned>{static_cast<int>(h_levels.size())};
 			cuda::memory::copy(levels.Get(), h_levels.data(), Depth() * sizeof(unsigned));
 		}
 

@@ -9,25 +9,7 @@
     <ClCompile Include="src\benchmark.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\keysFind.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\masksFind.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\multiConfigKeys.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\multiConfigMasks.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\dictionary.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\keysLen.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\masksLen.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,28 +17,16 @@
     <ClInclude Include="src\benchmark.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\keysFind.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\masksFind.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\multiConfigKeys.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\multiConfigMasks.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\timer.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\dictionary.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\keysLen.h">
+    <ClInclude Include="src\hostBenchmark.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\masksLen.h">
+    <ClInclude Include="src\json.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\randomBenchmark.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
