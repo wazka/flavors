@@ -20,6 +20,9 @@
     <ClInclude Include="src\dictionary.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\hostBenchmark.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\json.hpp">
       <Filter>src</Filter>
     </ClInclude>
