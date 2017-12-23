@@ -19,14 +19,6 @@ def runKeysFind(caption, benchPath, configPath, resultsPath):
     os.remove(config['resultFilePath'])
     
     return data
-
-def calculateThroughputs(data):
-    data['BuildThroughput'] = data['Count'] / (data['Sort'] + data['Reshape'] + data['Build']) * 10**9
-    data['FindThroughput'] = data['Count'] / data['Find'] * 10**9
-    data['FindRandomThroughput'] = data['Count'] / data['FindRandom'] * 10**9
-    data['FindSortedThroughput'] = data['Count'] / data['FindRandomSorted'] * 10**9
-    
-    return data
     
 def drawChart(maxData, meanData, minData, column, caption, groupColumn, chartKind):
     data = pd.DataFrame()
