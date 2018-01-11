@@ -27,8 +27,8 @@ def loadFromFile(path):
 
     return data
 
-def getConfig(data):
-    return ''.join(map(str, data['bestBuildConfig']))
+def getConfig(data, param):
+    return ''.join(map(str, data[param]))
 
 def appendOptional(stats, pos, param):
     if pos[param] == None:
@@ -49,23 +49,23 @@ def getStats(data):
         appendOptional(stats, pos, 'variance')
     return stats
 
-def getLabels(data):
+def getLabels(data, param):
     labels = dict()
 
     for info in data:
-        config = getConfig(info)
+        config = getConfig(info, param)
 
         if not config in labels:
             labels[config] = len(labels)
 
     return labels
 
-def setsImpl(data, labels, classCount, itemLen):
+def setsImpl(data, labels, classCount, itemLen, param):
     stats = []
     configs = []
 
     for info in data:
-        config = getConfig(info)
+        config = getConfig(info,param)
         configs.append(labels[config])
         stats.extend(getStats(info))
 
@@ -74,14 +74,9 @@ def setsImpl(data, labels, classCount, itemLen):
 
     return samples, configs
 
-def dataset(data, validationShare, testShare):
-    stats = []
-    configs = []
+def dataset(data, validationShare, testShare, param):
 
-    validationStats = []
-    validationConfigs = []
-
-    labels = getLabels(data)
+    labels = getLabels(data, param)
     classCount = labels[max(labels, key=lambda config: labels[config])] + 1
     maxSeed = (max(data, key= lambda info: info['seed']))['seed']
     itemLen = int(data[0]['dataItemLength'])
@@ -89,7 +84,7 @@ def dataset(data, validationShare, testShare):
     trainingShare = 1 - validationShare - testShare
 
     def sets(data):
-        return setsImpl(data, labels, classCount, itemLen)
+        return setsImpl(data, labels, classCount, itemLen, param)
     
     samples, configs = sets(
         [info for info in data if info['seed'] < maxSeed * trainingShare])
@@ -110,7 +105,7 @@ validationShare = 0.2
 testShare = 0.2
 
 data = load([dataInfoPath1, dataInfoPath2])
-samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen = dataset(data, validationShare, testShare)
+samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen = dataset(data, validationShare, testShare, 'bestFindRandomConfig')
 
 print('\nData loaded. Total count: {0}'.format(len(data)))
 print('Samples count: {0}'.format(len(samples)))
