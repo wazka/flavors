@@ -5,11 +5,21 @@ from keras.layers import Dense, Dropout
 import os
 import json 
 import numpy as np
+import pandas as pd
 
 #using only first device
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
-def load(path):
+def load(paths):
+    data = []
+    if type(paths) is str:
+        return loadFromFile(paths)
+    else:
+        for path in paths:
+            data.extend(loadFromFile(path))
+        return data
+
+def loadFromFile(path):
     data = []
     for fileName in os.listdir(path):
         with open(os.path.join(path, fileName)) as file:
@@ -39,48 +49,72 @@ def getStats(data):
         appendOptional(stats, pos, 'variance')
     return stats
 
-def dataset(data):
+def getLabels(data):
+    labels = dict()
+
+    for info in data:
+        config = getConfig(info)
+
+        if not config in labels:
+            labels[config] = len(labels)
+
+    return labels
+
+def setsImpl(data, labels, classCount, itemLen):
+    stats = []
+    configs = []
+
+    for info in data:
+        config = getConfig(info)
+        configs.append(labels[config])
+        stats.extend(getStats(info))
+
+    samples = np.array(stats).reshape(len(configs), itemLen * 8)
+    configs = keras.utils.to_categorical(np.array(configs), classCount)
+
+    return samples, configs
+
+def dataset(data, validationShare, testShare):
     stats = []
     configs = []
 
     validationStats = []
     validationConfigs = []
 
-    confgisLabels = dict()
+    labels = getLabels(data)
+    classCount = labels[max(labels, key=lambda config: labels[config])] + 1
+    maxSeed = (max(data, key= lambda info: info['seed']))['seed']
     itemLen = int(data[0]['dataItemLength'])
 
-    for info in data:
-        config = getConfig(info)
+    trainingShare = 1 - validationShare - testShare
 
-        if not config in confgisLabels:
-            confgisLabels[config] = len(confgisLabels)
+    def sets(data):
+        return setsImpl(data, labels, classCount, itemLen)
+    
+    samples, configs = sets(
+        [info for info in data if info['seed'] < maxSeed * trainingShare])
+    validationSamples, validationConfigs = sets(
+        [info for info in data if info['seed'] >= maxSeed * trainingShare and info['seed'] < maxSeed * (trainingShare + validationShare)])
+    testSamples, testConfigs = sets(
+        [info for info in data if info['seed'] >= maxSeed * (trainingShare + validationShare)])
 
-        if int(info['seed']) < 45:
-            configs.append(confgisLabels[config])
-            stats.extend(getStats(info))
-        else:
-            validationConfigs.append(confgisLabels[config])
-            validationStats.extend(getStats(info))
+    return samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen
 
-    samples = np.array(stats).reshape(len(configs), itemLen * 8)
-    configs = np.array(configs)
+dataPath1 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-4\\keysResults.csv'
+dataInfoPath1 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-4\\dataInfo'
 
-    validationSamples = np.array(validationStats).reshape(len(validationConfigs), itemLen * 8)
-    validationConfigs = np.array(validationConfigs)
+dataPath2 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-5\\keysResults.csv'
+dataInfoPath2 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-5\\dataInfo'
 
-    classCount = max(max(configs), max(validationConfigs)) + 1
-    configs = keras.utils.to_categorical(configs, classCount)
-    validationConfigs = keras.utils.to_categorical(validationConfigs, classCount)
+validationShare = 0.2
+testShare = 0.2
 
-    return samples, configs, validationSamples, validationConfigs, classCount, itemLen
+data = load([dataInfoPath1, dataInfoPath2])
+samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen = dataset(data, validationShare, testShare)
 
-dataInfoPath = 'D:\\Projekty\\flavors-results\\P100-keys-4\\dataInfo'
-
-data = load(dataInfoPath)
-samples, configs, validationSamples, validationConfigs, classCount, itemLen = dataset(data)
-
-print('\nData loaded')
+print('\nData loaded. Total count: {0}'.format(len(data)))
 print('Samples count: {0}'.format(len(samples)))
 print('Validation samples count: {0}'.format(len(validationSamples)))
+print('Validation samples count: {0}'.format(len(testSamples)))
 print('Class count: {0}'.format(classCount))
 
