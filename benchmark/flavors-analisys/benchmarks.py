@@ -281,15 +281,21 @@ def bestConfigs(rawData, dataInfoPath):
 
 def configsHist(dataInfoPath, valueName):
     hist = dict()
-    for dataInfoFilePath in os.listdir(dataInfoPath):
 
-            currentFilePath = dataInfoPath + '\\' + dataInfoFilePath
-            di = json.load(open(currentFilePath))
+    def processDirectory(path):
+        for dataInfoFilePath in os.listdir(path):
+            di = json.load(open(os.path.join(path, dataInfoFilePath)))
 
             if di[valueName] in hist:
                 hist[di[valueName]] = hist[di[valueName]] + 1
             else:
                 hist[di[valueName]] = 1
+
+    if type(dataInfoPath) is str:
+        processDirectory(dataInfoPath)
+    else:
+        for path in dataInfoPath:
+            processDirectory(path)
 
     plt.figure()
     plt.bar(range(len(hist)), list(hist.values()), align='center')

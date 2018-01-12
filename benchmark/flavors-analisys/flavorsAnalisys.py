@@ -6,6 +6,7 @@ import os
 import json 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 #using only first device
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
@@ -75,7 +76,6 @@ def setsImpl(data, labels, classCount, itemLen, param):
     return samples, configs
 
 def dataset(data, validationShare, testShare, param):
-
     labels = getLabels(data, param)
     classCount = labels[max(labels, key=lambda config: labels[config])] + 1
     maxSeed = (max(data, key= lambda info: info['seed']))['seed']
@@ -101,15 +101,36 @@ dataInfoPath1 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-4\\dataI
 dataPath2 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-5\\keysResults.csv'
 dataInfoPath2 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-5\\dataInfo'
 
-validationShare = 0.2
-testShare = 0.2
+dataPath3 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-6\\keysResults.csv'
+dataInfoPath3 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-6\\dataInfo'
 
-data = load([dataInfoPath1, dataInfoPath2])
-samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen = dataset(data, validationShare, testShare, 'bestFindRandomConfig')
+#rawData = fb.throughputs(pd.read_csv(dataPath3, sep=';'))
+#fb.bestConfigs(rawData, dataInfoPath3)
 
-print('\nData loaded. Total count: {0}'.format(len(data)))
-print('Samples count: {0}'.format(len(samples)))
-print('Validation samples count: {0}'.format(len(validationSamples)))
-print('Validation samples count: {0}'.format(len(testSamples)))
-print('Class count: {0}'.format(classCount))
+#validationShare = 0.2
+#testShare = 0.2
+
+#data = load([dataInfoPath1, dataInfoPath2, dataInfoPath3])
+#samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen = dataset(data, validationShare, testShare, 'bestBuildConfig')
+
+#print('\nData loaded. Total count: {0}'.format(len(data)))
+#print('Samples count: {0}'.format(len(samples)))
+#print('Validation samples count: {0}'.format(len(validationSamples)))
+#print('Test samples count: {0}'.format(len(testSamples)))
+#print('Class count: {0}'.format(classCount))
+
+#rawData = fb.throughputs(pd.concat([
+#    pd.read_csv(dataPath1, sep=';'),
+#    pd.read_csv(dataPath2, sep=';'),
+#    pd.read_csv(dataPath3, sep=';')]))
+
+#fb.buildThroughput(rawData)
+#fb.findThroughput(rawData)
+#fb.findRandomThroughput(rawData)
+
+#fb.buildConfigHist([dataInfoPath1, dataInfoPath2, dataInfoPath3])
+#fb.findRandomConfigHist([dataInfoPath1, dataInfoPath2, dataInfoPath3])
+#fb.findConfigHist([dataInfoPath1, dataInfoPath2, dataInfoPath3])
+
+plt.show()
 
