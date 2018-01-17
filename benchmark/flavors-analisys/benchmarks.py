@@ -306,19 +306,16 @@ def configsHist(dataInfoPath, valueName):
 def buildConfigHist(dataInfoPath):
     hist = configsHist(dataInfoPath, 'bestBuildConfig')
     plt.title('Best build config histogram')
-
     return hist
 
 def findConfigHist(dataInfoPath):
     hist = configsHist(dataInfoPath, 'bestFindConfig')
     plt.title('Best find config histogram')
-
     return hist
 
 def findRandomConfigHist(dataInfoPath):
     hist = configsHist(dataInfoPath, 'bestFindRandomConfig')
     plt.title('Best find random config histogram')
-
     return hist
 
 def printAllBestConfigs(dataInfoPath):

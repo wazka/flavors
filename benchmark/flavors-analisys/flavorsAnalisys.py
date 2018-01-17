@@ -7,6 +7,8 @@ import json
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import resnet
+import pickle
 
 #using only first device
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
@@ -70,7 +72,7 @@ def setsImpl(data, labels, classCount, itemLen, param):
         configs.append(labels[config])
         stats.extend(getStats(info))
 
-    samples = np.array(stats).reshape(len(configs), itemLen * 8)
+    samples = np.array(stats).reshape(len(configs), itemLen, 8, 1)
     configs = keras.utils.to_categorical(np.array(configs), classCount)
 
     return samples, configs
@@ -93,44 +95,57 @@ def dataset(data, validationShare, testShare, param):
     testSamples, testConfigs = sets(
         [info for info in data if info['seed'] >= maxSeed * (trainingShare + validationShare)])
 
-    return samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen
+    return [samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen]
 
-dataPath1 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-4\\keysResults.csv'
-dataInfoPath1 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-4\\dataInfo'
+dataPath = 'D:\\Projekty\\flavors-results\\P100-keys-top145\\keysResults.zip'
+dataInfoPath = 'D:\\Projekty\\flavors-results\\P100-keys-top145\\dataInfo'
+datasetPath = 'D:\\Projekty\\flavors-results\\P100-keys-top145\\findRandomDataset.pkl'
 
-dataPath2 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-5\\keysResults.csv'
-dataInfoPath2 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-5\\dataInfo'
-
-dataPath3 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-6\\keysResults.csv'
-dataInfoPath3 = 'C:\\Users\\alber\\Projects\\flavors-results\\P100-keys-6\\dataInfo'
-
-#rawData = fb.throughputs(pd.read_csv(dataPath3, sep=';'))
-#fb.bestConfigs(rawData, dataInfoPath3)
+#rawData = fb.throughputs(pd.read_csv(dataPath4, sep=';'))
+#fb.bestConfigs(rawData, dataInfoPath4)
 
 #validationShare = 0.2
 #testShare = 0.2
 
-#data = load([dataInfoPath1, dataInfoPath2, dataInfoPath3])
-#samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen = dataset(data, validationShare, testShare, 'bestBuildConfig')
+#data = load(dataInfoPath)
+#samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen = dataset(data, validationShare, testShare, 'bestFindRandomConfig')
 
-#print('\nData loaded. Total count: {0}'.format(len(data)))
-#print('Samples count: {0}'.format(len(samples)))
-#print('Validation samples count: {0}'.format(len(validationSamples)))
-#print('Test samples count: {0}'.format(len(testSamples)))
-#print('Class count: {0}'.format(classCount))
+[samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen] = pickle.load(open(datasetPath, 'rb'))
 
-#rawData = fb.throughputs(pd.concat([
-#    pd.read_csv(dataPath1, sep=';'),
-#    pd.read_csv(dataPath2, sep=';'),
-#    pd.read_csv(dataPath3, sep=';')]))
+print('Samples count: {0}'.format(len(samples)))
+print('Validation samples count: {0}'.format(len(validationSamples)))
+print('Test samples count: {0}'.format(len(testSamples)))
+print('Class count: {0}'.format(classCount))
+
+#rawData = pd.read_csv(dataPath, sep = ';', compression = 'zip')
 
 #fb.buildThroughput(rawData)
 #fb.findThroughput(rawData)
 #fb.findRandomThroughput(rawData)
 
-#fb.buildConfigHist([dataInfoPath1, dataInfoPath2, dataInfoPath3])
-#fb.findRandomConfigHist([dataInfoPath1, dataInfoPath2, dataInfoPath3])
-#fb.findConfigHist([dataInfoPath1, dataInfoPath2, dataInfoPath3])
+#fb.buildConfigHist(dataInfoPath)
+#fb.findRandomConfigHist(dataInfoPath)
+#fb.findConfigHist(dataInfoPath)
 
-plt.show()
+#plt.show()
+
+#resnetBuilder = resnet.ResnetBuilder()
+#model = resnetBuilder.build_resnet_18([1, itemLen, 8], classCount)
+
+#batch_size = 64
+#epochs = 1000
+
+#sgd = keras.optimizers.SGD(lr=0.01, momentum=0.0, decay=0.0, nesterov=False)
+#model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['acc'])
+
+#history = model.fit(samples, 
+#                    configs,
+#                    batch_size=batch_size,
+#                    epochs=epochs,
+#                    verbose=1,
+#                    validation_data=(validationSamples, validationConfigs))
+ 
+#score = model.evaluate(validationSamples, validationConfigs, verbose=0)
+#print('Test loss on validation set:', score)
+#model.save('D:\\Projekty\\flavors-results\\resnet18_1000epochs_sgd.h5')
 
