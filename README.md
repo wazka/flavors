@@ -6,7 +6,7 @@ Flavors is library of GPU Trie structures for fast parallel lookup. It provides 
 
 
 
-## Building
+#### Building
 ```sh
 #To build library
 make
@@ -15,9 +15,13 @@ make
 make sample
 ```
 
-## Running samples
+#### Running samples
 ```sh
 ./bin/basicKeysSample
 
 ./bin/basicMasksSample
 ```
+
+#### Benchmarks
+
+More information about benchmarks canbe foune on [this](docs/Benchmarks.md) page.
