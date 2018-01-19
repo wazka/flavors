@@ -1,8 +1,12 @@
-# flavors
+![alt text](https://www.iconsdb.com/icons/download/guacamole-green/ice-cream-2-48.png)
+flavors
+=======
 
 Flavors is library of GPU Trie structures for fast parallel lookup. It provides facilities to build Tries with changing bit stride and search them on the GPU.
 
-## Building
+
+
+#### Building
 ```sh
 #To build library
 make
@@ -11,9 +15,13 @@ make
 make sample
 ```
 
-## Running samples
+#### Running samples
 ```sh
 ./bin/basicKeysSample
 
 ./bin/basicMasksSample
 ```
+
+#### Benchmarks
+
+More information about benchmarks canbe foune on [this](docs/Benchmarks.md) page.
