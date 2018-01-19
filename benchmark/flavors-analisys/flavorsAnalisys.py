@@ -13,7 +13,28 @@ import pickle
 #using only first device
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
+def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█'):
+    """
+    Call in a loop to create terminal progress bar
+    @params:
+        iteration   - Required  : current iteration (Int)
+        total       - Required  : total iterations (Int)
+        prefix      - Optional  : prefix string (Str)
+        suffix      - Optional  : suffix string (Str)
+        decimals    - Optional  : positive number of decimals in percent complete (Int)
+        length      - Optional  : character length of bar (Int)
+        fill        - Optional  : bar fill character (Str)
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    print('\r%s |%s| %s%% %s' % (prefix, bar, percent, suffix), end = '\r')
+    # Print New Line on Complete
+    if iteration == total: 
+        print()
+
 def load(paths):
+    
     data = []
     if type(paths) is str:
         return loadFromFile(paths)
@@ -24,14 +45,17 @@ def load(paths):
 
 def loadFromFile(path):
     data = []
-    for fileName in os.listdir(path):
+
+    paths = list(os.listdir(path))
+    printProgressBar(0, len(paths), prefix = 'Loading data progress:', suffix = 'Complete', length = 50)
+
+    for i, fileName in enumerate(paths):
         with open(os.path.join(path, fileName)) as file:
             data.append(json.load(file))
 
-    return data
+        printProgressBar(i + 1, len(paths), prefix = 'Loading data progress:', suffix = 'Complete', length = 50)
 
-def getConfig(data, param):
-    return ''.join(map(str, data[param]))
+    return data
 
 def appendOptional(stats, pos, param):
     if pos[param] == None:
@@ -52,41 +76,33 @@ def getStats(data):
         appendOptional(stats, pos, 'variance')
     return stats
 
-def getLabels(data, param):
-    labels = dict()
+def getConfig(info, param, itemLen):
 
-    for info in data:
-        config = getConfig(info, param)
+    config = list(map(int, info[param].replace('{', '').replace('}', '').split(',')))
+    config.extend([0] * (itemLen - len(config)))
 
-        if not config in labels:
-            labels[config] = len(labels)
+    return config
 
-    return labels
-
-def setsImpl(data, labels, classCount, itemLen, param):
+def setsImpl(data, itemLen, param):
     stats = []
     configs = []
 
     for info in data:
-        config = getConfig(info,param)
-        configs.append(labels[config])
         stats.extend(getStats(info))
+        configs.extend(getConfig(info,param, itemLen))
 
-    samples = np.array(stats).reshape(len(configs), itemLen, 8, 1)
-    configs = keras.utils.to_categorical(np.array(configs), classCount)
+    samples = np.array(stats).reshape(len(data), itemLen, 8, 1)
+    configs = np.array(configs).reshape(len(data), itemLen)
 
     return samples, configs
 
 def dataset(data, validationShare, testShare, param):
-    labels = getLabels(data, param)
-    classCount = labels[max(labels, key=lambda config: labels[config])] + 1
     maxSeed = (max(data, key= lambda info: info['seed']))['seed']
     itemLen = int(data[0]['dataItemLength'])
-
     trainingShare = 1 - validationShare - testShare
 
     def sets(data):
-        return setsImpl(data, labels, classCount, itemLen, param)
+        return setsImpl(data, itemLen, param)
     
     samples, configs = sets(
         [info for info in data if info['seed'] < maxSeed * trainingShare])
@@ -95,11 +111,13 @@ def dataset(data, validationShare, testShare, param):
     testSamples, testConfigs = sets(
         [info for info in data if info['seed'] >= maxSeed * (trainingShare + validationShare)])
 
-    return [samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen]
+    return [samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, itemLen]
 
-dataPath = 'D:\\Projekty\\flavors-results\\P100-keys-top145\\keysResults.zip'
-dataInfoPath = 'D:\\Projekty\\flavors-results\\P100-keys-top145\\dataInfo'
-datasetPath = 'D:\\Projekty\\flavors-results\\P100-keys-top145\\findRandomDataset.pkl'
+dataPath = 'D:\\Projekty\\flavors-results\\P100-keys-top10\\keysResults.zip'
+dataInfoPath = 'D:\\Projekty\\flavors-results\\P100-keys-top10\\dataInfo'
+
+findRandomDatasetPath = 'D:\\Projekty\\flavors-results\\P100-keys-top10\\findRandomDataset.pkl'
+buildDatasetPath = 'D:\\Projekty\\flavors-results\\P100-keys-top10\\buildDataset.pkl'
 
 #rawData = fb.throughputs(pd.read_csv(dataPath4, sep=';'))
 #fb.bestConfigs(rawData, dataInfoPath4)
@@ -108,14 +126,18 @@ datasetPath = 'D:\\Projekty\\flavors-results\\P100-keys-top145\\findRandomDatase
 #testShare = 0.2
 
 #data = load(dataInfoPath)
-#samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen = dataset(data, validationShare, testShare, 'bestFindRandomConfig')
+#buildDataset = dataset(data, validationShare, testShare, 'bestBuildConfig')
+#findRandomDataset = dataset(data, validationShare, testShare, 'bestFindRandomConfig')
 
-[samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, classCount, itemLen] = pickle.load(open(datasetPath, 'rb'))
+[samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, itemLen] = pickle.load(open(findRandomDatasetPath, 'rb'))
 
-print('Samples count: {0}'.format(len(samples)))
-print('Validation samples count: {0}'.format(len(validationSamples)))
-print('Test samples count: {0}'.format(len(testSamples)))
-print('Class count: {0}'.format(classCount))
+#pickle.dump(buildDataset, open(buildDatasetPath, 'wb'))
+#pickle.dump(findRandomDataset, open(findRandomDatasetPath, 'wb'))
+
+#print('Samples count: {0}'.format(len(samples)))
+#print('Validation samples count: {0}'.format(len(validationSamples)))
+#print('Test samples count: {0}'.format(len(testSamples)))
+#print('Class count: {0}'.format(classCount))
 
 #rawData = pd.read_csv(dataPath, sep = ';', compression = 'zip')
 
@@ -129,14 +151,63 @@ print('Class count: {0}'.format(classCount))
 
 #plt.show()
 
-#resnetBuilder = resnet.ResnetBuilder()
-#model = resnetBuilder.build_resnet_18([1, itemLen, 8], classCount)
+resnetBuilder = resnet.ResnetBuilder()
+model = resnetBuilder.build_resnet_101([1, itemLen, 8], itemLen)
 
-#batch_size = 64
-#epochs = 1000
+batch_size = 64
+epochs = 500
 
-#sgd = keras.optimizers.SGD(lr=0.01, momentum=0.0, decay=0.0, nesterov=False)
-#model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['acc'])
+#sgd = keras.optimizers.SGD(lr=0.3, momentum=0.01, decay=0.01, nesterov=False)
+model.compile(loss='mean_squared_error', optimizer='rmsprop')
+
+history = model.fit(samples, 
+                    configs,
+                    batch_size=batch_size,
+                    epochs=epochs,
+                    verbose=1,
+                    validation_data=(validationSamples, validationConfigs))
+ 
+#score = model.evaluate(validationSamples, validationConfigs, verbose=0)
+#print('Test loss on validation set:', score)
+#model.save('D:\\Projekty\\flavors-results\\P100-keys-top10\\resnet18_100epochs_adam.h5')
+
+#samples = samples.reshape(len(samples), itemLen * 8)
+#validationSamples = validationSamples.reshape(len(validationSamples), itemLen * 8)
+
+#model = Sequential()
+#model.add(Dense(256, activation='sigmoid', input_shape=[itemLen* 8]))
+#model.add(Dense(256, activation='sigmoid'))
+#model.add(Dense(512, activation='sigmoid'))
+#model.add(Dense(512, activation='sigmoid'))
+#model.add(Dense(1024, activation='sigmoid'))
+#model.add(Dense(2048, activation='sigmoid'))
+#model.add(Dense(4096, activation='sigmoid'))
+#model.add(Dense(4096, activation='sigmoid'))
+#model.add(Dense(2048, activation='sigmoid'))
+#model.add(Dense(2048, activation='sigmoid'))
+#model.add(Dense(1024, activation='sigmoid'))
+#model.add(Dense(1024, activation='sigmoid'))
+#model.add(Dense(512, activation='sigmoid'))
+#model.add(Dense(512, activation='sigmoid'))
+#model.add(Dense(256, activation='sigmoid'))
+#model.add(Dense(256, activation='sigmoid'))
+#model.add(Dense(128, activation='sigmoid'))
+#model.add(Dense(128, activation='sigmoid'))
+#model.add(Dense(64, activation='sigmoid'))
+#model.add(Dense(64, activation='sigmoid'))
+#model.add(Dense(32, activation='sigmoid'))
+#model.add(Dense(32))
+
+#model = Sequential()
+#model.add(Dense(itemLen* 8,init='uniform', activation='linear', input_shape=[itemLen* 8]))
+#model.add(Dense(itemLen* 8,init='uniform', activation='linear'))
+#model.add(Dense(itemLen* 8,init='uniform', activation='linear'))
+#model.add(Dense(itemLen,init='uniform', activation='linear'))
+ 
+##model.summary()
+ 
+#model.compile(loss='mean_absolute_error',
+#              optimizer='rmsprop')
 
 #history = model.fit(samples, 
 #                    configs,
@@ -144,8 +215,4 @@ print('Class count: {0}'.format(classCount))
 #                    epochs=epochs,
 #                    verbose=1,
 #                    validation_data=(validationSamples, validationConfigs))
- 
-#score = model.evaluate(validationSamples, validationConfigs, verbose=0)
-#print('Test loss on validation set:', score)
-#model.save('D:\\Projekty\\flavors-results\\resnet18_1000epochs_sgd.h5')
 

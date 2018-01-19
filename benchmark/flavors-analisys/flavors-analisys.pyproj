@@ -24,6 +24,9 @@
     <Compile Include="benchmarks.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="dataset.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="flavorsAnalisys.py" />
     <Compile Include="resnet.py">
       <SubType>Code</SubType>
