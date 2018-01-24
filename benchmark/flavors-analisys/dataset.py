@@ -45,24 +45,29 @@ def _getStats(data):
     return stats
 
 def _getConfig(info, param, itemLen):
-
     config = list(map(int, info[param].replace('{', '').replace('}', '').split(',')))
-    config.extend([0] * (22 - len(config)))
 
     return config
 
 def _setsImpl(data, itemLen, param):
     stats = []
-    configs = []
+    rawConfigs = []
 
     for info in data:
         stats.extend(_getStats(info))
-        configs.extend(_getConfig(info,param, itemLen))
+        rawConfigs.append(_getConfig(info,param, itemLen))
+
+    maxConfigLen = len(max(rawConfigs, key = lambda c: len(c)))
+
+    configs = []
+    for c in rawConfigs:
+        c.extend([0] * (maxConfigLen - len(c)))
+        configs.extend(c)
 
     samples = ku.normalize(np.array(stats).reshape(len(data), itemLen * 8), axis = 0)
-    configs = ku.normalize(np.array(configs).reshape(len(data), 22), axis = 0)
+    configs = ku.normalize(np.array(configs).reshape(len(data), maxConfigLen), axis = 0)
 
-    return samples, configs
+    return samples, configs, maxConfigLen
 
 def build(data, validationShare, testShare, param):
     maxSeed = (max(data, key= lambda info: info['seed']))['seed']
@@ -72,11 +77,14 @@ def build(data, validationShare, testShare, param):
     def sets(data):
         return _setsImpl(data, itemLen, param)
     
-    samples, configs = sets(
+    samples, configs, maxLen = sets(
         [info for info in data if info['seed'] < maxSeed * trainingShare])
-    validationSamples, validationConfigs = sets(
+    validationSamples, validationConfigs, maxValidationLen = sets(
         [info for info in data if info['seed'] >= maxSeed * trainingShare and info['seed'] < maxSeed * (trainingShare + validationShare)])
-    testSamples, testConfigs = sets(
+    testSamples, testConfigs, maxTrainingLen = sets(
         [info for info in data if info['seed'] >= maxSeed * (trainingShare + validationShare)])
 
-    return [samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, itemLen]
+    if maxLen != maxValidationLen or maxLen != maxTrainingLen:
+        print('Warning: max config len differs in subsets')
+
+    return [samples, configs, validationSamples, validationConfigs, testSamples, testConfigs, itemLen, maxLen]
