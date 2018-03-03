@@ -2,7 +2,10 @@ NVCC=nvcc
 SRC=src
 BIN=bin
 
-NVCC_FLAGS=-rdc=true -gencode arch=compute_61,code=sm_61 -std=c++11 -I lib/cuda-api-wrappers/api/ -I lib/cuda-api-wrappers/ -I src/
+CC=35
+#CC=61
+
+NVCC_FLAGS=-rdc=true -gencode arch=compute_$(CC),code=sm_$(CC) -std=c++11 -I lib/cuda-api-wrappers/api/ -I lib/cuda-api-wrappers/ -I src/
 
 LIB=$(BIN)/tmp/device_properties.o
 FLAVORS=$(BIN)/tmp/configuration.o $(BIN)/tmp/keys.o $(BIN)/tmp/masks.o $(BIN)/tmp/tree.o $(BIN)/tmp/utils.o
