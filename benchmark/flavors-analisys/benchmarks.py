@@ -3,7 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import os
-import json
+import json 
+from pylab import rcParams
 
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.max_rows', 500)
@@ -47,7 +48,7 @@ def aggConfig(rawData, opName, finalAgg, valueName, *indexNames):
         index=[*indexNames, 'Config'],
         values=['{0}{1}'.format(opName, valueName)],
         aggfunc=[np.mean, np.max, np.min])
-
+    
     data = pd.pivot_table(
         pd.DataFrame(data.to_records()),
         index=[*indexNames],
@@ -63,9 +64,10 @@ def aggConfigPlot(rawData, opName, finalAgg, valueName, *indexNames):
     data = aggConfig(rawData, opName, finalAgg, valueName, *indexNames)
     plt.figure()
     plt.plot(data.index, data.values)
-    plt.legend(['Max', 'Min', 'Mean'])
+    plt.legend(['Max', 'Min', 'Mean'], loc=2)
     plt.grid()
-
+    
+    
     return
 
 def throughputPlot(rawData, columnName):
@@ -73,6 +75,8 @@ def throughputPlot(rawData, columnName):
 
 def latencyPlot(rawData, columnName):
     aggConfigPlot(rawData, columnName, np.min, 'Latency', 'Count')
+
+########################################################################################################3
 
 def buildThroughput(rawData):
     throughputPlot(rawData, 'Build')
@@ -335,8 +339,17 @@ def dictionaryFind(rawData):
 
     return
 
-#dataPath = 'D:\\Projekty\\flavors-results\\P100-keys\\keysResults.csv'
-#dataInfoPath = 'D:\\Projekty\\flavors-results\\P100-keys\\dataInfo'
+
+rcParams['figure.dpi'] = 130
+rcParams['figure.figsize'] = (6,4) 
+
+path = "/home/kk/Projects/experiments/rtree-gpu/p100-01-03-2018-variable-len/"
+dataPath = path+'keysLenResults.csv'
+
+#path = "/home/kk/Projects/experiments/rtree-gpu/p100-26-01-2018-random-bits/P100-keys-top10/"
+#dataPath = path+'keysResults.csv'
+
+dataInfoPath = path+'dataInfo'
 
 #dataPath = 'D:\\Projekty\\flavors-results\\P100-keys-4\\keysResults.csv'
 #dataInfoPath = 'D:\\Projekty\\flavors-results\\P100-keys-4\\dataInfo'
@@ -348,26 +361,27 @@ def dictionaryFind(rawData):
 
 #dataPath = 'D:\\Projekty\\flavors-results\\4790K-hostKeys\\hostResults.csv'
 
-#rawData = throughputs(latencies(pd.read_csv(dataPath, sep=';')))
+rawData = throughputs(latencies(pd.read_csv(dataPath, sep=';')))
 
 #rawData = rawData.loc[rawData['RandomCount'] <= 10 ** 7]
 #rawData = rawData.loc[rawData['RandomCount'] > 9 * 10 ** 5]
 
-#buildThroughput(rawData)
-#findThroughput(rawData)
-#findRandomThroughput(rawData)
-#buildLatency(rawData)
-#findLatency(rawData)
-#findRandomLatency(rawData)
+buildThroughput(rawData)
+buildLatency(rawData)
 
-#buildThroughputOverLength(rawData)
-#buildLatencyOverLength(rawData)
+# findThroughput(rawData)
+# findRandomThroughput(rawData)
+# findLatency(rawData)
+# findRandomLatency(rawData)
+# 
+buildThroughputOverLength(rawData)
+buildLatencyOverLength(rawData)
+# 
+# findRandomLatencyOverLength(rawData)
+# findRandomThroughputOverLength(rawData)
 
-#findRandomLatencyOverLength(rawData)
-#findRandomThroughputOverLength(rawData)
-
-#buildThroughputHost(rawData)
-#buildLatencyHost(rawData)
+buildThroughputHost(rawData)
+buildLatencyHost(rawData)
 #findThroughputHost(rawData)
 #findLatencyHost(rawData)
 
@@ -382,4 +396,5 @@ def dictionaryFind(rawData):
 #dataPath = 'D:\\Projekty\\flavors-results\\GTX1080-dictionary\\dictionaryResult.csv'
 #fb.dictionaryFind(pd.read_csv(dataPath, sep=';'))
 
+plt.tight_layout()
 plt.show()
