@@ -9,6 +9,15 @@ using namespace Flavors;
 
 namespace FlavorsBenchmarks
 {
+	bool invalidChar(char c)
+	{
+		return !(c >= 0 && c <128);
+	}
+	void stripUnicode(std::string & str)
+	{
+		str.erase(std::remove_if(str.begin(), str.end(), invalidChar), str.end());
+	}
+
 	std::vector<std::string> DictionaryBenchmark::readWords(std::string path, unsigned& maxWordLen)
 	{
 		std::vector<std::string> words;
@@ -23,13 +32,14 @@ namespace FlavorsBenchmarks
 			while(file >> word)
 			{
 				std::string result;
-
-				std::transform(word.begin(), word.end(), word.begin(), ::tolower);
-				std::remove_copy_if(word.begin(), word.end(), std::back_inserter(result), std::ptr_fun<int, int>(&std::ispunct));
+				stripUnicode(word);
+				std::copy_if(word.begin(), word.end(), std::back_inserter(result), std::ptr_fun<int, int>(&std::isalpha));
+				std::transform(result.begin(), result.end(), result.begin(), ::tolower);
 				words.push_back(result);
 
-				if(result.length() > maxWordLen)
+				if (result.length() > maxWordLen)
 					maxWordLen = result.length();
+
 			}
 		}
 
@@ -57,7 +67,8 @@ namespace FlavorsBenchmarks
 
 			rawLengths[wordIndex] = currentWord.length() * BitsPerLetter;
 
-			for(int letterIndex = 0; letterIndex < masks.Depth(); ++letterIndex)
+			int lenToCopy = currentWord.length() < masks.Depth() ? currentWord.length() : masks.Depth();
+			for(int letterIndex = 0; letterIndex < lenToCopy; ++letterIndex)
 				rawWords[letterIndex * masks.Count + wordIndex] = currentWord[letterIndex];
 		}
 
@@ -107,7 +118,7 @@ namespace FlavorsBenchmarks
 
 		timer.Start();
 		auto dictSourceWords = loadDictionary();
-		measured.Add("DictSourceRead",timer.Stop());
+		measured.Add("DictSourceRead",timer.Stop()); 
 		measured.Add("DictSourceWordCount", dictSourceWords.Count);
 		measured.Add("DictSourceMemory", dictSourceWords.MemoryFootprint());
 

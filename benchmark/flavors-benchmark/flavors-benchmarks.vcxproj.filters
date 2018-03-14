@@ -12,6 +12,9 @@
     <ClCompile Include="src\dictionary.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\words.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\benchmark.h">
@@ -27,6 +30,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\randomBenchmark.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\words.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

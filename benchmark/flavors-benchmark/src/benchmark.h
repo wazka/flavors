@@ -9,7 +9,7 @@
 #include <type_traits>
 #include <chrono>
 
-#include "json.hpp"
+#include "../../lib/json/json.hpp"
 
 namespace Flavors
 {

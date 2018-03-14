@@ -3404,7 +3404,7 @@ class basic_json
             , "incompatible pointer type");
 
         // delegate the call to get_impl_ptr<>() const
-        return get_impl_ptr(static_cast<PointerType>(nullptr));
+        return get_impl_ptr(static_cast<const PointerType>(nullptr));
     }
 
     /*!
@@ -3886,7 +3886,7 @@ class basic_json
     template<typename T, std::size_t n>
     reference operator[](T * (&key)[n])
     {
-        return operator[](static_cast<T>(key));
+        return operator[](static_cast<const T>(key));
     }
 
     /*!
@@ -3921,7 +3921,7 @@ class basic_json
     template<typename T, std::size_t n>
     const_reference operator[](T * (&key)[n]) const
     {
-        return operator[](static_cast<T>(key));
+        return operator[](static_cast<const T>(key));
     }
 
     /*!

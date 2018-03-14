@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="src\benchmark.cpp" />
     <ClCompile Include="src\dictionary.cpp" />
+    <ClCompile Include="src\words.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\benchmark.h" />
@@ -20,6 +21,7 @@
     <ClInclude Include="src\hostBenchmark.h" />
     <ClInclude Include="src\json.hpp" />
     <ClInclude Include="src\randomBenchmark.h" />
+    <ClInclude Include="src\words.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6A810E03-2538-442C-86FA-2CE6AC36897F}</ProjectGuid>

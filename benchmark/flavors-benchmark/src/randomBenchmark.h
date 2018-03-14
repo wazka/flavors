@@ -58,16 +58,17 @@ namespace FlavorsBenchmarks
 		{
 			std::cout << "Starting benchmark. Results will be saved to: \t" << resultFile << std::endl;
 
-			try
-			{
-				cuda::device::current::set(deviceId);
-			}
-			catch(...)
-			{
-				std::cout << "\t\t ERROR: Wrong device ID" << std::endl;
-				cuda::outstanding_error::clear();
-				return;
-			}
+			//TODO: Dlaczego to nie działa z Thrustem?
+//			try
+//			{
+//				cuda::device::current::set(deviceId);
+//			}
+//			catch(...)
+//			{
+//				std::cout << "\t\t ERROR: Wrong device ID" << std::endl;
+//				cuda::outstanding_error::clear();
+//				return;
+//			}
 
 			measured.Add("deviceId", deviceId);
 			deviceName = cuda::device::current::get().name();
@@ -195,7 +196,7 @@ namespace FlavorsBenchmarks
 
 					try
 					{
-						T randomRawData{rawData.Config, randomCount};
+						T randomRawData{Flavors::Configuration::Default(dataItemLength), randomCount};
 						fillRandom(randomRawData, seed);
 
 						measured.Add("RandomCount", randomCount);
@@ -216,7 +217,7 @@ namespace FlavorsBenchmarks
 						timer.Start();
 						tree.Find(randomData, randomResult.Get());
 						measured.Add("FindRandomSorted", timer.Stop());
-						measured.AddHitCount(result);
+						measured.AddHitCount(randomResult);
 
 						measured.AppendToFile(resultFile);
 					}

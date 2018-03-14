@@ -1,4 +1,4 @@
-#include "json.hpp"
+#include "../../lib/json/json.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -10,6 +10,7 @@
 #include "randomBenchmark.h"
 #include "dictionary.h"
 #include "hostBenchmark.h"
+#include "words.h"
 
 int main(int argc, char** argv)
 {
@@ -32,52 +33,57 @@ int main(int argc, char** argv)
 
 	file.close();
 
-	if(j["benchmark"] == "keysBenchmark")
+	if (j["benchmark"] == "keysBenchmark")
 	{
-		FlavorsBenchmarks::RandomBenchmark<Flavors::Keys> bench{j};
+		FlavorsBenchmarks::RandomBenchmark<Flavors::Keys> bench{ j };
 		bench.Run();
 	}
-	else if(j["benchmark"] == "masksBenchmark")
+	else if (j["benchmark"] == "masksBenchmark")
 	{
 		int maxMaskLength =
-				FlavorsBenchmarks::tryReadIntFromJson(j, "maxMaskLength");
+			FlavorsBenchmarks::tryReadIntFromJson(j, "maxMaskLength");
 		int minMaskLength =
-				FlavorsBenchmarks::tryReadIntFromJson(j, "minMaskLength");
+			FlavorsBenchmarks::tryReadIntFromJson(j, "minMaskLength");
 
 		FlavorsBenchmarks::RandomBenchmark<Flavors::Masks> bench{
 			j,
 			maxMaskLength,
-			minMaskLength};
+			minMaskLength };
 
 		bench.Run();
 	}
-	else if(j["benchmark"] == "keysLenBenchmark")
+	else if (j["benchmark"] == "keysLenBenchmark")
 	{
-		FlavorsBenchmarks::LengthBenchmark<Flavors::Keys> bench{j};
+		FlavorsBenchmarks::LengthBenchmark<Flavors::Keys> bench{ j };
 		bench.Run();
 	}
-	else if(j["benchmark"] == "masksLenBenchmark")
+	else if (j["benchmark"] == "masksLenBenchmark")
 	{
 		float maxMaskLength =
-				FlavorsBenchmarks::tryReadFloatFromJson(j, "maxMaskLength");
+			FlavorsBenchmarks::tryReadFloatFromJson(j, "maxMaskLength");
 		float minMaskLength =
-				FlavorsBenchmarks::tryReadFloatFromJson(j, "minMaskLength");
+			FlavorsBenchmarks::tryReadFloatFromJson(j, "minMaskLength");
 
 		FlavorsBenchmarks::LengthBenchmark<Flavors::Masks> bench{
 			j,
 			maxMaskLength,
-			minMaskLength};
+			minMaskLength };
 
 		bench.Run();
 	}
-	else if(j["benchmark"] == "dictionary")
+	else if (j["benchmark"] == "dictionary")
 	{
-		FlavorsBenchmarks::DictionaryBenchmark bench{j};
+		FlavorsBenchmarks::DictionaryBenchmark bench{ j };
 		bench.Run();
 	}
-	else if(j["benchmark"] == "host")
+	else if (j["benchmark"] == "host")
 	{
-		FlavorsBenchmarks::HostBenchmark bench{j};
+		FlavorsBenchmarks::HostBenchmark bench{ j };
+		bench.Run();
+	}
+	else if (j["benchmark"] == "words")
+	{
+		FlavorsBenchmarks::WordsBenchmark bench{ j };
 		bench.Run();
 	}
 	else

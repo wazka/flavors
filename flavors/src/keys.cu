@@ -60,11 +60,11 @@ namespace Flavors
 			for (int level = 0; level < obj.Config.Depth(); ++level)
 			{
 				for (int bit = obj.Config[level] - 1; bit >= 0; --bit)
-					std::cout << ((h_store[level][item] >> bit) & 1u);
-					std::cout << "\t";
+					os << ((h_store[level][item] >> bit) & 1u);
+				os << "\t";
 			}
 
-			std::cout << std::endl;
+			os << std::endl;
 		}
 
 		return os;
