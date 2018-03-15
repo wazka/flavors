@@ -7,7 +7,6 @@
 #include <map>
 #include <fstream>
 #include <type_traits>
-#include <chrono>
 
 #include "../../lib/json/json.hpp"
 
@@ -134,25 +133,25 @@ namespace FlavorsBenchmarks
 	public:
 		void Start()
 		{
-			start = std::chrono::high_resolution_clock::now();
+			cudaEventCreate(&cudaStart);
+			cudaEventCreate(&cudaStop);
+			cudaEventRecord(cudaStart);
 		}
 
-		template<typename Unit>
-		unsigned long long Stop()
+		float Stop()
 		{
-			auto end = std::chrono::high_resolution_clock::now();
-			auto duration = std::chrono::duration_cast<Unit>( end - start ).count();
+			cudaEventRecord(cudaStop);
+			cudaEventSynchronize(cudaStop);
+			float timeMiliseconds = 0.0;
+			cudaEventElapsedTime(&timeMiliseconds, cudaStart, cudaStop);
 
-			return duration;
-		}
+			cudaEventDestroy(cudaStart);
+			cudaEventDestroy(cudaStop);
 
-		unsigned long long Stop()
-		{
-			return Stop<std::chrono::nanoseconds>();
+			return timeMiliseconds;
 		}
 
 	private:
-		std::chrono::high_resolution_clock::time_point start;
-
+		cudaEvent_t cudaStart, cudaStop;
 	};
 }
