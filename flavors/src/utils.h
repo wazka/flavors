@@ -25,6 +25,11 @@ namespace Flavors
 		{
 			auto currentDevice = cuda::device::current::get();
 			store = cuda::memory::device::make_unique<T[]>(currentDevice, count);
+			Clear();
+		}
+
+		void Clear()
+		{
 			cuda::memory::device::zero(store.get(), count * sizeof(T));
 		}
 

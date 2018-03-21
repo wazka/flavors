@@ -41,9 +41,11 @@ namespace FlavorsBenchmarks
 		Measured measured;
 		std::string deviceName;
 
+	protected:
+		virtual void runForDictionary(std::string& path);
+
 	private:
 
-		void runForDictionary(std::string& path);
 		std::vector<std::string> loadWordsFromFile(std::string path);
 		Flavors::Keys readWords(std::string path);
 	};

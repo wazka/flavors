@@ -11,6 +11,7 @@
 #include "dictionary.h"
 #include "hostBenchmark.h"
 #include "words.h"
+#include "ip.h"
 
 int main(int argc, char** argv)
 {
@@ -84,6 +85,11 @@ int main(int argc, char** argv)
 	else if (j["benchmark"] == "words")
 	{
 		FlavorsBenchmarks::WordsBenchmark bench{ j };
+		bench.Run();
+	}
+	else if(j["benchmark"] == "ip")
+	{
+		FlavorsBenchmarks::IpBenchmark bench{ j };
 		bench.Run();
 	}
 	else
