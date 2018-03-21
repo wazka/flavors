@@ -37,7 +37,8 @@
                 "${workspaceRoot}",
                 "${workspaceRoot}/flavors/src",
                 "${workspaceRoot}/lib/cuda-api-wrappers",
-                "${workspaceRoot}/lib/json"
+                "${workspaceRoot}/lib/json",
+                "${workspaceRoot}/benchmark/flavors-benchmark/src"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",

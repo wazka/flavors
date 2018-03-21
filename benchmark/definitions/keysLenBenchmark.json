@@ -1,29 +1,16 @@
 {
   "benchmark": "keysLenBenchmark",
-  "resultFile": "keysLenResults.csv",
+  "resultFile": "../results/GTX1080-keysLen/keysLenResults.csv",
   "deviceId": 0,
-  "dataInfoDirectory": "./dataInfo/",
-  "keyLenghts": [ 32, 48, 64 ],
-  "firstLevelStrides": [ 16, 8, 4 ],
+  "dataInfoDirectory": "../results/GTX1080-keysLen/dataInfo/",
+  "keyLenghts": [32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 480, 512],
+  "firstLevelStrides": [ 16, 8 ],
   "levelStrides": [ 8, 4 ],
-  "counts": [
-      100000,
-      200000,
-      300000,
-      400000,
-      500000
-  ],
-  "randomCounts": [
-    400000,
-    500000,
-    700000,
-    800000
-  ],
+  "counts": [100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000],
+  "randomCounts": [ 100000 ],
   "seeds": [
       30503,
       30040,
-      29379,
-      90116,
-      91010
+      29379
     ]
 }
