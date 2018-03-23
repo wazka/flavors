@@ -1,10 +1,11 @@
 NVCC=nvcc
-SRC=flavors/src
-BENCH_SRC=benchmark/flavors-benchmark/src
+SRC=flavors/
+BENCH_SRC=benchmark/
 BIN_DIR=./bin
 LIB_DIR=lib
+INCLUDES=-I $(LIB_DIR)/cuda-api-wrappers/api/ -I $(LIB_DIR)/cuda-api-wrappers/ -I $(LIB_DIR)/json -I $(SRC)/ -I benchmark/
 
-NVCC_FLAGS=-rdc=true -gencode arch=compute_61,code=sm_61 -std=c++11 -O3  -I $(LIB_DIR)/cuda-api-wrappers/api/ -I $(LIB_DIR)/cuda-api-wrappers/ -I $(LIB_DIR)/json -I $(SRC)/ -I benchmark/flavors-benchmark/src
+NVCC_FLAGS=-rdc=true -gencode arch=compute_61,code=sm_61 -std=c++11 -O3 $(INCLUDES)
 
 BIN=$(BIN_DIR) $(BIN_DIR)/tmp
 LIB=$(BIN_DIR)/tmp/device_properties.o
@@ -56,8 +57,8 @@ $(BIN_DIR)/tmp/words.o: $(BENCH_SRC)/words.cpp $(BENCH_SRC)/words.h
 $(BIN_DIR)/tmp/ip.o: $(BENCH_SRC)/ip.cpp $(BENCH_SRC)/ip.h
 	$(NVCC) $(NVCC_FLAGS) -c $(BENCH_SRC)/ip.cpp -o $(BIN_DIR)/tmp/ip.o
 
-$(BIN_DIR)/tmp/runMain.o: benchmark/benchmark-run/src/runMain.cpp
-	$(NVCC) $(NVCC_FLAGS) -c benchmark/benchmark-run/src/runMain.cpp -o $(BIN_DIR)/tmp/runMain.o
+$(BIN_DIR)/tmp/runMain.o: benchmark/runMain.cpp
+	$(NVCC) $(NVCC_FLAGS) -c benchmark/runMain.cpp -o $(BIN_DIR)/tmp/runMain.o
 
 $(BIN_DIR)/flavors-benchmarks: $(BENCH_SRC)/hostBenchmark.h $(BENCH_SRC)/randomBenchmark.h $(BENCHMARKS)
 	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/flavors-benchmarks $(BIN_DIR)/flavors.a $(BENCHMARKS)
