@@ -1,7 +1,7 @@
 NVCC=nvcc
 SRC=flavors/
 BENCH_SRC=benchmarks/
-SAMPLE_SRC=sample/
+SAMPLE_SRC=samples/
 BIN_DIR=./bin
 LIB_DIR=lib
 INCLUDES=-I $(LIB_DIR)/cuda-api-wrappers/api/ -I $(LIB_DIR)/cuda-api-wrappers/ -I $(LIB_DIR)/json -I $(SRC)/ -I benchmark/
@@ -12,14 +12,14 @@ BIN=$(BIN_DIR) $(BIN_DIR)/tmp
 LIB=$(BIN_DIR)/tmp/device_properties.o
 FLAVORS=$(BIN_DIR)/tmp/configuration.o $(BIN_DIR)/tmp/keys.o $(BIN_DIR)/tmp/masks.o $(BIN_DIR)/tmp/tree.o $(BIN_DIR)/tmp/utils.o $(BIN_DIR)/tmp/dataInfo.o
 BENCHMARKS=$(BIN_DIR)/tmp/benchmark.o $(BIN_DIR)/tmp/dictionary.o $(BIN_DIR)/tmp/words.o $(BIN_DIR)/tmp/ip.o  $(BIN_DIR)/tmp/runMain.o
-SAMPLE=$(BIN_DIR)/tmp/keysSample.o
+SAMPLE=$(BIN_DIR)/tmp/keysSample.o $(BIN_DIR)/tmp/longKeysSample.o
 
 all: flavors
 
 lib: $(BIN) $(LIB)
 flavors: $(BIN) $(FLAVORS) $(BIN_DIR)/flavors.a lib
 benchmarks: $(BIN) flavors $(BENCHMARKS) $(BIN_DIR)/flavors-benchmarks
-samples: flavors $(SAMPLE) $(BIN_DIR)/keys-sample
+samples: flavors $(SAMPLE) $(BIN_DIR)/keys-sample $(BIN_DIR)/long-keys-sample
 
 # flavors library objects
 $(BIN_DIR)/flavors.a: $(LIB) $(FLAVORS) $(SRC)/containers.h
@@ -71,7 +71,13 @@ $(BIN_DIR)/tmp/keysSample.o: $(SAMPLE_SRC)/keysSample.cpp
 	$(NVCC) $(NVCC_FLAGS) -c $(SAMPLE_SRC)/keysSample.cpp -o $(BIN_DIR)/tmp/keysSample.o
 
 $(BIN_DIR)/keys-sample: $(SAMPLE) $(BIN_DIR)/flavors.a
-	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/keys-sample $(BIN_DIR)/flavors.a $(SAMPLE)
+	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/keys-sample $(BIN_DIR)/flavors.a $(BIN_DIR)/tmp/keysSample.o
+
+$(BIN_DIR)/tmp/longKeysSample.o:  $(SAMPLE_SRC)/longKeysSample.cpp
+	$(NVCC) $(NVCC_FLAGS) -c $(SAMPLE_SRC)/longKeysSample.cpp -o $(BIN_DIR)/tmp/longKeysSample.o
+
+$(BIN_DIR)/long-keys-sample: $(SAMPLE) $(BIN_DIR)/flavors.a
+	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/long-keys-sample $(BIN_DIR)/flavors.a $(BIN_DIR)/tmp/longKeysSample.o
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)

@@ -48,9 +48,13 @@ namespace Flavors
 
 	void Keys::FillFromVector(std::vector<unsigned> source)
 	{
-		//TODO: Implement
 		for(int level = 0; level < Depth(); ++level)
-			cuda::memory::copy(Store[level], source.data(), Count * sizeof(unsigned));
+		{
+			cuda::memory::copy(
+				Store[level], 
+				source.data() + level * Count, 
+				Count * sizeof(unsigned));
+		}
 	}
 
 	std::vector<std::vector<unsigned>> Keys::ToHost() const

@@ -22,7 +22,7 @@ make samples
 
 #### Getting started
 
-For getting started guide go to samples [page](sample/README.md).
+For getting started guide go to samples [page](samples/README.md).
 
 #### Benchmarks
 
