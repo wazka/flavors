@@ -1,6 +1,7 @@
 NVCC=nvcc
 SRC=flavors/
-BENCH_SRC=benchmark/
+BENCH_SRC=benchmarks/
+SAMPLE_SRC=sample/
 BIN_DIR=./bin
 LIB_DIR=lib
 INCLUDES=-I $(LIB_DIR)/cuda-api-wrappers/api/ -I $(LIB_DIR)/cuda-api-wrappers/ -I $(LIB_DIR)/json -I $(SRC)/ -I benchmark/
@@ -11,12 +12,14 @@ BIN=$(BIN_DIR) $(BIN_DIR)/tmp
 LIB=$(BIN_DIR)/tmp/device_properties.o
 FLAVORS=$(BIN_DIR)/tmp/configuration.o $(BIN_DIR)/tmp/keys.o $(BIN_DIR)/tmp/masks.o $(BIN_DIR)/tmp/tree.o $(BIN_DIR)/tmp/utils.o $(BIN_DIR)/tmp/dataInfo.o
 BENCHMARKS=$(BIN_DIR)/tmp/benchmark.o $(BIN_DIR)/tmp/dictionary.o $(BIN_DIR)/tmp/words.o $(BIN_DIR)/tmp/ip.o  $(BIN_DIR)/tmp/runMain.o
+SAMPLE=$(BIN_DIR)/tmp/keysSample.o
 
-all: lib flavors benchmarks
+all: flavors
 
 lib: $(BIN) $(LIB)
-flavors: $(BIN) $(FLAVORS) $(BIN_DIR)/flavors.a
+flavors: $(BIN) $(FLAVORS) $(BIN_DIR)/flavors.a lib
 benchmarks: $(BIN) flavors $(BENCHMARKS) $(BIN_DIR)/flavors-benchmarks
+samples: flavors $(SAMPLE) $(BIN_DIR)/keys-sample
 
 # flavors library objects
 $(BIN_DIR)/flavors.a: $(LIB) $(FLAVORS) $(SRC)/containers.h
@@ -57,16 +60,23 @@ $(BIN_DIR)/tmp/words.o: $(BENCH_SRC)/words.cpp $(BENCH_SRC)/words.h
 $(BIN_DIR)/tmp/ip.o: $(BENCH_SRC)/ip.cpp $(BENCH_SRC)/ip.h
 	$(NVCC) $(NVCC_FLAGS) -c $(BENCH_SRC)/ip.cpp -o $(BIN_DIR)/tmp/ip.o
 
-$(BIN_DIR)/tmp/runMain.o: benchmark/runMain.cpp
-	$(NVCC) $(NVCC_FLAGS) -c benchmark/runMain.cpp -o $(BIN_DIR)/tmp/runMain.o
+$(BIN_DIR)/tmp/runMain.o: $(BENCH_SRC)/runMain.cpp
+	$(NVCC) $(NVCC_FLAGS) -c $(BENCH_SRC)/runMain.cpp -o $(BIN_DIR)/tmp/runMain.o
 
-$(BIN_DIR)/flavors-benchmarks: $(BENCH_SRC)/hostBenchmark.h $(BENCH_SRC)/randomBenchmark.h $(BENCHMARKS)
+$(BIN_DIR)/flavors-benchmarks: $(BENCH_SRC)/hostBenchmark.h $(BENCH_SRC)/randomBenchmark.h $(BENCHMARKS) $(BIN_DIR)/flavors.a
 	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/flavors-benchmarks $(BIN_DIR)/flavors.a $(BENCHMARKS)
+
+# sample
+$(BIN_DIR)/tmp/keysSample.o: $(SAMPLE_SRC)/keysSample.cpp
+	$(NVCC) $(NVCC_FLAGS) -c $(SAMPLE_SRC)/keysSample.cpp -o $(BIN_DIR)/tmp/keysSample.o
+
+$(BIN_DIR)/keys-sample: $(SAMPLE) $(BIN_DIR)/flavors.a
+	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/keys-sample $(BIN_DIR)/flavors.a $(SAMPLE)
 
 $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
 
-$(BIN_DIR)/tmp:
+$(BIN_DIR)/tmp: 
 	mkdir -p $(BIN_DIR)/tmp
 
 clear: clean

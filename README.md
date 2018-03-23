@@ -6,22 +6,24 @@ Flavors is library of GPU Trie structures for fast parallel lookup. It provides 
 
 
 
-#### Building
+### Building
 ```sh
 #To build library
 make
 
+#To build benchmarks
+make benchmarks
+
 #To build samples
-make sample
+make samples
 ```
 
-#### Running samples
-```sh
-./bin/basicKeysSample
+### Where to go next?
 
-./bin/basicMasksSample
-```
+#### Getting started
+
+For getting started guide go to samples [page](sample/README.md).
 
 #### Benchmarks
 
-More information about benchmarks canbe foune on [this](docs/Benchmarks.md) page.
+More information about how to run benchmarks and some experimental results can be found on [this](benchmarks/README.md) page.

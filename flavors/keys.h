@@ -15,6 +15,7 @@ namespace Flavors
 		Keys(const Configuration& config, int count, unsigned* data);
 
 		virtual void FillRandom(int seed);
+		virtual void FillFromVector(std::vector<unsigned> source);
 		std::vector<std::vector<unsigned>> ToHost() const;
 
 		friend std::ostream& operator<<(std::ostream& os, const Keys& obj);

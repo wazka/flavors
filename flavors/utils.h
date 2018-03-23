@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <iostream>
 #include "api_wrappers.h"
 
 namespace Flavors
@@ -40,6 +41,17 @@ namespace Flavors
 			std::vector<T> host(count);
 			cuda::memory::copy(host.data(), store.get(), count * sizeof(unsigned));
 			return host;
+		}
+
+		friend  std::ostream& operator<<(std::ostream& os, const CudaArray& obj)
+		{
+			auto h_array = obj.ToHost();
+
+    		for(auto item : h_array)
+        		os << item << ", ";
+			os << std::endl;
+
+			return os;
 		}
 
 

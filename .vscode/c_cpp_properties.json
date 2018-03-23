@@ -34,11 +34,12 @@
                 "/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed",
                 "/usr/include/x86_64-linux-gnu",
                 "/usr/include",
+                "/usr/local/cuda/include",
                 "${workspaceRoot}",
-                "${workspaceRoot}/flavors/src",
                 "${workspaceRoot}/lib/cuda-api-wrappers",
                 "${workspaceRoot}/lib/json",
-                "${workspaceRoot}/benchmark/flavors-benchmark/src"
+                "${workspaceRoot}/benchmarks",
+                "${workspaceRoot}/flavors"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
@@ -52,9 +53,14 @@
                     "/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed",
                     "/usr/include/x86_64-linux-gnu",
                     "/usr/include",
-                    "${workspaceRoot}"
+                    "/usr/local/cuda/include",
+                    "${workspaceRoot}",
+                    "${workspaceRoot}/lib/cuda-api-wrappers",
+                    "${workspaceRoot}/lib/json",
+                    "${workspaceRoot}/benchmarks",
+                    "${workspaceRoot}/flavors"
                 ],
-                "limitSymbolsToIncludedHeaders": true,
+                "limitSymbolsToIncludedHeaders": false,
                 "databaseFilename": ""
             }
         },
