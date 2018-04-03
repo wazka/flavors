@@ -13,10 +13,10 @@
 #ifndef CUDA_API_WRAPPERS_DEVICE_FUNCTION_HPP_
 #define CUDA_API_WRAPPERS_DEVICE_FUNCTION_HPP_
 
-#include <types.h>
-#include <device_properties.hpp>
-#include <error.hpp>
-#include <current_device.hpp>
+#include "types.h"
+#include "device_properties.hpp"
+#include "error.hpp"
+#include "current_device.hpp"
 
 #include <cuda_runtime_api.h>
 

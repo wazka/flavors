@@ -1,4 +1,4 @@
-#include <device_properties.hpp>
+#include "device_properties.hpp"
 
 #include <string>
 #include <unordered_map>

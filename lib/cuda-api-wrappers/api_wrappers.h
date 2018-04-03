@@ -8,25 +8,23 @@
 #ifndef CUDA_API_WRAPPERS_H_
 #define CUDA_API_WRAPPERS_H_
 
-#include <types.h>
-#include <constants.h>
-#include <error.hpp>
-#include <versions.hpp>
-#include <kernel_launch.cuh>
-#include <device_properties.hpp>
-#include <pci_id.hpp>
-#include <device_count.hpp>
-#include <current_device.hpp>
-#include <device_function.hpp>
-#include <memory.hpp>
-#include <pointer.hpp>
-#include <unique_ptr.hpp>
-#include <ipc.hpp>
-
-#include <stream.hpp>
-#include <device.hpp>
-#include <event.hpp>
-
-#include <multi_wrapper_impls.hpp>
+#include "api/types.h"
+#include "api/constants.h"
+#include "api/error.hpp"
+#include "api/versions.hpp"
+#include "api/kernel_launch.cuh"
+#include "api/device_properties.hpp"
+#include "api/pci_id.hpp"
+#include "api/device_count.hpp"
+#include "api/current_device.hpp"
+#include "api/device_function.hpp"
+#include "api/memory.hpp"
+#include "api/pointer.hpp"
+#include "api/unique_ptr.hpp"
+#include "api/ipc.hpp"
+#include "api/stream.hpp"
+#include "api/device.hpp"
+#include "api/event.hpp"
+#include "api/multi_wrapper_impls.hpp"
 
 #endif /* CUDA_API_WRAPPERS_H_ */
