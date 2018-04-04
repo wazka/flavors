@@ -79,11 +79,19 @@
             "browse": {
                 "path": [
                     "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/include/*",
-                    "${workspaceRoot}"
+                    "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.11.25503/include/*",
+                    "${workspaceRoot}",
+                    "${workspaceRoot}/lib/cuda-api-wrappers",
+                    "${workspaceRoot}/lib/json",
+                    "${workspaceRoot}/benchmarks",
+                    "${workspaceRoot}/flavors",
+                    "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/include"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
         }
     ],
     "version": 3

@@ -1,3 +1,4 @@
+SHELL=powershell.exe
 NVCC=nvcc
 SRC=flavors/
 BENCH_SRC=benchmarks/
@@ -6,7 +7,7 @@ BIN_DIR=./bin
 LIB_DIR=lib
 INCLUDES=-I $(LIB_DIR)/cuda-api-wrappers/api/ -I $(LIB_DIR)/cuda-api-wrappers/ -I $(LIB_DIR)/json -I $(SRC)/ -I benchmark/
 
-NVCC_FLAGS=-rdc=true -gencode arch=compute_61,code=sm_61 -std=c++11 -O3 $(INCLUDES)
+NVCC_FLAGS=-rdc=true -gencode arch=compute_50,code=sm_50 -std=c++11 -O3 $(INCLUDES)
 
 BIN=$(BIN_DIR) $(BIN_DIR)/tmp
 LIB=$(BIN_DIR)/tmp/device_properties.o
@@ -19,7 +20,7 @@ all: flavors
 lib: $(BIN) $(LIB)
 flavors: $(BIN) $(FLAVORS) $(BIN_DIR)/flavors.a lib
 benchmarks: $(BIN) flavors $(BENCHMARKS) $(BIN_DIR)/flavors-benchmarks
-samples: flavors $(SAMPLE) $(BIN_DIR)/keys-sample $(BIN_DIR)/long-keys-sample
+samples: $(BIN) $(FLAVORS) $(SAMPLE) $(BIN_DIR)/keys-sample $(BIN_DIR)/long-keys-sample
 
 # flavors library objects
 $(BIN_DIR)/flavors.a: $(LIB) $(FLAVORS) $(SRC)/containers.h
@@ -70,27 +71,27 @@ $(BIN_DIR)/flavors-benchmarks: $(BENCH_SRC)/hostBenchmark.h $(BENCH_SRC)/randomB
 $(BIN_DIR)/tmp/keysSample.o: $(SAMPLE_SRC)/keysSample.cpp
 	$(NVCC) $(NVCC_FLAGS) -c $(SAMPLE_SRC)/keysSample.cpp -o $(BIN_DIR)/tmp/keysSample.o
 
-$(BIN_DIR)/keys-sample: $(SAMPLE) $(BIN_DIR)/flavors.a
-	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/keys-sample $(BIN_DIR)/flavors.a $(BIN_DIR)/tmp/keysSample.o
+$(BIN_DIR)/keys-sample: $(SAMPLE) $(FLAVORS)
+	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/keys-sample $(FLAVORS) $(BIN_DIR)/tmp/keysSample.o
 
 $(BIN_DIR)/tmp/longKeysSample.o:  $(SAMPLE_SRC)/longKeysSample.cpp
 	$(NVCC) $(NVCC_FLAGS) -c $(SAMPLE_SRC)/longKeysSample.cpp -o $(BIN_DIR)/tmp/longKeysSample.o
 
-$(BIN_DIR)/long-keys-sample: $(SAMPLE) $(BIN_DIR)/flavors.a
-	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/long-keys-sample $(BIN_DIR)/flavors.a $(BIN_DIR)/tmp/longKeysSample.o
+$(BIN_DIR)/long-keys-sample: $(SAMPLE) $(FLAVORS)
+	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/long-keys-sample $(FLAVORS) $(BIN_DIR)/tmp/longKeysSample.o
 
 $(BIN_DIR):
-	mkdir -p $(BIN_DIR)
+	mkdir -p "$(BIN_DIR)"
 
 $(BIN_DIR)/tmp: 
-	mkdir -p $(BIN_DIR)/tmp
+	mkdir -p "$(BIN_DIR)/tmp"
 
 clear: clean
-	rm -f $(BIN_DIR)/*.o
-	rm -r -f $(BIN_DIR)
+	rm -Force "$(BIN_DIR)/*.o"
+	rm -r -Force "$(BIN_DIR)"
 
 clean:	
-	rm -f $(BIN_DIR)/tmp/*.o
-	rm -r -f $(BIN_DIR)/tmp
+	rm -Force "$(BIN_DIR)/tmp/*.o"
+	rm -r -Force "$(BIN_DIR)/tmp"
 
 .PHONY: all clear clean
