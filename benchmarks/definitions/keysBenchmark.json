@@ -1,7 +1,7 @@
 {
   "benchmark": "keysBenchmark",
-  "resultFile": "../results/tmp_results/keysResults.csv",
-  "dataInfoDirectory": "../results/tmp_results/dataInfo/",
+  "resultFile": "keysResults.csv",
+  "dataInfoDirectory": "dataInfo/",
   "deviceId": 0,
   "configs": [
     [
@@ -23,13 +23,13 @@
     ]
   ],
   "counts": [
-    10000000
+    100000
   ],
   "randomCounts": [
-    10000000,
-    11000000,
-    15000000,
-    20000000
+    100000,
+    110000,
+    150000,
+    200000
   ],
   "seeds": [
     1234

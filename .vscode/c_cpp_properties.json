@@ -83,6 +83,8 @@
                     "${workspaceRoot}",
                     "${workspaceRoot}/lib/cuda-api-wrappers",
                     "${workspaceRoot}/lib/json",
+                    "${workspaceRoot}/lib/catch",
+                    "C:/Program Files/boost/boost_1_66_0/boost",
                     "${workspaceRoot}/benchmarks",
                     "${workspaceRoot}/flavors",
                     "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.1/include"

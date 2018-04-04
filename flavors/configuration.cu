@@ -12,26 +12,26 @@ namespace Flavors
 																  1, 1, 1, 1, 1, 1, 1, 1,
 																  1, 1, 1, 1, 1, 1, 1, 1} };
 
-	Configuration Configuration::Default(unsigned depth)
+	Configuration Configuration::Default(unsigned length)
 	{
 		std::vector<unsigned> levels;
-		auto currentDepth = depth;
+		auto currentLength = length;
 
-		while(currentDepth > 32)
+		while(currentLength > 32)
 		{
 			levels.push_back(32);
-			currentDepth -= 32;
+			currentLength -= 32;
 		}
 
-		if(currentDepth > 0)
-			levels.push_back(currentDepth);
+		if(currentLength > 0)
+			levels.push_back(currentLength);
 
 		return Configuration{levels};
 	}
 
-	Configuration Configuration::Binary(unsigned depth)
+	Configuration Configuration::Binary(unsigned length)
 	{
-		std::vector<unsigned> levels(depth, 1u);
+		std::vector<unsigned> levels(length, 1u);
 		return Configuration{levels};
 	}
 
@@ -80,6 +80,7 @@ namespace Flavors
 
 	void Configuration::PopLastLevel()
 	{
+		//TODO: Should this reallocate CudaArray, if Get has been already called?
 		h_levels.pop_back();
 	}
 

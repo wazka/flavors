@@ -7,14 +7,15 @@
 
 namespace Flavors
 {
+	//TODO: Constructor from init list
 	class Configuration
 	{
 	public:
 		static Configuration Default32;
 		static Configuration Binary32;
 
-		static Configuration Default(unsigned depth);
-		static Configuration Binary(unsigned depth);
+		static Configuration Default(unsigned length);
+		static Configuration Binary(unsigned length);
 
 		int Length;
 

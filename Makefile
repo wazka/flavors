@@ -3,24 +3,26 @@ NVCC=nvcc
 SRC=flavors/
 BENCH_SRC=benchmarks/
 SAMPLE_SRC=samples/
+TEST_SRC=test/
 BIN_DIR=./bin
 LIB_DIR=lib
-INCLUDES=-I $(LIB_DIR)/cuda-api-wrappers/api/ -I $(LIB_DIR)/cuda-api-wrappers/ -I $(LIB_DIR)/json -I $(SRC)/ -I benchmark/
+TEST_SRC=test/
+INCLUDES=-I $(LIB_DIR)/cuda-api-wrappers/api/ -I $(LIB_DIR)/cuda-api-wrappers/ -I $(LIB_DIR)/json -I $(LIB_DIR)/catch -I "C:\Program Files\boost\boost_1_66_0" -I $(SRC)/ -I benchmark/
 
 NVCC_FLAGS=-rdc=true -gencode arch=compute_50,code=sm_50 -std=c++11 -O3 $(INCLUDES)
 
 BIN=$(BIN_DIR) $(BIN_DIR)/tmp
-LIB=$(BIN_DIR)/tmp/device_properties.o
 FLAVORS=$(BIN_DIR)/tmp/configuration.o $(BIN_DIR)/tmp/keys.o $(BIN_DIR)/tmp/masks.o $(BIN_DIR)/tmp/tree.o $(BIN_DIR)/tmp/utils.o $(BIN_DIR)/tmp/dataInfo.o
 BENCHMARKS=$(BIN_DIR)/tmp/benchmark.o $(BIN_DIR)/tmp/dictionary.o $(BIN_DIR)/tmp/words.o $(BIN_DIR)/tmp/ip.o  $(BIN_DIR)/tmp/runMain.o
 SAMPLE=$(BIN_DIR)/tmp/keysSample.o $(BIN_DIR)/tmp/longKeysSample.o
+TEST=$(BIN_DIR)/tmp/runTests.o $(BIN_DIR)/tmp/testConfiguration.o $(BIN_DIR)/tmp/testKeys.o $(BIN_DIR)/tmp/testTree.o
 
 all: flavors
 
-lib: $(BIN) $(LIB)
-flavors: $(BIN) $(FLAVORS) $(BIN_DIR)/flavors.a lib
-benchmarks: $(BIN) flavors $(BENCHMARKS) $(BIN_DIR)/flavors-benchmarks
+flavors: $(BIN) $(FLAVORS) $(BIN_DIR)/flavors.a
+benchmarks: $(BIN) $(FLAVORS) $(BENCHMARKS) $(BIN_DIR)/flavors-benchmarks
 samples: $(BIN) $(FLAVORS) $(SAMPLE) $(BIN_DIR)/keys-sample $(BIN_DIR)/long-keys-sample
+tests: $(BIN) $(FLAVORS) $(TEST) $(BIN_DIR)/flavors-tests
 
 # flavors library objects
 $(BIN_DIR)/flavors.a: $(LIB) $(FLAVORS) $(SRC)/containers.h
@@ -44,10 +46,6 @@ $(BIN_DIR)/tmp/utils.o: $(SRC)/utils.cpp $(SRC)/utils.h
 $(BIN_DIR)/tmp/dataInfo.o: $(SRC)/dataInfo.cu $(SRC)/dataInfo.h
 	$(NVCC) $(NVCC_FLAGS) -c $(SRC)/dataInfo.cu -o $(BIN_DIR)/tmp/dataInfo.o
 
-# cuda-api-wrappers objects
-$(BIN_DIR)/tmp/device_properties.o: $(LIB_DIR)/cuda-api-wrappers/api/device_properties.cpp
-	$(NVCC) $(NVCC_FLAGS) -c $(LIB_DIR)/cuda-api-wrappers/api/device_properties.cpp -o $(BIN_DIR)/tmp/device_properties.o
-
 # benchmarks objects
 $(BIN_DIR)/tmp/benchmark.o: $(BENCH_SRC)/benchmark.cpp $(BENCH_SRC)/benchmark.h
 	$(NVCC) $(NVCC_FLAGS) -c $(BENCH_SRC)/benchmark.cpp -o $(BIN_DIR)/tmp/benchmark.o
@@ -64,8 +62,8 @@ $(BIN_DIR)/tmp/ip.o: $(BENCH_SRC)/ip.cpp $(BENCH_SRC)/ip.h
 $(BIN_DIR)/tmp/runMain.o: $(BENCH_SRC)/runMain.cpp
 	$(NVCC) $(NVCC_FLAGS) -c $(BENCH_SRC)/runMain.cpp -o $(BIN_DIR)/tmp/runMain.o
 
-$(BIN_DIR)/flavors-benchmarks: $(BENCH_SRC)/hostBenchmark.h $(BENCH_SRC)/randomBenchmark.h $(BENCHMARKS) $(BIN_DIR)/flavors.a
-	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/flavors-benchmarks $(BIN_DIR)/flavors.a $(BENCHMARKS)
+$(BIN_DIR)/flavors-benchmarks: $(BENCH_SRC)/hostBenchmark.h $(BENCH_SRC)/randomBenchmark.h $(BENCHMARKS) $(FLAVORS)
+	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/flavors-benchmarks $(FLAVORS) $(BENCHMARKS)
 
 # sample
 $(BIN_DIR)/tmp/keysSample.o: $(SAMPLE_SRC)/keysSample.cpp
@@ -79,6 +77,22 @@ $(BIN_DIR)/tmp/longKeysSample.o:  $(SAMPLE_SRC)/longKeysSample.cpp
 
 $(BIN_DIR)/long-keys-sample: $(SAMPLE) $(FLAVORS)
 	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/long-keys-sample $(FLAVORS) $(BIN_DIR)/tmp/longKeysSample.o
+
+#tests
+$(BIN_DIR)/tmp/testConfiguration.o:  $(TEST_SRC)/testConfiguration.cpp
+	$(NVCC) $(NVCC_FLAGS) -c $(TEST_SRC)/testConfiguration.cpp -o $(BIN_DIR)/tmp/testConfiguration.o
+
+$(BIN_DIR)/tmp/testKeys.o:  $(TEST_SRC)/testKeys.cpp
+	$(NVCC) $(NVCC_FLAGS) -c $(TEST_SRC)/testKeys.cpp -o $(BIN_DIR)/tmp/testKeys.o
+
+$(BIN_DIR)/tmp/testTree.o:  $(TEST_SRC)/testTree.cpp
+	$(NVCC) $(NVCC_FLAGS) -c $(TEST_SRC)/testTree.cpp -o $(BIN_DIR)/tmp/testTree.o
+
+$(BIN_DIR)/tmp/runTests.o:  $(TEST_SRC)/runTests.cpp
+	$(NVCC) $(NVCC_FLAGS) -c $(TEST_SRC)/runTests.cpp -o $(BIN_DIR)/tmp/runTests.o
+
+$(BIN_DIR)/flavors-tests: $(TESTS) $(FLAVORS)
+	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/flavors-tests $(FLAVORS) $(TEST)
 
 $(BIN_DIR):
 	mkdir -p "$(BIN_DIR)"

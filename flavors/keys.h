@@ -7,6 +7,7 @@
 
 namespace Flavors
 {
+	//TODO: Add checks for differences in configs when reshaping
 	class Keys
 	{
 	public:
