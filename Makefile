@@ -91,7 +91,7 @@ $(BIN_DIR)/tmp/testTree.o:  $(TEST_SRC)/testTree.cpp
 $(BIN_DIR)/tmp/runTests.o:  $(TEST_SRC)/runTests.cpp
 	$(NVCC) $(NVCC_FLAGS) -c $(TEST_SRC)/runTests.cpp -o $(BIN_DIR)/tmp/runTests.o
 
-$(BIN_DIR)/flavors-tests: $(TESTS) $(FLAVORS)
+$(BIN_DIR)/flavors-tests: $(TESTS) $(FLAVORS) $(TEST_SRC)/helpers.h
 	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/flavors-tests $(FLAVORS) $(TEST)
 
 $(BIN_DIR):
