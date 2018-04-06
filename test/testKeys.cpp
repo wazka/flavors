@@ -1,6 +1,5 @@
 #include "catch.hpp"
 #include "keys.h"
-#include "helpers.h"
 
 #include <vector>
 
@@ -66,63 +65,4 @@ TEST_CASE("Keys test", "[keys]")
 
     //then
     REQUIRE(otherKeys == yetOtherKeys);
-}
-
-const std::vector<int> Counts = { 1000, 2000, 3000, 4000, 5000 };
-const std::vector<int> Seeds = { 1234, 5765, 8304, 2365, 4968 };
-const std::vector<Configuration> Configs =
-{
-    Flavors::Configuration{ std::vector<unsigned>{8, 8, 8, 8} },
-    Flavors::Configuration{ std::vector<unsigned>{4, 4, 4, 4, 4, 4, 4, 4} },
-    Flavors::Configuration{ std::vector<unsigned>{8, 8, 4, 4, 4, 4} },
-    Flavors::Configuration{ std::vector<unsigned>{16, 4, 4, 4, 4} },
-    Flavors::Configuration{ std::vector<unsigned>{7, 5, 3, 2, 3, 6, 6} }
-};
-Configuration UniqueConfig32{std::vector<unsigned>{5, 5, 3, 7, 2, 3, 7}};
-
-TEST_CASE("Keys stress test", "[keys][stress]")
-{
-    for(auto count : Counts)
-        for(auto seed : Seeds)
-            for(auto config : Configs)
-            {
-                //when
-                Keys keys{ config, count };
-                keys.FillRandom(seed);
-
-                //then
-                REQUIRE(keys.Config == config);
-                REQUIRE(keys.Depth() == config.Depth());
-                REQUIRE(keys.Sorted() == false);
-                REQUIRE(keys.Count == count);
-                REQUIRE(CheckAgainstConfig(keys, config));
-
-                //when
-                auto newKeys = keys.ReshapeKeys(UniqueConfig32);
-
-                //then
-                REQUIRE(count == newKeys.Count);
-                REQUIRE(newKeys.Config == UniqueConfig32);
-                REQUIRE(UniqueConfig32.Depth() == newKeys.Depth());
-                REQUIRE(CheckAgainstConfig(newKeys, UniqueConfig32));
-                REQUIRE(keys.ReshapeKeys(Configuration::Default32) == newKeys.ReshapeKeys(Configuration::Default32));
-
-                //when
-                keys.Sort();
-
-                //then
-                REQUIRE(keys.Sorted() == true);
-                REQUIRE(CheckSort(keys));
-
-                //when
-                newKeys.Sort();
-                
-                //then
-                REQUIRE(newKeys.Sorted() == true);
-                REQUIRE(CheckSort(newKeys));
-                REQUIRE(keys.ReshapeKeys(Configuration::Default32) == newKeys.ReshapeKeys(Configuration::Default32));
-
-                
-
-            }
 }
