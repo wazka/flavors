@@ -15,7 +15,7 @@ BIN=$(BIN_DIR) $(BIN_DIR)/tmp
 FLAVORS=$(BIN_DIR)/tmp/configuration.o $(BIN_DIR)/tmp/keys.o $(BIN_DIR)/tmp/masks.o $(BIN_DIR)/tmp/tree.o $(BIN_DIR)/tmp/utils.o $(BIN_DIR)/tmp/dataInfo.o
 BENCHMARKS=$(BIN_DIR)/tmp/benchmark.o $(BIN_DIR)/tmp/dictionary.o $(BIN_DIR)/tmp/words.o $(BIN_DIR)/tmp/ip.o  $(BIN_DIR)/tmp/runMain.o
 SAMPLE=$(BIN_DIR)/tmp/keysSample.o $(BIN_DIR)/tmp/longKeysSample.o
-TEST=$(BIN_DIR)/tmp/runTests.o $(BIN_DIR)/tmp/testConfiguration.o $(BIN_DIR)/tmp/testKeys.o $(BIN_DIR)/tmp/testTree.o $(BIN_DIR)/tmp/testLoad.o
+TEST=$(BIN_DIR)/tmp/runTests.o $(BIN_DIR)/tmp/testConfiguration.o $(BIN_DIR)/tmp/testKeys.o $(BIN_DIR)/tmp/testMasks.o $(BIN_DIR)/tmp/testTree.o $(BIN_DIR)/tmp/testLoad.o $(BIN_DIR)/tmp/helpers.o
 
 all: flavors
 
@@ -85,16 +85,22 @@ $(BIN_DIR)/tmp/testConfiguration.o:  $(TEST_SRC)/testConfiguration.cpp
 $(BIN_DIR)/tmp/testKeys.o:  $(TEST_SRC)/testKeys.cpp
 	$(NVCC) $(NVCC_FLAGS) -c $(TEST_SRC)/testKeys.cpp -o $(BIN_DIR)/tmp/testKeys.o
 
+$(BIN_DIR)/tmp/testMasks.o:  $(TEST_SRC)/testMasks.cpp
+	$(NVCC) $(NVCC_FLAGS) -c $(TEST_SRC)/testMasks.cpp -o $(BIN_DIR)/tmp/testMasks.o
+
 $(BIN_DIR)/tmp/testTree.o:  $(TEST_SRC)/testTree.cpp
 	$(NVCC) $(NVCC_FLAGS) -c $(TEST_SRC)/testTree.cpp -o $(BIN_DIR)/tmp/testTree.o
 
 $(BIN_DIR)/tmp/testLoad.o:  $(TEST_SRC)/testLoad.cpp
 	$(NVCC) $(NVCC_FLAGS) -c $(TEST_SRC)/testLoad.cpp -o $(BIN_DIR)/tmp/testLoad.o
 
+$(BIN_DIR)/tmp/helpers.o:  $(TEST_SRC)/helpers.cpp $(TEST_SRC)/helpers.h
+	$(NVCC) $(NVCC_FLAGS) -c $(TEST_SRC)/helpers.cpp -o $(BIN_DIR)/tmp/helpers.o
+
 $(BIN_DIR)/tmp/runTests.o:  $(TEST_SRC)/runTests.cpp
 	$(NVCC) $(NVCC_FLAGS) -c $(TEST_SRC)/runTests.cpp -o $(BIN_DIR)/tmp/runTests.o
 
-$(BIN_DIR)/flavors-tests: $(TESTS) $(FLAVORS) $(TEST_SRC)/helpers.h
+$(BIN_DIR)/flavors-tests: $(TESTS) $(FLAVORS)
 	$(NVCC) $(NVCC_FLAGS) -o $(BIN_DIR)/flavors-tests $(FLAVORS) $(TEST)
 
 $(BIN_DIR):

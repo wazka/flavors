@@ -90,6 +90,24 @@ namespace Flavors
 			Store.GetLevels());
 	}
 
+	void Masks::FillFromVector(std::vector<unsigned> source, std::vector<unsigned> lengths)
+	{
+		Keys::FillFromVector(source);
+
+		cuda::memory::copy(Lengths.Get(), lengths.data(), Count * sizeof(unsigned));
+
+		auto kernelConfig = make_launch_config(Count);
+
+		cuda::launch(
+			clip,
+			kernelConfig,
+			Count,
+			Depth(),
+			Config.Get(),
+			Lengths.Get(),
+			Store.GetLevels());
+	}
+
 	void Masks::Sort()
 	{
 		CudaArray<unsigned> tmp{ Count };
@@ -129,10 +147,18 @@ namespace Flavors
 
 		for (int item = 0; item < obj.Count; ++item)
 		{
+			int globalBit = 0;
 			for (int level = 0; level < obj.Config.Depth(); ++level)
 			{
 				for (int bit = obj.Config[level] - 1; bit >= 0; --bit)
-					std::cout << ((h_store[level][item] >> bit) & 1u);
+				{
+					if(globalBit < h_lengths[item])
+						std::cout << ((h_store[level][item] >> bit) & 1u);
+					else
+						std::cout << "X";
+
+					++globalBit;
+				}
 				std::cout << "\t";
 			}
 
