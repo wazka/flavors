@@ -6,7 +6,7 @@
 using namespace std;
 using namespace Flavors;
 
-TEST_CASE("Tree from keys test", "[tree]")
+TEST_CASE("Tree from keys test", "[tree][keys]")
 {
     //given
     int count = 4;
@@ -49,6 +49,7 @@ TEST_CASE("Tree from keys test", "[tree]")
     //given
     Keys otherKeys{config, count};
     otherKeys.FillFromVector(data);
+    result.Clear();
 
     //when
     tree.Find(otherKeys, result.Get());
@@ -61,7 +62,7 @@ TEST_CASE("Tree from keys test", "[tree]")
     REQUIRE(h_result[3] == 4);
 }
 
-TEST_CASE("Tree from masks test", "[tree]")
+TEST_CASE("Tree from masks test", "[tree][masks]")
 {
     //given
     int count = 4;
@@ -106,6 +107,7 @@ TEST_CASE("Tree from masks test", "[tree]")
     //given
     Masks otherMasks{config, count};
     otherMasks.FillFromVector(data, lengths);
+    result.Clear();
 
     //when
     tree.Find(otherMasks, result.Get());
@@ -116,4 +118,10 @@ TEST_CASE("Tree from masks test", "[tree]")
     REQUIRE(h_result[1] == 2);
     REQUIRE(h_result[2] == 3);
     REQUIRE(h_result[3] == 4);
+
+    //given
+    result.Clear();
+
+    //when
+    REQUIRE_NOTHROW(tree.Match(otherMasks, result.Get()));
 }
