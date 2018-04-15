@@ -11,6 +11,38 @@ bool CheckSort(Keys& keys)
     return std::is_sorted(h_keys.begin()->begin(), h_keys.begin()->end());
 }
 
+bool CheckLengths(Masks& masks, unsigned min, unsigned max)
+{
+    auto hostLengths = masks.Lengths.ToHost();
+    return std::all_of(
+        hostLengths.begin(),
+        hostLengths.end(),
+        [&min, &max](unsigned length) { return length >= min && length <= max; });
+}
+
+bool CheckAgainstConfig(Masks& masks, const Configuration& config)
+{
+    Keys& keys = masks;
+    return CheckAgainstConfig(keys, config) && CheckLengths(masks, 1, config.Length);
+}
+
+bool CheckSort(Masks& masks)
+{
+    auto h_masks = masks.ReshapeMasks(Configuration::Default32).ToHost();
+    auto h_lenghts = masks.Lengths.ToHost();
+
+    for (int mask = 1; mask < masks.Count; ++mask)
+    {
+        if (h_masks[0][mask - 1] > h_masks[0][mask])
+            return false;
+        if (h_masks[0][mask - 1] == h_masks[0][mask])
+            if (h_lenghts[mask - 1] > h_lenghts[mask])
+                return false;
+    }
+
+    return true;
+}
+
 bool CheckAgainstConfig(Keys& keys, const Configuration& config)
 {
     auto hostKeys = keys.ToHost();
@@ -118,6 +150,101 @@ bool CheckMasksAgainstSource(
 
         if(h_lengths[mask] != lengths[mask])
             return false;
+    }
+
+    return true;
+}
+
+bool AllMasksInTree(Tree& tree, Masks& masks)
+{
+    auto h_children = tree.Children.ToHost();
+    auto h_masks = masks.ToHost();
+    auto h_permutation = masks.Permutation.ToHost();
+    auto h_lengths = masks.Lengths.ToHost();
+
+    auto h_contStarts = tree.containers.Starts.ToHost();
+    auto h_contLengths = tree.containers.Lengths.ToHost();
+    auto h_contItems = tree.containers.Items.ToHost();
+
+    auto h_masksParts = tree.masksParts.ToHost();
+    auto h_treeLengths = tree.lengths.ToHost();
+
+    for (int mask = 0; mask < masks.Count; ++mask)
+    {
+        int currentNode = 1;
+        int depth = tree.Config[0];
+        int level = 0;
+
+        while(h_lengths[mask] > depth)
+        {
+            currentNode = h_children[level][(currentNode - 1) * tree.ChildrenCountsHost[level] + h_masks[level][mask]];
+            
+            ++level;
+            depth += tree.Config[level];
+
+            if (currentNode == 0)
+                return false;
+        }
+
+        int listItem = 0;
+        while(listItem < h_contLengths[level][currentNode - 1])
+        {
+            auto itemValue = h_contItems[h_contStarts[level][currentNode - 1] + listItem];
+            if (h_lengths[mask] == h_treeLengths[itemValue] && h_masksParts[itemValue] == h_masks[level][mask])
+                break;
+
+            ++listItem;
+        }
+
+        if (listItem == h_contLengths[level][currentNode - 1])
+            return false;
+
+        auto itemValue = h_contItems[h_contStarts[level][currentNode - 1] + listItem];
+        if (!CmpKeys(h_masks, mask, itemValue) || h_lengths[mask] != h_lengths[itemValue])
+            return false;
+    }
+
+    return true;
+}
+
+bool CheckMasksFindResult(CudaArray<unsigned>& result, Masks& masks)
+{
+    auto h_result = result.ToHost();
+    auto h_masks = masks.ToHost();
+    auto h_permutation = masks.Permutation.ToHost();
+    auto h_lengths = masks.Lengths.ToHost();
+    
+    for (int mask = 0; mask < masks.Count; ++mask)
+    {
+        if (h_permutation[mask] != h_result[mask] - 1)
+        {
+            auto retrivedMask = std::find(h_permutation.begin(), h_permutation.end(), h_result[mask] - 1) - h_permutation.begin();
+            if (!CmpKeys(h_masks, mask, retrivedMask) || h_lengths[mask] != h_lengths[retrivedMask])
+                return false;
+        }
+    }
+
+    return true;
+}
+
+bool CheckMatchResult(CudaArray<unsigned>& result, Masks& masks)
+{
+    //This works, since in tests, we match masks with themselves and empty values are filled with 0.
+    //That is why, we can compare using CmpKeys.
+
+    auto h_result = result.ToHost();
+    auto h_masks = masks.ToHost();
+    auto h_permutation = masks.Permutation.ToHost();
+    auto h_lengths = masks.Lengths.ToHost();
+
+    for (int mask = 0; mask < masks.Count; ++mask)
+    {
+        if (h_permutation[mask] != h_result[mask] - 1)
+        {
+            auto retrivedMask = std::find(h_permutation.begin(), h_permutation.end(), h_result[mask] - 1) - h_permutation.begin();
+            if (!CmpKeys(h_masks, mask, retrivedMask) || h_lengths[mask] > h_lengths[retrivedMask])
+                return false;
+        }
     }
 
     return true;

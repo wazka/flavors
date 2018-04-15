@@ -38,7 +38,8 @@ namespace Flavors
 
 		size_t MemoryFootprint();
 
-	private:
+	//TODO: Revise public interface
+	// private:
 		void levelsSizesToHost(Cuda2DArray& indexes);
 		void removeEmptyLevels();
 		void countNodes(Cuda2DArray& borders, Cuda2DArray& indexes, Cuda2DArray& paths);
