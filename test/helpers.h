@@ -38,7 +38,7 @@ bool CheckMasksFindResult(CudaArray<unsigned>& result, Masks& masks);
 bool CheckMatchResult(CudaArray<unsigned>& result, Masks& masks);
 
 template<class TreeType>
-void TreeFromKeysTest()
+void TreeFromKeysTest(std::vector<unsigned> trueLevelsSizes)
 {
     //given
     int count = 4;
@@ -59,9 +59,7 @@ void TreeFromKeysTest()
     REQUIRE(tree.Count == count);
     REQUIRE(tree.Depth() == config.Depth());
     REQUIRE(tree.Config == config);
-    REQUIRE(tree.h_LevelsSizes[0] == 1);
-    REQUIRE(tree.h_LevelsSizes[1] == 3);
-    REQUIRE(tree.h_LevelsSizes[2] == 4);
+    REQUIRE(tree.h_LevelsSizes == trueLevelsSizes);
 
     //given
     CudaArray<unsigned> result{count};

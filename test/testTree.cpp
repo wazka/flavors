@@ -1,5 +1,6 @@
 #include "catch.hpp"
 #include "tree.h"
+#include "compressedTree.h"
 #include "helpers.h"
 
 #include <vector>
@@ -9,7 +10,16 @@ using namespace Flavors;
 
 TEST_CASE("Tree from keys test", "[tree][keys]")
 {
-    TreeFromKeysTest<Tree>();
+    TreeFromKeysTest<Tree>(
+        std::vector<unsigned>{1, 3, 4}
+    );
+}
+
+TEST_CASE("Compressed tree from keys test", "[compressed-tree][keys]")
+{
+    TreeFromKeysTest<CompressedTree>(
+        std::vector<unsigned>{1, 1, 1}
+    );
 }
 
 TEST_CASE("Tree from masks test", "[tree][masks]")
