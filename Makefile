@@ -1,4 +1,3 @@
-SHELL=powershell.exe
 NVCC=nvcc
 SRC=flavors/
 BENCH_SRC=benchmarks/
@@ -7,9 +6,9 @@ TEST_SRC=test/
 BIN_DIR=./bin
 LIB_DIR=lib
 TEST_SRC=test/
-INCLUDES=-I $(LIB_DIR)/cuda-api-wrappers/api/ -I $(LIB_DIR)/cuda-api-wrappers/ -I $(LIB_DIR)/json -I $(LIB_DIR)/catch -I "C:\Program Files\boost\boost_1_66_0" -I $(SRC)/ -I benchmark/
+INCLUDES=-I $(LIB_DIR)/cuda-api-wrappers/api/ -I $(LIB_DIR)/cuda-api-wrappers/ -I $(LIB_DIR)/json -I $(LIB_DIR)/catch -I $(SRC)/ -I benchmark/
 
-NVCC_FLAGS=-rdc=true -gencode arch=compute_50,code=sm_50 -std=c++11 -O3 $(INCLUDES)
+NVCC_FLAGS=-rdc=true -gencode arch=compute_61,code=sm_61 -std=c++11 -O3 $(INCLUDES)
 
 BIN=$(BIN_DIR) $(BIN_DIR)/tmp
 FLAVORS=$(BIN_DIR)/tmp/configuration.o $(BIN_DIR)/tmp/keys.o $(BIN_DIR)/tmp/masks.o $(BIN_DIR)/tmp/tree.o $(BIN_DIR)/tmp/compressedTree.o $(BIN_DIR)/tmp/utils.o $(BIN_DIR)/tmp/dataInfo.o
@@ -113,11 +112,11 @@ $(BIN_DIR)/tmp:
 	mkdir -p "$(BIN_DIR)/tmp"
 
 clear: clean
-	rm -Force "$(BIN_DIR)/*.o"
-	rm -r -Force "$(BIN_DIR)"
+	rm -f "$(BIN_DIR)/*.o"
+	rm -f -r "$(BIN_DIR)"
 
 clean:	
-	rm -Force "$(BIN_DIR)/tmp/*.o"
-	rm -r -Force "$(BIN_DIR)/tmp"
+	rm -f "$(BIN_DIR)/tmp/*.o"
+	rm -f -r "$(BIN_DIR)/tmp"
 
 .PHONY: all clear clean

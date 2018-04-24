@@ -9,6 +9,7 @@
 #include "catch.hpp"
 
 using namespace Flavors;
+using namespace std;
 
 bool CheckSort(Keys& keys);
 

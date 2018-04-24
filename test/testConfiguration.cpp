@@ -4,8 +4,6 @@
 #include <vector>
 #include <string>
 
-#include <boost/range/numeric.hpp>
-
 using namespace std;
 using namespace Flavors;
 
@@ -13,7 +11,9 @@ TEST_CASE("Configuration test", "[configuration]")
 {
     //given
     vector<unsigned> levels {8, 4, 4, 16, 32, 10, 5};
-    auto length = boost::accumulate(levels, 0);
+    int length = 0;
+    for(auto level : levels)
+        length += level;
 
     //when
     Configuration config{levels};

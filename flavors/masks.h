@@ -16,7 +16,7 @@ namespace Flavors
 		void FillRandom(int seed) override;
 		void FillRandom(int seed, int max, int min = 1);
 
-		void Masks::FillFromVector(std::vector<unsigned> source, std::vector<unsigned> lengths);
+		void FillFromVector(std::vector<unsigned> source, std::vector<unsigned> lengths);
 
 		void Sort() override;
 
