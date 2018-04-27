@@ -2,24 +2,33 @@
 #include "keys.h"
 #include "masks.h"
 #include "tree.h"
+#include "compressedTree.h"
 #include "helpers.h"
 
 using namespace Flavors;
 using namespace std;
+
+// const vector<int> Counts = { 10000 };
+// const vector<int> Seeds = { 1234 };
+// const vector<Configuration> Configs =
+// {
+//     Flavors::Configuration{ vector<unsigned>{8, 8, 8, 8} }
+// };
 
 const vector<int> Counts = { 10000, 20000, 30000, 40000, 50000 };
 const vector<int> Seeds = { 1234, 5765, 8304, 2365, 4968 };
 const vector<Configuration> Configs =
 {
     Flavors::Configuration{ vector<unsigned>{8, 8, 8, 8} },
-    Flavors::Configuration{ vector<unsigned>{4, 4, 4, 4, 4, 4, 4, 4} },
-    Flavors::Configuration{ vector<unsigned>{8, 8, 4, 4, 4, 4} },
-    Flavors::Configuration{ vector<unsigned>{16, 4, 4, 4, 4} },
-    Flavors::Configuration{ vector<unsigned>{7, 5, 3, 2, 3, 6, 6} }
+    // Flavors::Configuration{ vector<unsigned>{16, 16} },
+    // Flavors::Configuration{ vector<unsigned>{4, 4, 4, 4, 4, 4, 4, 4} },
+    // Flavors::Configuration{ vector<unsigned>{8, 8, 4, 4, 4, 4} },
+    // Flavors::Configuration{ vector<unsigned>{16, 4, 4, 4, 4} },
+    // Flavors::Configuration{ vector<unsigned>{7, 5, 3, 2, 3, 6, 6} }
 };
 Configuration UniqueConfig32{vector<unsigned>{5, 5, 3, 7, 2, 3, 7}};
 
-TEST_CASE("Keys load test", "[load][keys]")
+TEST_CASE("Keys load test", "[tree][load][keys]")
 {
     for(auto count : Counts)
         for(auto seed : Seeds)
@@ -82,6 +91,46 @@ TEST_CASE("Keys load test", "[load][keys]")
                 randomKeys.FillRandom(seed + 1);
 
                 //when
+                result.Clear();
+                REQUIRE_NOTHROW(tree.FindKeys(randomKeys, result.Get()));
+            }
+}
+
+TEST_CASE("Keys load test for compressed tree", "[load][keys][compressed-tree]")
+{
+    for(auto count : Counts)
+        for(auto seed : Seeds)
+            for(auto config : Configs)
+            {
+                //when
+                Keys keys{ config, count };
+                keys.FillRandom(seed);
+
+                //when
+                CompressedTree tree{ keys };
+
+                for(int level = 0; level < tree.Depth(); ++level)
+                    std::cout << tree.h_LevelsSizes[level] << "\t";
+                std::cout << "\n";
+
+                //then
+                REQUIRE(tree.Count == count);
+                REQUIRE(tree.Depth() == config.Depth());
+                REQUIRE(tree.Config == config);
+                REQUIRE(AllKeysInCompressedTree(tree, keys));
+
+                //when
+                CudaArray<unsigned> result{ keys.Count };
+                tree.FindKeys(keys, result.Get());
+
+                //then
+                REQUIRE(CheckKeysFindResultInCompressedTree(result, keys));
+
+                // given
+                Keys randomKeys{ config, count };
+                randomKeys.FillRandom(seed + 1);
+
+                // when
                 result.Clear();
                 REQUIRE_NOTHROW(tree.FindKeys(randomKeys, result.Get()));
             }

@@ -21,7 +21,11 @@ bool CmpKeys(std::vector<std::vector<unsigned>>& hostKeys, int lhs, int rhs);
 
 bool AllKeysInTree(Tree& tree, Keys& keys);
 
+bool AllKeysInCompressedTree(Tree& tree, Keys& keys);
+
 bool CheckKeysFindResult(CudaArray<unsigned>& result, Keys& keys);
+
+bool CheckKeysFindResultInCompressedTree(CudaArray<unsigned>& result, Keys& keys);
 
 bool CheckMasksAgainstSource(
     Masks& masks, 
@@ -39,14 +43,13 @@ bool CheckMasksFindResult(CudaArray<unsigned>& result, Masks& masks);
 bool CheckMatchResult(CudaArray<unsigned>& result, Masks& masks);
 
 template<class TreeType>
-void TreeFromKeysTest(std::vector<unsigned> trueLevelsSizes)
+void TreeFromKeysTest(
+    vector<unsigned> data,
+    vector<unsigned> trueLevelsSizes,
+    vector<unsigned> trueFindResult)
 {
     //given
     int count = 4;
-    auto data = vector<unsigned>{
-        1, 99, 50, 50,
-        5,  6,  9,  8,
-        9, 10, 11, 12};
 
     Configuration config{vector<unsigned>{8, 8, 4}};
 
@@ -62,33 +65,27 @@ void TreeFromKeysTest(std::vector<unsigned> trueLevelsSizes)
     REQUIRE(tree.Config == config);
     REQUIRE(tree.h_LevelsSizes == trueLevelsSizes);
 
-    //given
-    // CudaArray<unsigned> result{count};
+    // given
+    CudaArray<unsigned> result{count};
 
-    // //when
-    // tree.Find(keys, result.Get());
+    //when
+    tree.Find(keys, result.Get());
 
-    // //then
-    // //0 in result would mean not found
-    // //TODO: Tree constructor sorts keys under the hood
-    // auto h_result = result.ToHost();
-    // REQUIRE(h_result[0] == 1);
-    // REQUIRE(h_result[1] == 4);
-    // REQUIRE(h_result[2] == 3);
-    // REQUIRE(h_result[3] == 2);
+    //then
+    //0 in result would mean not found
+    //TODO: Tree constructor sorts keys under the hood
+    auto h_result = result.ToHost();
+    REQUIRE(h_result == trueFindResult);
 
     // //given
-    // Keys otherKeys{config, count};
-    // otherKeys.FillFromVector(data);
-    // result.Clear();
+    Keys otherKeys{config, count};
+    otherKeys.FillFromVector(data);
+    result.Clear();
 
-    // //when
-    // tree.Find(otherKeys, result.Get());
+    //when
+    tree.Find(otherKeys, result.Get());
 
-    // //then
-    // h_result = result.ToHost();
-    // REQUIRE(h_result[0] == 1);
-    // REQUIRE(h_result[1] == 2);
-    // REQUIRE(h_result[2] == 3);
-    // REQUIRE(h_result[3] == 4);
+    //then
+    h_result = result.ToHost();
+    REQUIRE(h_result == trueFindResult);
 }

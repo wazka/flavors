@@ -8,21 +8,77 @@
 using namespace std;
 using namespace Flavors;
 
-TEST_CASE("Tree from keys test", "[tree][keys]")
+TEST_CASE("Tree from keys test", "[tree][keys][unit]")
 {
+    auto data = vector<unsigned>{
+        1, 99, 50, 50,
+        5,  6,  9,  8,
+        9, 10, 11, 12};
+
     TreeFromKeysTest<Tree>(
-        std::vector<unsigned>{1, 3, 4}
+        data,
+        std::vector<unsigned>{1, 3, 4},
+        std::vector<unsigned>{1, 4, 3, 2}
     );
 }
 
-TEST_CASE("Compressed tree from keys test", "[compressed-tree][keys]")
+TEST_CASE("Compressed tree from keys test", "[compressed-tree][keys][unit]")
 {
+    auto data = vector<unsigned>{
+        1, 99, 50, 50,
+        5,  6,  9,  8,
+        9, 10, 11, 12};
+
     TreeFromKeysTest<CompressedTree>(
-        std::vector<unsigned>{1, 1, 1}
+        data,
+        std::vector<unsigned>{1, 1, 1},
+        std::vector<unsigned>{1, 2, 3, 4}
     );
 }
 
-TEST_CASE("Tree from masks test", "[tree][masks]")
+TEST_CASE("Compressed tree from keys with replicated key test", "[compressed-tree][keys][unit]")
+{
+    auto data = vector<unsigned>{
+        1, 99, 50, 50,
+        5,  6,  9,  9,
+        9, 10, 11, 11};
+
+    TreeFromKeysTest<CompressedTree>(
+        data,
+        std::vector<unsigned>{1, 1, 1},
+        std::vector<unsigned>{1, 2, 4, 4}
+    );
+}
+
+TEST_CASE("Compressed tree from keys with split test", "[compressed-tree][keys][unit]")
+{
+    auto data = vector<unsigned>{
+        1, 99, 50, 50,
+        5,  6,  8,  9,
+        9, 10, 11, 11};
+
+    TreeFromKeysTest<CompressedTree>(
+        data,
+        std::vector<unsigned>{1, 1, 2},
+        std::vector<unsigned>{1, 2, 3, 4}
+    );
+}
+
+TEST_CASE("Compressed tree from keys with circle test", "[compressed-tree][keys][unit]")
+{
+    auto data = vector<unsigned>{
+        1, 99, 50, 51,
+        5,  6,  9,  9,
+        9, 10, 11, 12};
+
+    TreeFromKeysTest<CompressedTree>(
+        data,
+        std::vector<unsigned>{1, 2, 1},
+        std::vector<unsigned>{1, 2, 3, 4}
+    );
+}
+
+TEST_CASE("Tree from masks test", "[tree][masks][unit]")
 {
     //given
     int count = 4;
