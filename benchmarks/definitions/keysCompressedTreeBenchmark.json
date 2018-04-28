@@ -1,5 +1,5 @@
 {
-  "benchmark": "keysBenchmark",
+  "benchmark": "keysCompressedTreeBenchmark",
   "resultFile": "keysResults.csv",
   "dataInfoDirectory": "dataInfo/",
   "deviceId": 0,

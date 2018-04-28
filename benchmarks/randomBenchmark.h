@@ -5,10 +5,11 @@
 
 #include "benchmark.h"
 #include "tree.h"
+#include "compressedTree.h"
 
 namespace FlavorsBenchmarks
 {
-template <typename T>
+template <typename T, typename TreeType>
 class RandomBenchmark
 {
   public:
@@ -177,7 +178,7 @@ class RandomBenchmark
 				measured.Add("DataMemory", data.MemoryFootprint());
 
 				timer.Start();
-				Flavors::Tree tree{data};
+				TreeType tree{data};
 				measured.Add("Build", timer.Stop());
 				measured.Add("TreeMemory", tree.MemoryFootprint());
 				measured.Add("TreeLevels", tree);
@@ -346,7 +347,7 @@ class LengthBenchmark
 		int currentMaxLength = static_cast<float>(depth) * maxMaskLength;
 		int currentMinLength = static_cast<float>(depth) * minMaskLength;
 
-		RandomBenchmark<T> bench{
+		RandomBenchmark<T, Flavors::Tree> bench{
 			counts,
 			randomCounts,
 			seeds,

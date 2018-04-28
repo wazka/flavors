@@ -36,7 +36,12 @@ int main(int argc, char** argv)
 
 	if (j["benchmark"] == "keysBenchmark")
 	{
-		FlavorsBenchmarks::RandomBenchmark<Flavors::Keys> bench{ j };
+		FlavorsBenchmarks::RandomBenchmark<Flavors::Keys, Flavors::Tree> bench{ j };
+		bench.Run();
+	}
+	else if(j["benchmark"] == "keysCompressedTreeBenchmark")
+	{
+		FlavorsBenchmarks::RandomBenchmark<Flavors::Keys, Flavors::CompressedTree> bench{ j };
 		bench.Run();
 	}
 	else if (j["benchmark"] == "masksBenchmark")
@@ -46,7 +51,7 @@ int main(int argc, char** argv)
 		int minMaskLength =
 			FlavorsBenchmarks::tryReadIntFromJson(j, "minMaskLength");
 
-		FlavorsBenchmarks::RandomBenchmark<Flavors::Masks> bench{
+		FlavorsBenchmarks::RandomBenchmark<Flavors::Masks, Flavors::Tree> bench{
 			j,
 			maxMaskLength,
 			minMaskLength };
