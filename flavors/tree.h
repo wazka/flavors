@@ -45,6 +45,7 @@ namespace Flavors
 		void countNodes(Cuda2DArray& borders, Cuda2DArray& indexes, Cuda2DArray& paths);
 		void fillNodes(Cuda2DArray& borders, Cuda2DArray& indexes, Keys& keys, bool forMasks = false);
 		void allocateNodes(bool forMasks = false);
+		void fillChildrenCounts();
 		void copyMasks(Masks& masks, Cuda2DArray& pathsEnds);
 
 		void markPaths(Masks& masks, Cuda2DArray& paths, Cuda2DArray& pathsEnds);

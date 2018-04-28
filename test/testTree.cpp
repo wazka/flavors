@@ -46,7 +46,7 @@ TEST_CASE("Compressed tree from keys with replicated key test", "[compressed-tre
     TreeFromKeysTest<CompressedTree>(
         data,
         std::vector<unsigned>{1, 1, 1},
-        std::vector<unsigned>{1, 2, 4, 4}
+        std::vector<unsigned>{1, 2, 3, 3}
     );
 }
 

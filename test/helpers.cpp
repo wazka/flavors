@@ -101,37 +101,6 @@ bool AllKeysInTree(Tree& tree, Keys& keys)
     return true;
 }
 
-bool AllKeysInCompressedTree(Tree& tree, Keys& keys)
-{
-    auto hostChildren = tree.Children.ToHost();
-    auto hostKeys = keys.ToHost();
-
-
-
-    for (int key = 0; key < keys.Count; ++key)
-    {
-        int currentNode = 1;
-        for (int level = 0; level < tree.Depth(); ++level)
-        {
-            currentNode = hostChildren[level][(currentNode - 1) * tree.ChildrenCountsHost[level] + hostKeys[level][key]];
-            if (currentNode == 0)
-            {
-                std::cout << "Wrong path on level " << level << " for key " << key << " \n\n";
-                return false;
-            }
-        }
-
-        if (!CmpKeys(hostKeys, key, currentNode - 1))
-        {
-            // std::cout << keys << std::endl;
-            std::cout << "Wrong node " << key << " : " << currentNode - 1 << " \n\n";
-            return false;
-        }
-    }
-
-    return true;
-}
-
 bool CheckKeysFindResult(CudaArray<unsigned>& result, Keys& keys)
 {
     auto h_result = result.ToHost();
@@ -144,23 +113,6 @@ bool CheckKeysFindResult(CudaArray<unsigned>& result, Keys& keys)
         {
             auto retrivedKey = std::find(h_permutation.begin(), h_permutation.end(), h_result[key] - 1) - h_permutation.begin();
             if (!CmpKeys(h_keys, key, retrivedKey))
-                return false;
-        }
-    }
-
-    return true;
-}
-
-bool CheckKeysFindResultInCompressedTree(CudaArray<unsigned>& result, Keys& keys)
-{
-    auto h_result = result.ToHost();
-    auto h_keys = keys.ToHost();
-
-    for(int key = 0; key < keys.Count; ++key)
-    {
-        if (key != h_result[key] - 1)
-        {
-            if (!CmpKeys(h_keys, key, h_result[key] - 1))
                 return false;
         }
     }

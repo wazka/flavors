@@ -66,16 +66,20 @@ namespace Flavors
 		return h_levels[level].Get();
 	}
 
+	std::vector<unsigned> CudaJaggedArray::ToHost(int level)
+	{
+		std::vector<unsigned> row(sizes[level]);
+		cuda::memory::copy(row.data(), operator[](level), sizes[level] * sizeof(unsigned));	
+
+		return row;
+	}
+
 	std::vector<std::vector<unsigned>> CudaJaggedArray::ToHost()
 	{
 		std::vector<std::vector<unsigned>> h_store;
 
 		for (int level = 0; level < Depth(); ++level)
-		{
-			std::vector<unsigned> row(sizes[level]);
-			cuda::memory::copy(row.data(), operator[](level), sizes[level] * sizeof(unsigned));
-			h_store.push_back(row);
-		}
+			h_store.push_back(ToHost(level));
 
 		return h_store;
 	}

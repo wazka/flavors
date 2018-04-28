@@ -21,11 +21,7 @@ bool CmpKeys(std::vector<std::vector<unsigned>>& hostKeys, int lhs, int rhs);
 
 bool AllKeysInTree(Tree& tree, Keys& keys);
 
-bool AllKeysInCompressedTree(Tree& tree, Keys& keys);
-
 bool CheckKeysFindResult(CudaArray<unsigned>& result, Keys& keys);
-
-bool CheckKeysFindResultInCompressedTree(CudaArray<unsigned>& result, Keys& keys);
 
 bool CheckMasksAgainstSource(
     Masks& masks, 

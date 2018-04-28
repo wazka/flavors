@@ -115,6 +115,7 @@ namespace Flavors
 
 	void Tree::fillNodes(Cuda2DArray& borders, Cuda2DArray& indexes, Keys& keys, bool forMasks)
 	{
+		fillChildrenCounts();
 		allocateNodes(forMasks);
 
 		auto kernelConfig = make_launch_config(Count);
@@ -150,17 +151,20 @@ namespace Flavors
 			ChildrenCounts.Get());
 	}
 
+	void Tree::fillChildrenCounts()
+	{
+		for (int level = 0; level < Depth(); ++level)
+			ChildrenCountsHost.push_back(1u << Config[level]);
+
+		ChildrenCounts = CudaArray<unsigned>{ Depth() };
+		cuda::memory::copy(ChildrenCounts.Get(), ChildrenCountsHost.data(), Depth() * sizeof(unsigned));
+	}
+
 	void Tree::allocateNodes(bool forMasks)
 	{
 		std::vector<unsigned> levelsRawSizes;
 		for (int level = 0; level < Depth(); ++level)
-		{
-			ChildrenCountsHost.push_back(1u << Config[level]);
-			levelsRawSizes.push_back(h_LevelsSizes[level] * ChildrenCountsHost.back());
-		}
-
-		ChildrenCounts = CudaArray<unsigned>{ Depth() };
-		cuda::memory::copy(ChildrenCounts.Get(), ChildrenCountsHost.data(), Depth() * sizeof(unsigned));
+			levelsRawSizes.push_back(h_LevelsSizes[level] * ChildrenCountsHost[level]);
 
 		if (forMasks)
 			levelsRawSizes.pop_back();

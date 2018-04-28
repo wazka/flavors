@@ -8,8 +8,8 @@ LIB_DIR=lib
 TEST_SRC=test/
 INCLUDES=-I $(LIB_DIR)/cuda-api-wrappers/api/ -I $(LIB_DIR)/cuda-api-wrappers/ -I $(LIB_DIR)/json -I $(LIB_DIR)/catch -I $(SRC)/ -I benchmark/
 
-# NVCC_FLAGS=-rdc=true -gencode arch=compute_61,code=sm_61 -std=c++11 -O3 $(INCLUDES)
-NVCC_FLAGS=-rdc=true -gencode arch=compute_61,code=sm_61 -std=c++11 -g $(INCLUDES)
+NVCC_FLAGS=-rdc=true -gencode arch=compute_61,code=sm_61 -std=c++11 -O3 $(INCLUDES)
+# NVCC_FLAGS=-rdc=true -gencode arch=compute_61,code=sm_61 -std=c++11 -g $(INCLUDES)
 
 BIN=$(BIN_DIR) $(BIN_DIR)/tmp
 FLAVORS=$(BIN_DIR)/tmp/configuration.o $(BIN_DIR)/tmp/keys.o $(BIN_DIR)/tmp/masks.o $(BIN_DIR)/tmp/tree.o $(BIN_DIR)/tmp/compressedTree.o $(BIN_DIR)/tmp/utils.o $(BIN_DIR)/tmp/dataInfo.o
@@ -40,8 +40,8 @@ $(BIN_DIR)/tmp/masks.o: $(SRC)/masks.cu $(SRC)/masks.h
 $(BIN_DIR)/tmp/tree.o: $(SRC)/tree.cu $(SRC)/tree.h
 	$(NVCC) $(NVCC_FLAGS) -c $(SRC)/tree.cu -o $(BIN_DIR)/tmp/tree.o
 
-$(BIN_DIR)/tmp/compressedTree.o: $(SRC)/compressedTree.cpp $(SRC)/compressedTree.h
-	$(NVCC) $(NVCC_FLAGS) -c $(SRC)/compressedTree.cpp -o $(BIN_DIR)/tmp/compressedTree.o
+$(BIN_DIR)/tmp/compressedTree.o: $(SRC)/compressedTree.cu $(SRC)/compressedTree.h
+	$(NVCC) $(NVCC_FLAGS) -c $(SRC)/compressedTree.cu -o $(BIN_DIR)/tmp/compressedTree.o
 
 $(BIN_DIR)/tmp/utils.o: $(SRC)/utils.cpp $(SRC)/utils.h
 	$(NVCC) $(NVCC_FLAGS) -c $(SRC)/utils.cpp -o $(BIN_DIR)/tmp/utils.o

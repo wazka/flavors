@@ -29,6 +29,11 @@ namespace Flavors
 			Clear();
 		}
 
+		explicit CudaArray(std::vector<T>& data) : CudaArray(data.size())
+		{
+			cuda::memory::copy(store.get(), data.data(), data.size() * sizeof(T));
+		}
+
 		void Clear()
 		{
 			cuda::memory::device::zero(store.get(), count * sizeof(T));
@@ -139,6 +144,7 @@ namespace Flavors
 		unsigned** GetLevels() { return levels.Get(); };
 
 		std::vector<std::vector<unsigned>> ToHost();
+		std::vector<unsigned> ToHost(int level);
 
 		CudaJaggedArray(const CudaJaggedArray& other) = delete;
 		CudaJaggedArray& operator=(const CudaJaggedArray& other) = delete;

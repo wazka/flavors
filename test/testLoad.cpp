@@ -8,23 +8,15 @@
 using namespace Flavors;
 using namespace std;
 
-// const vector<int> Counts = { 10000 };
-// const vector<int> Seeds = { 1234 };
-// const vector<Configuration> Configs =
-// {
-//     Flavors::Configuration{ vector<unsigned>{8, 8, 8, 8} }
-// };
-
 const vector<int> Counts = { 10000, 20000, 30000, 40000, 50000 };
 const vector<int> Seeds = { 1234, 5765, 8304, 2365, 4968 };
 const vector<Configuration> Configs =
 {
     Flavors::Configuration{ vector<unsigned>{8, 8, 8, 8} },
-    // Flavors::Configuration{ vector<unsigned>{16, 16} },
-    // Flavors::Configuration{ vector<unsigned>{4, 4, 4, 4, 4, 4, 4, 4} },
-    // Flavors::Configuration{ vector<unsigned>{8, 8, 4, 4, 4, 4} },
-    // Flavors::Configuration{ vector<unsigned>{16, 4, 4, 4, 4} },
-    // Flavors::Configuration{ vector<unsigned>{7, 5, 3, 2, 3, 6, 6} }
+    Flavors::Configuration{ vector<unsigned>{4, 4, 4, 4, 4, 4, 4, 4} },
+    Flavors::Configuration{ vector<unsigned>{8, 8, 4, 4, 4, 4} },
+    Flavors::Configuration{ vector<unsigned>{16, 4, 4, 4, 4} },
+    Flavors::Configuration{ vector<unsigned>{7, 5, 3, 2, 3, 6, 6} }
 };
 Configuration UniqueConfig32{vector<unsigned>{5, 5, 3, 7, 2, 3, 7}};
 
@@ -117,14 +109,14 @@ TEST_CASE("Keys load test for compressed tree", "[load][keys][compressed-tree]")
                 REQUIRE(tree.Count == count);
                 REQUIRE(tree.Depth() == config.Depth());
                 REQUIRE(tree.Config == config);
-                REQUIRE(AllKeysInCompressedTree(tree, keys));
+                REQUIRE(AllKeysInTree(tree, keys));
 
                 //when
                 CudaArray<unsigned> result{ keys.Count };
                 tree.FindKeys(keys, result.Get());
 
                 //then
-                REQUIRE(CheckKeysFindResultInCompressedTree(result, keys));
+                REQUIRE(CheckKeysFindResult(result, keys));
 
                 // given
                 Keys randomKeys{ config, count };
