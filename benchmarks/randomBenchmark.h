@@ -179,6 +179,8 @@ class RandomBenchmark
 
 				timer.Start();
 				TreeType tree{data};
+				auto caption = tree.Caption();
+				measured.Add("TreeType", caption);
 				measured.Add("Build", timer.Stop());
 				measured.Add("TreeMemory", tree.MemoryFootprint());
 				measured.Add("TreeLevels", tree);

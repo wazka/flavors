@@ -38,6 +38,11 @@ namespace Flavors
 
 		size_t MemoryFootprint();
 
+		std::string Caption()
+		{
+			return std::string{"PlainTree"};
+		}
+
 	//TODO: Revise public interface
 	// private:
 		void levelsSizesToHost(Cuda2DArray& indexes);

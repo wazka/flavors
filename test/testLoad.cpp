@@ -8,6 +8,13 @@
 using namespace Flavors;
 using namespace std;
 
+// const vector<int> Counts = { 100 };
+// const vector<int> Seeds = { 1234 };
+// const vector<Configuration> Configs =
+// {
+//     Flavors::Configuration{ vector<unsigned>{8, 8, 8, 8} }
+// };
+
 const vector<int> Counts = { 10000, 20000, 30000, 40000, 50000 };
 const vector<int> Seeds = { 1234, 5765, 8304, 2365, 4968 };
 const vector<Configuration> Configs =
@@ -97,6 +104,7 @@ TEST_CASE("Keys load test for compressed tree", "[load][keys][compressed-tree]")
                 //when
                 Keys keys{ config, count };
                 keys.FillRandom(seed);
+                keys.Sort();
 
                 //when
                 CompressedTree tree{ keys };
@@ -113,7 +121,7 @@ TEST_CASE("Keys load test for compressed tree", "[load][keys][compressed-tree]")
 
                 //when
                 CudaArray<unsigned> result{ keys.Count };
-                tree.FindKeys(keys, result.Get());
+                tree.Find(keys, result.Get());
 
                 //then
                 REQUIRE(CheckKeysFindResult(result, keys));
@@ -125,6 +133,25 @@ TEST_CASE("Keys load test for compressed tree", "[load][keys][compressed-tree]")
                 // when
                 result.Clear();
                 REQUIRE_NOTHROW(tree.FindKeys(randomKeys, result.Get()));
+
+                //given
+                Tree plainTree { keys };
+                CudaArray<unsigned> plainTreeResult{ keys.Count };
+                plainTree.FindKeys(randomKeys, plainTreeResult.Get());
+
+                //when
+                auto h_plainTreeResult = plainTreeResult.ToHost();
+                auto h_compressedTreeResult = result.ToHost();
+
+                //then
+                REQUIRE(h_plainTreeResult == h_compressedTreeResult);
+
+                for(int level = 0; level < tree.Depth(); ++level)
+                    std::cout << plainTree.h_LevelsSizes[level] << "\t";
+                std::cout << "\n";
+                std::cout << "\n";
+
+
             }
 }
 
